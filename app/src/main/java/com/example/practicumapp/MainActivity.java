@@ -8,8 +8,8 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    final Button taskListButton = findViewById(R.id.task_list_button);
-    final Button loginButton = findViewById(R.id.login_button);
+    private Button taskListButton;
+    private Button loginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +19,10 @@ public class MainActivity extends AppCompatActivity {
         /**
          * TODO: remove temporary test buttons when not needed
          **/
+
+        taskListButton = findViewById(R.id.task_list_button);
+        loginButton = findViewById(R.id.login_button);
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
