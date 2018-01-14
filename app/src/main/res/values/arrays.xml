@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- test array -->
+    <string-array name="task_list">
+        <item>UST ID Setup</item>
+        <item>Welcome Email</item>
+        <item>Mandatory Trainings</item>
+        <item>Background Verification</item>
+        <item>PM Sync-up</item>
+        <item>Seat &amp; Asset allocation</item>
+        <item>Mailbox Activation</item>
+        <item>About Me Email</item>
+        <item>Company Badge</item>
+        <item>Software Request: VPN + VIP</item>
+        <item>Software Request: Slack</item>
+        <item>Project Tool Access: Jira</item>
+        <item>Project Tool Access: Corp Domain</item>
+        <item>Project Tool Access: GitHub</item>
+        <item>Project Tool Access: SharePoint</item>
+        <item>Project Docs: About Team</item>
+        <item>Project Overview</item>
+    </string-array>
+</resources>
