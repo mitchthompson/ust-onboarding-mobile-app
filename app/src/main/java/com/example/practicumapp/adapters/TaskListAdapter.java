@@ -8,14 +8,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.practicumapp.R;
-import com.example.practicumapp.models.Tasks;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by jsayler on 1/14/18.
+ *
+ * JS - this is the task activity's view adapter. it takes data piped into it and displays it in the
+ * recycler view
+ *
+ * any changes here will probably need to be made when creating the expandable line items as
+ * indicated on the wireframe. this will require modifications to onBindViewHolder and the
+ * TaskListViewHolder
  */
 
 public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskListViewHolder> {
