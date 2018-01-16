@@ -46,6 +46,10 @@ public class TaskListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_task_list);
         context = getApplicationContext();
 
+        /*Enables tool bar & sets title displayed
+        Can customize menu items in res/menu/main_menu.xml
+        Can customize toolbar in res/layout/toolbar_layout.xml*/
+
         // contains dummy data from arrays.xml
         testData = getResources().getStringArray(R.array.task_list);
         // converts array into a list for use with the adapter
