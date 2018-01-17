@@ -47,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         // TODO Place the code to retrieve JSON data in proper location
-        JSON json = new JSON(getApplicationContext());
-        json.fetchAllTasks();
+        TaskParser taskParser = new TaskParser(getApplicationContext());
+        taskParser.fetchAllTasks();
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
