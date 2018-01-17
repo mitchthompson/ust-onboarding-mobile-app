@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, TaskListActivity.class));
             }
         });
-
         // TODO Place the code to retrieve JSON data in proper location
         JSON json = new JSON(getApplicationContext());
         json.fetchAllTasks();
