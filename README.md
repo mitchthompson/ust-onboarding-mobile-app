@@ -1,7 +1,15 @@
 # Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+This is the repo for a mobile employee onboarding application developed by North Seattle College students for SVT Global. 
 
 # Getting Started
+To get started clone this repo onto your local machine.  
+All branches should be made off of the development branch, DO NOT make a branch or push code directly to MASTER or INTEGRATION branches
+Naming convention for branches:
+task[number]_[featurename]_[firstintitial+lastname]
+    i.e task123_loginscript_ktatum
+Make sure all functions and variables are well named, descriptive and follow Java naming conventions
+Make sure to comment code well
+
 TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
 1.	Installation process
 2.	Software dependencies
