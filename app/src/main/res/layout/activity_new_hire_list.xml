@@ -4,6 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+<<<<<<< HEAD
     tools:context="com.example.practicumapp.NewHireList">
+=======
+    tools:context="com.example.practicumapp.NewHireListActivity">
+>>>>>>> aa01eb766c6f46539012d4abac76f7e715305909
 
 </android.support.constraint.ConstraintLayout>

@@ -47,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         // TODO Place the code to retrieve JSON data in proper location
-        JSON json = new JSON(getApplicationContext());
-        json.fetchAllTasks();
+        TaskParser taskParser = new TaskParser(getApplicationContext());
+        taskParser.fetchAllTasks();
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -66,6 +66,24 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Logout toast. Cheers!",
                         Toast.LENGTH_SHORT).show();
 
+                return true;
+
+            // TODO Remove following action items from actionbar here and in res/main_menu.xml
+
+            case R.id.action_login:
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                return true;
+
+            case R.id.action_tasklist:
+                startActivity(new Intent(MainActivity.this, TaskListActivity.class));
+                return true;
+
+            case R.id.action_newhirelist:
+                startActivity(new Intent(MainActivity.this, NewHireListActivity.class));
+                return true;
+
+            case R.id.action_addhire:
+                //startActivity(new Intent(MainActivity.this, ActivityName.class));
                 return true;
 
             default:

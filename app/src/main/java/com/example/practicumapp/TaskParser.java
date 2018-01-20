@@ -18,11 +18,11 @@ import org.json.JSONObject;
  * This class sends and retrieves JSON data from the API using REST
  */
 
-class JSON {
+class TaskParser {
 
     private Context context; // Application Context
 
-    private static final String TAG = JSON.class.getName(); // Constant for logging data
+    private static final String TAG = TaskParser.class.getName(); // Constant for logging data
 
     private static final String URL = "http://www.mocky.io/v2/5a5d7d6033000056001917d7"; // URL to retrieve JSON data
 
@@ -31,7 +31,7 @@ class JSON {
      * @param context Context of current state of application/object
      * @return Nothing
      */
-    JSON(Context context) {
+    TaskParser(Context context) {
         this.context = context;
     }
 
