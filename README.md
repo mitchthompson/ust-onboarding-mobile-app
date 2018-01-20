@@ -1,5 +1,5 @@
 # Introduction 
-This is the repo for a mobile employee onboarding application developed by North Seattle College students for SVT Global. 
+This is the repo for a mobile employee onboarding application developed by North Seattle College students for UST Global. 
 
 # Getting Started
 To get started clone this repo onto your local machine.  
@@ -9,6 +9,9 @@ task[number]_[featurename]_[firstintitial+lastname]
     i.e task123_loginscript_ktatum
 Make sure all functions and variables are well named, descriptive and follow Java naming conventions
 Make sure to comment code well
+
+Dependicies
+Latest version of Android Studio
 
 TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
 1.	Installation process
