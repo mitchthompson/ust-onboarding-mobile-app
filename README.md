@@ -10,14 +10,10 @@ task[number]_[featurename]_[firstintitial+lastname]
 Make sure all functions and variables are well named, descriptive and follow Java naming conventions
 Make sure to comment code well
 
-Dependicies
+# Dependicies
 Latest version of Android Studio
-
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+Minimum SDK 15
+Target SDK 26
 
 # Build and Test
 TODO: Describe and show how to build your code and run the tests. 
