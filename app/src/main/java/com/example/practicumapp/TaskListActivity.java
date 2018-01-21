@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.practicumapp.adapters.TaskListAdapter;
 
@@ -43,8 +44,12 @@ public class TaskListActivity extends AppCompatActivity {
     private TaskListAdapter taskViewAdapter;
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
     private ArrayList<String> taskList;
+    private TextView employeeNameTextView;
+    private TextView employeeNameIdTextView;
 
-
+    //test variables
+    private String employeeName = "LukeTestEmployee";
+    private String employeeId = "LukeTest123456";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +66,15 @@ public class TaskListActivity extends AppCompatActivity {
 
         //Declare the ActionBar with the employee name and ID in it
         ActionMenuView employeeProgressBar = (ActionMenuView) findViewById(R.id.progress_toolbar);
+
+        // Set the employee name and ID,
+        // this can be done with the API functions,
+        // or from the stored information we get from the API later
+        employeeNameTextView = (TextView)findViewById(R.id.EmployeeName);
+        employeeNameTextView.setText(employeeName);
+
+        employeeNameIdTextView = (TextView)findViewById(R.id.EmployeeID);
+        employeeNameIdTextView.setText(employeeId);
 
         // contains dummy data from arrays.xml
         testData = getResources().getStringArray(R.array.task_list);
