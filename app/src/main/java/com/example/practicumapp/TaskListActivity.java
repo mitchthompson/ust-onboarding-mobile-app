@@ -3,8 +3,10 @@ package com.example.practicumapp;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.widget.RelativeLayout;
 
 import com.example.practicumapp.adapters.TaskListAdapter;
@@ -25,9 +27,11 @@ import java.util.Arrays;
  * an item. this will probably involve creating a more robust adapter for the recyclerview that
  * displays its contents upon tapping
  *
- * TODO: add check boxes next to each item
+ *
  * TODO: add description under each item
  * TODO: create onclick listeners for checking the checkboxes and expanding each item's description
+ * TODO: add progress bar
+ * TODO: update progress bar when checkbox is clicked
  */
 
 public class TaskListActivity extends AppCompatActivity {
@@ -40,15 +44,23 @@ public class TaskListActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
     private ArrayList<String> taskList;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_list);
         context = getApplicationContext();
 
-        /*Enables tool bar & sets title displayed
+         /*Enables tool bar & sets title displayed
         Can customize menu items in res/menu/main_menu.xml
         Can customize toolbar in res/layout/toolbar_layout.xml*/
+        Toolbar myToolbar = findViewById(R.id.myToolbar);
+        myToolbar.setTitle("Task List");
+        setSupportActionBar(myToolbar);
+
+        //Declare the ActionBar with the employee name and ID in it
+        ActionMenuView employeeProgressBar = (ActionMenuView) findViewById(R.id.progress_toolbar);
 
         // contains dummy data from arrays.xml
         testData = getResources().getStringArray(R.array.task_list);
@@ -56,6 +68,8 @@ public class TaskListActivity extends AppCompatActivity {
         taskList = new ArrayList<>(Arrays.asList(testData));
 
         relativeLayout = (RelativeLayout) findViewById(R.id.activity_task_list);
+
+
         recyclerView = (RecyclerView) findViewById(R.id.task_list_recycler);
         recyclerViewLayoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(recyclerViewLayoutManager);
