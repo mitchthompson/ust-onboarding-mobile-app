@@ -15,6 +15,32 @@
         completions."
     </string>
 
+    <!-- Strings related to AddNewHire activity -->
+    <string-array name="workflow_array">
+        <item>SELECT WORKFLOW</item>
+        <item>Workflow 1</item>
+        <item>Workflow 2</item>
+        <item>Workflow 3</item>
+    </string-array>
+    <string-array name="department_array">
+        <item>SELECT DEPARTMENT</item>
+        <item>Department 1</item>
+        <item>Department 2</item>
+        <item>Department 3</item>
+    </string-array>
+    <string name="department_prompt">Select a department</string>
+    <string name="workflow_prompt">Select a workflow</string>
+    <string name="prompt_employee_id">Employee ID</string>
+    <string name="prompt_first_name">First name</string>
+    <string name="prompt_last_name">Last name</string>
+    <string name="employee_internal">Internal</string>
+    <string name="employee_external">External</string>
+    <string name="btn_display">Display</string>
+    <string name="select_type">Select Employee Type</string>
+    <string name="btn_finish">Finish</string>
+    <string name="btn_cancel">Cancel</string>
+
+
     <string name="placeholder">Test</string>
     <!-- sample task description text -->
     <string name="sample_text">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vitae
