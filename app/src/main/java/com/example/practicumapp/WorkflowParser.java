@@ -1,11 +1,10 @@
 package com.example.practicumapp;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.android.volley.Request;
 import com.example.practicumapp.Interfaces.VolleyCallback;
-import com.example.practicumapp.Interfaces.WorkflowCallback;
+import com.example.practicumapp.Interfaces.WorkflowResponseCallback;
 import com.example.practicumapp.models.Task;
 import com.example.practicumapp.models.Workflow;
 
@@ -39,7 +38,13 @@ public class WorkflowParser {
     }
 
 //  TODO Function to retrieve a workflow by id, return workflow JSON object
-    public void getWorkflow(String workflowID, final WorkflowCallback workflowCallback) {
+    /*
+     * Get workflow info from the API and callback on success
+     * @param workflowID Id of the workflow
+     * @param WorkflowResponseCallback Interface callback
+     * @exception JSONException On JSON error
+     */
+    public void getWorkflow(String workflowID, final WorkflowResponseCallback workflowResponseCallback) {
         String urlWithParams = WORKFLOW_API_ADDRESS + "/" + workflowID;
         MyVolleySingleton.getInstance(context).
                 sendVolleyRequest(Request.Method.GET, urlWithParams, null, new VolleyCallback() {
@@ -62,7 +67,7 @@ public class WorkflowParser {
                                 tasks.add(singleTask);
                             }
                             Workflow workflow = new Workflow(id, name, description, tasks);
-                            workflowCallback.onSuccess(workflow);
+                            workflowResponseCallback.onSuccess(workflow);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

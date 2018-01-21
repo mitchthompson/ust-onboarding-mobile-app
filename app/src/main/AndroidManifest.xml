@@ -35,8 +35,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".NewHireList"></activity>
-        <activity android:name=".NewHireListActivity"></activity>
+        <activity android:name=".NewHireListActivity" />
     </application>
 
 </manifest>

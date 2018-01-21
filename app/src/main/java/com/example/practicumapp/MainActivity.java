@@ -13,7 +13,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.practicumapp.Interfaces.UserResponseCallback;
-import com.example.practicumapp.Interfaces.WorkflowCallback;
+import com.example.practicumapp.Interfaces.WorkflowResponseCallback;
 import com.example.practicumapp.models.User;
 import com.example.practicumapp.models.Workflow;
 
@@ -36,9 +36,9 @@ public class MainActivity extends AppCompatActivity {
         myToolbar.setTitle("Main Activity");
         setSupportActionBar(myToolbar);
 
-        /**
-         * TODO: remove temporary test buttons when not needed
-         **/
+
+        // TODO: remove temporary test buttons when not needed
+
 
         taskListButton = findViewById(R.id.task_list_button);
         loginButton = findViewById(R.id.login_button);
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         WorkflowParser workflowParser = new WorkflowParser(this.getApplicationContext());
-        workflowParser.getWorkflow("01", new WorkflowCallback() {
+        workflowParser.getWorkflow("01", new WorkflowResponseCallback() {
             @Override
             public void onSuccess(Workflow workflow) {
                 Log.d(TAG, "Workflow Task Name : " + workflow.getTasks().get(0).getName());
