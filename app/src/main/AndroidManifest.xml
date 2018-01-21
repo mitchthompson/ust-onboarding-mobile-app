@@ -26,12 +26,17 @@
             android:name=".LoginActivity"
             android:label="@string/title_activity_login" />
         <activity
+            android:name=".AddNewHireActivity"
+            android:label="Add New Hire"/>
+        <activity
             android:name=".TaskListActivity"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+        <activity android:name=".NewHireList"></activity>
+        <activity android:name=".NewHireListActivity"></activity>
     </application>
 
 </manifest>

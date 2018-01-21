@@ -90,6 +90,24 @@ public class MainActivity extends AppCompatActivity {
 
                 return true;
 
+            // TODO Remove following action items from actionbar here and in res/main_menu.xml
+
+            case R.id.action_login:
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                return true;
+
+            case R.id.action_tasklist:
+                startActivity(new Intent(MainActivity.this, TaskListActivity.class));
+                return true;
+
+            case R.id.action_newhirelist:
+                startActivity(new Intent(MainActivity.this, NewHireListActivity.class));
+                return true;
+
+            case R.id.action_addhire:
+                //startActivity(new Intent(MainActivity.this, ActivityName.class));
+                return true;
+
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
