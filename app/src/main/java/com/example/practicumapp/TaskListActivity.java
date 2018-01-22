@@ -7,6 +7,7 @@ import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -60,7 +61,7 @@ public class TaskListActivity extends AppCompatActivity {
          /*Enables tool bar & sets title displayed
         Can customize menu items in res/menu/main_menu.xml
         Can customize toolbar in res/layout/toolbar_layout.xml*/
-        Toolbar myToolbar = findViewById(R.id.myToolbar);
+        Toolbar myToolbar = findViewById(R.id.main_toolbar);
         myToolbar.setTitle("Task List");
         setSupportActionBar(myToolbar);
 
@@ -75,6 +76,15 @@ public class TaskListActivity extends AppCompatActivity {
 
         employeeNameIdTextView = (TextView)findViewById(R.id.EmployeeID);
         employeeNameIdTextView.setText(employeeId);
+
+        //Progress Bar stuff
+        ProgressBar simpleProgressBar=(ProgressBar) findViewById(R.id.task_progressBar); // initiate the progress bar
+        simpleProgressBar.setMax(100); // 100 maximum value for the progress bar
+        int maxValue=simpleProgressBar.getMax(); // get maximum value of the progress bar
+        simpleProgressBar.setProgress(50); // 50 default progress value for the progress bar
+        int progressValue=simpleProgressBar.getProgress(); // get progress value from the progress bar
+
+
 
         // contains dummy data from arrays.xml
         testData = getResources().getStringArray(R.array.task_list);
