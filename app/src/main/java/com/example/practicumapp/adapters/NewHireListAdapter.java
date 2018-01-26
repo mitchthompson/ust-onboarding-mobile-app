@@ -14,7 +14,7 @@ import java.util.ArrayList;
 /**
  * Created by Mitch Thompson on 1/22/18.
  *
- * This is the new hire list activity's view adapter. It takes data and displays in a recyclerview.
+ * This is the new hire list activity's view adapter. It takes New Hire data and displays in a recyclerview.
  *
  */
 

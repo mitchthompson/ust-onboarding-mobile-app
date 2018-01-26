@@ -9,9 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.example.practicumapp.adapters.NewHireListAdapter;
 
@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class NewHireListActivity extends AppCompatActivity {
+    private Button addNewHireButton;
+
     private Context context;
     private String[] testData;
     private RecyclerView recyclerView;
@@ -39,11 +41,21 @@ public class NewHireListActivity extends AppCompatActivity {
         myToolbar.setTitle("New Hire List");
         setSupportActionBar(myToolbar);
 
-        /**
-         * TODO: get data for JSON parser
+        /*
+        sets click listener for add_new_hire_btn to launch AddNewHireActivity
          */
+        addNewHireButton = findViewById(R.id.add_new_hire_btn);
+        addNewHireButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(NewHireListActivity.this, AddNewHireActivity.class));
+            }
+        });
 
-        newHireList = new ArrayList<>(Arrays.asList("John Doe", "Susan Smith", "Blake Bortles", "Michael Barnum"));
+        /**
+         * TODO: get data from JSON parser, remove test dada
+         */
+        newHireList = new ArrayList<>(Arrays.asList("John Doe", "Susan Smith", "Blake Bortles",
+                "Michael Barnum", "Jason Mendoza", "Jill Riker", "Andrew Ryan", "Frank Fontaine", "Generic Name", "Reference Name"));
 
         relativeLayout = (RelativeLayout) findViewById(R.id.new_hire_relativeLayout);
         recyclerView = (RecyclerView) findViewById(R.id.new_hire_list_recycler);
