@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.SearchView;
 
 import com.example.practicumapp.adapters.NewHireListAdapter;
 
@@ -20,6 +21,7 @@ import java.util.Arrays;
 
 public class NewHireListActivity extends AppCompatActivity {
     private Button addNewHireButton;
+    private SearchView searchView;
 
     private Context context;
     private String[] testData;

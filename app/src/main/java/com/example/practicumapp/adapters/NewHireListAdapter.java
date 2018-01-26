@@ -24,7 +24,7 @@ public class NewHireListAdapter extends RecyclerView.Adapter<NewHireListAdapter.
     private View newHireView;
     private NewHireListViewHolder newHireViewHolder;
     private LayoutInflater inflater;
-    private ArrayList<String> newHireData = new ArrayList();
+    private ArrayList<String> newHireData;
 
     public NewHireListAdapter(Context newContext, ArrayList<String> newData) {
         this.context = newContext;
@@ -48,6 +48,7 @@ public class NewHireListAdapter extends RecyclerView.Adapter<NewHireListAdapter.
     public int getItemCount() {
         return newHireData.size();
     }
+
 
     public static class NewHireListViewHolder extends RecyclerView.ViewHolder {
         public TextView newHireTextView;
