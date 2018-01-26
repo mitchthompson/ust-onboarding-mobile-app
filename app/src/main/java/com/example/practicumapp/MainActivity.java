@@ -3,6 +3,7 @@ package com.example.practicumapp;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.support.v7.widget.Toolbar;
@@ -11,10 +12,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.practicumapp.Interfaces.UserResponseCallback;
+import com.example.practicumapp.Interfaces.WorkflowResponseCallback;
+import com.example.practicumapp.models.User;
+import com.example.practicumapp.models.Workflow;
+
+
 public class MainActivity extends AppCompatActivity {
 
     private Button taskListButton;
     private Button loginButton;
+    private static final String TAG = MainActivity.class.getName(); // Constant for logging data
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +36,9 @@ public class MainActivity extends AppCompatActivity {
         myToolbar.setTitle("Main Activity");
         setSupportActionBar(myToolbar);
 
-        /**
-         * TODO: remove temporary test buttons when not needed
-         **/
+
+        // TODO: remove temporary test buttons when not needed
+
 
         taskListButton = findViewById(R.id.task_list_button);
         loginButton = findViewById(R.id.login_button);
@@ -46,9 +54,23 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, TaskListActivity.class));
             }
         });
-        // TODO Place the code to retrieve JSON data in proper location
-        TaskParser taskParser = new TaskParser(getApplicationContext());
-        taskParser.fetchAllTasks();
+
+        // TODO Remove UserParser and WorkflowParser code below (For testing purposes only)
+        UserParser userParser = new UserParser(this.getApplicationContext());
+        userParser.getUser("72AD9DBC-60AE-4857-82D4-3A1AE09279A4", new UserResponseCallback() {
+            @Override
+            public void onSuccess(User user) {
+                Log.d(TAG, "User First Name : " + user.getFirstName());
+            }
+        });
+
+        WorkflowParser workflowParser = new WorkflowParser(this.getApplicationContext());
+        workflowParser.getWorkflow("01", new WorkflowResponseCallback() {
+            @Override
+            public void onSuccess(Workflow workflow) {
+                Log.d(TAG, "Workflow Task Name : " + workflow.getTasks().get(0).getName());
+            }
+        });
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
