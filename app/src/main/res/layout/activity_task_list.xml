@@ -56,13 +56,19 @@
         <ProgressBar
             android:id="@+id/task_progressBar"
             style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
             android:layout_weight="1"
             android:max="100"
-            android:progress="50"/>
-
+            android:maxHeight="35dip"
+            android:maxWidth="200dip"
+            android:minHeight="35dip"
+            android:minWidth="200dip"
+            android:progress="50" />
     </android.support.v7.widget.ActionMenuView>
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/task_list_recycler"

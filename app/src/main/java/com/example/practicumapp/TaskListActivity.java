@@ -48,6 +48,10 @@ public class TaskListActivity extends AppCompatActivity {
     private TextView employeeNameTextView;
     private TextView employeeNameIdTextView;
 
+    // Progress Bar
+    private ProgressBar simpleProgressBar;
+    private int countOfCompletedTasks = 0;
+
     //test variables
     private String employeeName = "LukeTestEmployee";
     private String employeeId = "LukeTest123456";
@@ -70,29 +74,28 @@ public class TaskListActivity extends AppCompatActivity {
 
         // Set the employee name and ID,
         // this can be done with the API functions,
-        // or from the stored information we get from the API later
+        // or from the stored information we get from the API later,
+        // perhaps this would be more effective in a method later.
         employeeNameTextView = (TextView)findViewById(R.id.EmployeeName);
         employeeNameTextView.setText(employeeName);
 
         employeeNameIdTextView = (TextView)findViewById(R.id.EmployeeID);
         employeeNameIdTextView.setText(employeeId);
 
-        //Progress Bar stuff
-        ProgressBar simpleProgressBar=(ProgressBar) findViewById(R.id.task_progressBar); // initiate the progress bar
-        simpleProgressBar.setMax(100); // 100 maximum value for the progress bar
-        int maxValue=simpleProgressBar.getMax(); // get maximum value of the progress bar
-        simpleProgressBar.setProgress(50); // 50 default progress value for the progress bar
-        int progressValue=simpleProgressBar.getProgress(); // get progress value from the progress bar
-
-
-
         // contains dummy data from arrays.xml
+        // either we change this variable name and continue to get the data from the array, or we
+        // call the API directly here?
         testData = getResources().getStringArray(R.array.task_list);
+
         // converts array into a list for use with the adapter
         taskList = new ArrayList<>(Arrays.asList(testData));
 
-        relativeLayout = (RelativeLayout) findViewById(R.id.activity_task_list);
+        // initiate the progress bar and set it's initial max
+        simpleProgressBar=(ProgressBar) findViewById(R.id.task_progressBar);
+        // use the array from onCreate to set the progress bars max value
+        simpleProgressBar.setMax(testData.length); // 100 maximum value for the progress bar
 
+        relativeLayout = (RelativeLayout) findViewById(R.id.activity_task_list);
 
         recyclerView = (RecyclerView) findViewById(R.id.task_list_recycler);
         recyclerViewLayoutManager = new LinearLayoutManager(context);
@@ -100,5 +103,20 @@ public class TaskListActivity extends AppCompatActivity {
 
         taskViewAdapter = new TaskListAdapter(context, taskList);
         recyclerView.setAdapter(taskViewAdapter);
+    }
+
+    /**
+     * Helper method to calculate and redraw the progress bar whenever a checkbox is checked
+     */
+    public void ProgressBarIncrement(int increment) {
+
+
+        //int maxValue=simpleProgressBar.getMax(); // get maximum value of the progress bar
+        //simpleProgressBar.setProgress(50); // 50 default progress value for the progress bar
+        //int progressValue=simpleProgressBar.getProgress(); // get progress value from the progress bar
+
+        // let the built in increment method do the work.
+        // does this increment method also work on decrement?
+        simpleProgressBar.incrementProgressBy(increment);
     }
 }
