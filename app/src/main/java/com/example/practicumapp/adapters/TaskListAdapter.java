@@ -31,6 +31,8 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
     private View taskView;
     private TaskListViewHolder taskViewHolder;
     private LayoutInflater inflater;
+    
+    //TODO: change this to an array of tasks from a workflow?
     private ArrayList<String> taskData = new ArrayList();
 
     public TaskListAdapter(Context newContext, ArrayList<String> newData) {
@@ -52,7 +54,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
 
         //TODO: We need to store the checked/unchecked status in our model,
         // and then call it here in a method, like this maybe:
-        // holder.taskCheckBox.setChecked(getChecked())
+        // holder.taskCheckBox.setChecked(isChecked())
 
         holder.taskCheckBox.setChecked(true);
     }
@@ -72,8 +74,10 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
 
             taskCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                /**
+                /*
                  * Handles listening for changes to the checkboxes, if a checkbox changes
+                 * TODO: Set the isChecked value of the task in the model so that the state is tracked
+                 * Otherwise the recycler view will just reload it as checked when you scroll.
                  */
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if(taskCheckBox.isChecked()) {
