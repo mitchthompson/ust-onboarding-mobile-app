@@ -31,7 +31,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
     private View taskView;
     private TaskListViewHolder taskViewHolder;
     private LayoutInflater inflater;
-    
     //TODO: change this to an array of tasks from a workflow?
     private ArrayList<String> taskData = new ArrayList();
 
