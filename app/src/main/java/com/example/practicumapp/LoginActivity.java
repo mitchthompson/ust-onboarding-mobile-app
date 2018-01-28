@@ -28,6 +28,10 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.practicumapp.Interfaces.UserResponseCallback;
+import com.example.practicumapp.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -310,6 +314,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             try {
                 // Simulate network access.
+                UserParser getJson = new UserParser(getApplicationContext());
+                getJson.getUser(mEmail, new UserResponseCallback() {
+                    @Override
+                    public void onSuccess(User user) {
+                        String temp = "Email: " + user.getEmail() + "\nFirst: " + user.getFirstName() + "\nLast: " + user.getLastName()
+                                + "\nUsername: " + user.getUserName() + "\nType: " + user.getType() + "\nID: " + user.getId()
+                                + "\nPhone: " + user.getPhone();
+                        Toast.makeText(getApplicationContext(), temp, Toast.LENGTH_LONG).show();
+
+
+
+                    }
+                });
+
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 return false;
