@@ -49,7 +49,7 @@ public class TaskListActivity extends AppCompatActivity {
     private TextView employeeNameIdTextView;
 
     // Progress Bar
-    private ProgressBar simpleProgressBar;
+    private static ProgressBar simpleProgressBar;
     private int countOfCompletedTasks = 0;
 
     //test variables
@@ -103,20 +103,23 @@ public class TaskListActivity extends AppCompatActivity {
 
         taskViewAdapter = new TaskListAdapter(context, taskList);
         recyclerView.setAdapter(taskViewAdapter);
+
+
+
     }
 
     /**
      * Helper method to calculate and redraw the progress bar whenever a checkbox is checked
      */
-    public void ProgressBarIncrement(int increment) {
+    public static void ProgressBarIncrement(int increment) {
 
-
+        /* I might need this code later
         //int maxValue=simpleProgressBar.getMax(); // get maximum value of the progress bar
         //simpleProgressBar.setProgress(50); // 50 default progress value for the progress bar
         //int progressValue=simpleProgressBar.getProgress(); // get progress value from the progress bar
+        */
 
-        // let the built in increment method do the work.
-        // does this increment method also work on decrement?
+        // let the built in increment method do the work. Also works on a negative increment.
         simpleProgressBar.incrementProgressBy(increment);
     }
 }

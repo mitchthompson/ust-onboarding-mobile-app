@@ -6,7 +6,7 @@
     android:layout_height="64dp">
 
     <CheckBox
-        android:id="@+id/checkBox2"
+        android:id="@+id/task_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="0"

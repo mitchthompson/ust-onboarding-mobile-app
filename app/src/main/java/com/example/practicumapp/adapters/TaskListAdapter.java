@@ -5,9 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.example.practicumapp.R;
+import com.example.practicumapp.TaskListActivity;
 
 import java.util.ArrayList;
 
@@ -46,6 +49,12 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
     @Override
     public void onBindViewHolder(TaskListViewHolder holder, int position) {
         holder.taskTextView.setText(taskData.get(position).toString());
+
+        //TODO: We need to store the checked/unchecked status in our model,
+        // and then call it here in a method, like this maybe:
+        // holder.taskCheckBox.setChecked(getChecked())
+
+        holder.taskCheckBox.setChecked(true);
     }
 
     @Override
@@ -53,11 +62,31 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
         return taskData.size();
     }
 
-    public static class TaskListViewHolder extends RecyclerView.ViewHolder {
+    public class TaskListViewHolder extends RecyclerView.ViewHolder {
+        public CheckBox taskCheckBox;
         public TextView taskTextView;
         public TaskListViewHolder(View v) {
             super(v);
+            taskCheckBox = (CheckBox) v.findViewById(R.id.task_checkbox);
             taskTextView = (TextView) v.findViewById(R.id.task_list_item);
+
+            taskCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                /**
+                 * Handles listening for changes to the checkboxes, if a checkbox changes
+                 */
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if(taskCheckBox.isChecked()) {
+                        TaskListActivity.ProgressBarIncrement(1);
+                    }
+                    else {
+                        TaskListActivity.ProgressBarIncrement(-1);
+                    }
+                }
+            });
+
+
         }
+
     }
 }
