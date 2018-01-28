@@ -13,12 +13,14 @@ gradle-app.setting
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
 
+*.iml
 /local.properties
 /.idea/workspace.xml
 /.idea/libraries
 .DS_Store
 /build
 /captures
+.externalNativeBuild
 
 # Built application files
 *.apk
@@ -83,4 +85,3 @@ fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
-/.idea/

@@ -7,12 +7,77 @@
     tools:context="com.example.practicumapp.TaskListActivity"
     android:id="@+id/activity_task_list">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/main_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    <android.support.v7.widget.ActionMenuView
+        android:id="@+id/employee_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/main_toolbar"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp">
+
+        <TextView
+            android:id="@+id/EmployeeName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5px"
+            android:layout_weight="1"
+            android:text="PlaceHolder Employee" />
+
+        <TextView
+            android:id="@+id/EmployeeID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5px"
+            android:layout_weight="1"
+            android:text="123456" />
+
+    </android.support.v7.widget.ActionMenuView>
+
+    <android.support.v7.widget.ActionMenuView
+        android:id="@+id/progress_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/employee_toolbar"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp">
+
+        <ProgressBar
+            android:id="@+id/task_progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_weight="1"
+            android:max="100"
+            android:maxHeight="35dip"
+            android:maxWidth="200dip"
+            android:minHeight="35dip"
+            android:minWidth="200dip"
+            android:progress="50" />
+    </android.support.v7.widget.ActionMenuView>
+
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/task_list_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/myToolbar"
+        android:layout_below="@+id/progress_toolbar"
         android:scrollbars="vertical"
         tools:listitem="@layout/task_items" />
+
+
 
 </RelativeLayout>
