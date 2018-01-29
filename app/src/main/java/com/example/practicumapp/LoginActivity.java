@@ -46,18 +46,19 @@ public class LoginActivity extends AppCompatActivity {
         submitLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userID = unameField.getText().toString();
-                userPass = pswdField.getText().toString();
+                userID = unameField.getText().toString().trim();
+                userPass = pswdField.getText().toString().trim();
 
                 UserLoginTask login = new UserLoginTask(userID, userPass);
-                login.doInBackground();
-
+                login.execute();
+                /*
                 if(userID.equals("admin") && userPass.equals("admin")){
                     Toast.makeText(LoginActivity.this, "Username and Password is correct", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(LoginActivity.this, TaskListActivity.class));
                 }else{
                     Toast.makeText(LoginActivity.this, "Username or Password is incorrect", Toast.LENGTH_SHORT).show();
                 }
+                */
             }
         });
     }
@@ -68,30 +69,40 @@ public class LoginActivity extends AppCompatActivity {
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final String mEmail;
+        private final String mUserID;
         private final String mPassword;
 
-        UserLoginTask(String email, String password) {
-            mEmail = email;
+        UserLoginTask(String id, String password) {
+            mUserID = id;
             mPassword = password;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
+            // TODO: Request username and compare password with specified username
 
             try {
                 UserParser getJson = new UserParser(getApplicationContext());
-                getJson.getUser(mEmail, new UserResponseCallback() {
+                getJson.getUser(mUserID, new UserResponseCallback() {
                     @Override
                     public void onSuccess(User user) {
-                        String temp = "Email: " + user.getEmail() + "\nFirst: " + user.getFirstName() + "\nLast: " + user.getLastName()
-                                + "\nUsername: " + user.getUserName() + "\nType: " + user.getType() + "\nID: " + user.getId()
-                                + "\nPhone: " + user.getPhone();
-                        Toast.makeText(getApplicationContext(), temp, Toast.LENGTH_LONG).show();
-
-
-
+                        /*
+                            Formats the returned ID without dashes and compares it to input ID from textbox.
+                            72AD9DBC60AE485782D43A1AE09279A4 is the current valid example ID for Rick Sanchez
+                            If true, toast appears displaying user info and starts TaskListActivity.
+                            If false, reloads LoginActivity and notifies that the user/pass is incorrect.
+                         */
+                        if (mUserID.equals(user.getId().replace("-",""))) {
+                            String temp = "Email: " + user.getEmail() + "\nFirst: " + user.getFirstName() + "\nLast: " + user.getLastName()
+                                    + "\nUsername: " + user.getUserName() + "\nType: " + user.getType() + "\nID: " + user.getId()
+                                    + "\nPhone: " + user.getPhone();
+                            Toast.makeText(getApplicationContext(), temp, Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(LoginActivity.this, TaskListActivity.class));
+                        }
+                        else {
+                            startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+                            Toast.makeText(getApplicationContext(), "Incorrect User/Pass", Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
 
@@ -100,27 +111,26 @@ public class LoginActivity extends AppCompatActivity {
                 return false;
             }
 
-            // TODO: register the new account here.
             return true;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
+            //mAuthTask = null;
+            //showProgress(false);
 
             if (success) {
                 finish();
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+               // mPasswordView.setError(getString(R.string.error_incorrect_password));
+               // mPasswordView.requestFocus();
             }
         }
 
         @Override
         protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
+            //mAuthTask = null;
+            //showProgress(false);
         }
     }
 }
