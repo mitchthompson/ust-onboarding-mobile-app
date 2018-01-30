@@ -8,7 +8,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.practicumapp.Interfaces.VolleyCallback;
+import com.example.practicumapp.Interfaces.VolleyResponseListener;
 
 import org.json.JSONObject;
 
@@ -72,7 +72,7 @@ public class MyVolleySingleton {
      * @param callback Interface callback
      * @exception VolleyError on volley error
      */
-    public void sendVolleyRequest(int requestMethod, String url, JSONObject jsonObject, final VolleyCallback callback) {
+    public void sendVolleyRequest(int requestMethod, String url, JSONObject jsonObject, final VolleyResponseListener callback) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (requestMethod, url, jsonObject, new Response.Listener<JSONObject>() {
                     @Override
