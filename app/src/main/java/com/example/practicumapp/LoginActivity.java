@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.practicumapp.Interfaces.UserResponseCallback;
+import com.example.practicumapp.Interfaces.VolleyUserResponseListener;
 import com.example.practicumapp.models.User;
 
 /**
@@ -82,8 +82,8 @@ public class LoginActivity extends AppCompatActivity {
             // TODO: Request username and compare password with specified username
 
             try {
-                UserParser getJson = new UserParser(getApplicationContext());
-                getJson.getUser(mUserID, new UserResponseCallback() {
+                VolleyParser getJson = new VolleyParser(getApplicationContext());
+                getJson.getUser(mUserID, new VolleyUserResponseListener() {
                     @Override
                     public void onSuccess(User user) {
                         /*
@@ -94,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
                          */
                         if (mUserID.equals(user.getId().replace("-",""))) {
                             String temp = "Email: " + user.getEmail() + "\nFirst: " + user.getFirstName() + "\nLast: " + user.getLastName()
-                                    + "\nUsername: " + user.getUserName() + "\nType: " + user.getType() + "\nID: " + user.getId()
+                                    + "\nUsername: " + user.getManager() + "\nType: " + user.getType() + "\nID: " + user.getId()
                                     + "\nPhone: " + user.getPhone();
                             Toast.makeText(getApplicationContext(), temp, Toast.LENGTH_LONG).show();
                             startActivity(new Intent(LoginActivity.this, TaskListActivity.class));
