@@ -7,7 +7,7 @@ import org.json.JSONObject;
  * This interface allows callback after any volley request is successful
  */
 
-public interface VolleyCallback {
+public interface VolleyResponseListener {
 
     void onSuccess(JSONObject response); // Called after a successful response is received
 

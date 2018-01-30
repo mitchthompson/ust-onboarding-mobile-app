@@ -12,8 +12,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.practicumapp.Interfaces.UserResponseCallback;
-import com.example.practicumapp.Interfaces.WorkflowResponseCallback;
+import com.example.practicumapp.Interfaces.VolleyUserResponseListener;
+import com.example.practicumapp.Interfaces.VolleyWorkflowResponseListener;
 import com.example.practicumapp.models.User;
 import com.example.practicumapp.models.Workflow;
 
@@ -55,20 +55,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // TODO Remove UserParser and WorkflowParser code below (For testing purposes only)
-        UserParser userParser = new UserParser(this.getApplicationContext());
-        userParser.getUser("72AD9DBC-60AE-4857-82D4-3A1AE09279A4", new UserResponseCallback() {
+        // TODO Remove volleyParser code below (For testing purposes only)
+        VolleyParser volleyParser = new VolleyParser(this.getApplicationContext());
+        volleyParser.getUser("72AD9DBC60AE485782D43A1AE09279A4", new VolleyUserResponseListener() {
             @Override
             public void onSuccess(User user) {
-                Log.d(TAG, "User First Name : " + user.getFirstName());
+                Log.d(TAG, "VolleyParser User First Name : " + user.getFirstName());
             }
         });
-
-        WorkflowParser workflowParser = new WorkflowParser(this.getApplicationContext());
-        workflowParser.getWorkflow("01", new WorkflowResponseCallback() {
+        volleyParser.getWorkflow("01", new VolleyWorkflowResponseListener() {
             @Override
             public void onSuccess(Workflow workflow) {
-                Log.d(TAG, "Workflow Task Name : " + workflow.getTasks().get(0).getName());
+                Log.d(TAG, "VolleyParser Workflow Task Name : " + workflow.getTasks().get(0).getName());
             }
         });
     }
