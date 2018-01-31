@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * Represents an asynchronous login/registration task used to authenticate
+     * Represents an asynchronous login task used to authenticate
      * the user.
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
@@ -72,6 +72,15 @@ public class LoginActivity extends AppCompatActivity {
         private final String mUserID;
         private final String mPassword;
 
+        /**
+         * Constructor for UserLoginTask that accepts two parameters (user's ID and password), uses
+         * these parameters to send a call to the API to get the specified user. If the user's password
+         * matches, the user is redirected to the TaskListActivity. If the password doesn't match,
+         * the LoginActivity is reloaded and the user is notified that the user/pass is incorrect.
+         *
+         * @param id user's ID
+         * @param password user's password
+         */
         UserLoginTask(String id, String password) {
             mUserID = id;
             mPassword = password;
@@ -86,12 +95,6 @@ public class LoginActivity extends AppCompatActivity {
                 getJson.getUser(mUserID, new VolleyUserResponseListener() {
                     @Override
                     public void onSuccess(User user) {
-                        /*
-                            Formats the returned ID without dashes and compares it to input ID from textbox.
-                            72AD9DBC60AE485782D43A1AE09279A4 is the current valid example ID for Rick Sanchez
-                            If true, toast appears displaying user info and starts TaskListActivity.
-                            If false, reloads LoginActivity and notifies that the user/pass is incorrect.
-                         */
                         if (mUserID.equals(user.getId().replace("-",""))) {
                             String temp = "Email: " + user.getEmail() + "\nFirst: " + user.getFirstName() + "\nLast: " + user.getLastName()
                                     + "\nUsername: " + user.getManager() + "\nType: " + user.getType() + "\nID: " + user.getId()
