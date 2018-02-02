@@ -89,12 +89,12 @@ public class VolleyParser {
                             JSONArray employeesJSONArray = response.getJSONArray("employees");
                             ArrayList<String> employees = new ArrayList<>();
                             for (int i = 0; i < employeesJSONArray.length(); i++) {
-                                employees.add(String.valueOf(employeesJSONArray.getInt(i)));
+//                                employees.add(String.valueOf(employeesJSONArray.getInt(i)));
                             }
                             JSONArray tasksJSONArray = response.getJSONArray("tasks");
                             ArrayList<String> tasks = new ArrayList<>();
                             for (int i = 0; i < tasksJSONArray.length(); i++) {
-                                employees.add(String.valueOf(tasksJSONArray.getInt(i)));
+//                                tasks.add(String.valueOf(tasksJSONArray.getInt(i)));
                             }
                             User user = new User(id, firstName, lastName, email, phone, type, manager, employees, workflow, tasks);
                             volleyUserResponseListener.onSuccess(user);
