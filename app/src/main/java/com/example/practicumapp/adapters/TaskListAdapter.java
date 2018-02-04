@@ -49,7 +49,12 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
 
     @Override
     public void onBindViewHolder(TaskListViewHolder holder, int position) {
+        //set task name
         holder.taskTextView.setText(taskData.get(position).toString());
+
+        //set and hide task description
+        //holder.taskDescriptionView.setText(taskData.get(position).toString());
+        //holder.
 
         //TODO: We need to store the checked/unchecked status in our model,
         // and then call it here in a method, like this maybe:
@@ -66,10 +71,15 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
     public class TaskListViewHolder extends RecyclerView.ViewHolder {
         public CheckBox taskCheckBox;
         public TextView taskTextView;
+        public TextView taskDescriptionView;
         public TaskListViewHolder(View v) {
             super(v);
             taskCheckBox = (CheckBox) v.findViewById(R.id.task_checkbox);
             taskTextView = (TextView) v.findViewById(R.id.task_list_item);
+
+            //Set and hide taskDescription
+            taskDescriptionView = (TextView) v.findViewById(R.id.task_description);
+            taskDescriptionView.setVisibility(View.INVISIBLE);
 
             taskCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -84,6 +94,18 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
                     }
                     else {
                         TaskListActivity.ProgressBarIncrement(-1);
+                    }
+                }
+            });
+
+            taskTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (taskDescriptionView.getVisibility() == View.VISIBLE) {
+                        taskDescriptionView.setVisibility(View.INVISIBLE);
+                    }
+                    else {
+                        taskDescriptionView.setVisibility(View.VISIBLE);
                     }
                 }
             });
