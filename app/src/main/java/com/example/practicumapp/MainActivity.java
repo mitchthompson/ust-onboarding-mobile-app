@@ -12,10 +12,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.practicumapp.Interfaces.VolleyTaskResponseListener;
 import com.example.practicumapp.Interfaces.VolleyUserResponseListener;
 import com.example.practicumapp.Interfaces.VolleyWorkflowResponseListener;
+import com.example.practicumapp.models.Task;
 import com.example.practicumapp.models.User;
 import com.example.practicumapp.models.Workflow;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -61,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(User user) {
                 Log.d(TAG, "VolleyParser User First Name : " + user.getFirstName());
+                Log.d(TAG, "VolleyParser Tasks : " + user.getTasks().toString());
+                Log.d(TAG, "VolleyParser Employees : " + user.getEmployees().toString());
             }
         });
         volleyParser.getWorkflow("01", new VolleyWorkflowResponseListener() {
@@ -69,6 +75,13 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "VolleyParser Workflow Task Name : " + workflow.getTasks().get(0).getName());
             }
         });
+        volleyParser.getTask("ECCD3A6ED4C54D2DA28C9CDD28F6417E", new VolleyTaskResponseListener() {
+            @Override
+            public void onSuccess(Task task) {
+                Log.d(TAG, "VolleyParser Task Name : " + task.getName());
+            }
+        });
+
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

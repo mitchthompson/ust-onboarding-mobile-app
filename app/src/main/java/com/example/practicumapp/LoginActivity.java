@@ -97,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onSuccess(User user) {
                         if (mUserID.equals(user.getId().replace("-",""))) {
                             String temp = "Email: " + user.getEmail() + "\nFirst: " + user.getFirstName() + "\nLast: " + user.getLastName()
-                                    + "\nUsername: " + user.getManager() + "\nType: " + user.getType() + "\nID: " + user.getId()
+                                    + "\nStartDate: " + user.getStartDate() + "\nType: " + user.getType() + "\nID: " + user.getId()
                                     + "\nPhone: " + user.getPhone();
                             Toast.makeText(getApplicationContext(), temp, Toast.LENGTH_LONG).show();
                             startActivity(new Intent(LoginActivity.this, TaskListActivity.class));
