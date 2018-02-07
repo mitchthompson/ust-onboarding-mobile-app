@@ -1,10 +1,16 @@
 package com.example.practicumapp.models;
 
-public class Task {
+import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
+
+import java.util.ArrayList;
+
+public class Task extends ExpandableGroup<TaskDescription> {
 
     private String id, name, description, employeeInstructions, managerInstructions;
 
-    public Task(String id, String name, String description, String employeeInstructions, String managerInstructions) {
+    public Task(String id, String name, String description, String employeeInstructions,
+                String managerInstructions, ArrayList<TaskDescription> childDescription) {
+        super(name, childDescription);
         this.id = id;
         this.name = name;
         this.description = description;

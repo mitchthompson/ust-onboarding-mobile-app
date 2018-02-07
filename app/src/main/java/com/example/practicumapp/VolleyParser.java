@@ -1,18 +1,22 @@
 package com.example.practicumapp;
 
 import android.content.Context;
+
 import com.android.volley.Request;
+import com.example.practicumapp.Interfaces.VolleyResponseListener;
 import com.example.practicumapp.Interfaces.VolleyTaskResponseListener;
 import com.example.practicumapp.Interfaces.VolleyUserResponseListener;
-import com.example.practicumapp.Interfaces.VolleyResponseListener;
 import com.example.practicumapp.Interfaces.VolleyWorkflowResponseListener;
 import com.example.practicumapp.models.Task;
+import com.example.practicumapp.models.TaskDescription;
 import com.example.practicumapp.models.User;
 import com.example.practicumapp.models.Workflow;
-import java.util.ArrayList;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /*
  * JSON parser class for User, Workflow and Task
@@ -139,7 +143,11 @@ public class VolleyParser {
                                 String taskDescription = jsonObject.getString("description");
                                 String employeeInstructions = jsonObject.getString("employeeInstructions");
                                 String managerInstructions = jsonObject.getString("managerInstructions");
-                                Task singleTask = new Task(taskID, taskName, taskDescription, employeeInstructions, managerInstructions);
+                                TaskDescription expandableDescription = new TaskDescription(taskID, taskDescription);
+                                ArrayList<TaskDescription> expandableDescriptionArrayList = new ArrayList<TaskDescription>();
+                                expandableDescriptionArrayList.add(expandableDescription);
+
+                                Task singleTask = new Task(taskID, taskName, taskDescription, employeeInstructions, managerInstructions, expandableDescriptionArrayList);
                                 tasks.add(singleTask);
                             }
                             Workflow workflow = new Workflow(id, name, description, tasks);
@@ -168,7 +176,12 @@ public class VolleyParser {
                                 String taskDescription = response.getString("description");
                                 String employeeInstructions = response.getString("employeeInstructions");
                                 String managerInstructions = response.getString("managerInstructions");
-                                Task task = new Task(taskID, taskName, taskDescription, employeeInstructions, managerInstructions);
+
+                                TaskDescription expandableDescription = new TaskDescription(taskID, taskDescription);
+                                ArrayList<TaskDescription> expandableDescriptionArrayList = new ArrayList<TaskDescription>();
+                                expandableDescriptionArrayList.add(expandableDescription);
+
+                                Task task = new Task(taskID, taskName, taskDescription, employeeInstructions, managerInstructions, expandableDescriptionArrayList);
                                 volleyTaskResponseListener.onSuccess(task);
                             } catch (JSONException e1) {
                             e1.printStackTrace();

@@ -12,9 +12,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.practicumapp.adapters.TaskListAdapter;
+import com.example.practicumapp.models.Task;
+import com.example.practicumapp.models.TaskDescription;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * JS - main task activity; this will show all of the tasks that an employee needs to complete
@@ -88,7 +89,19 @@ public class TaskListActivity extends AppCompatActivity {
         testData = getResources().getStringArray(R.array.task_list);
 
         // converts array into a list for use with the adapter
-        taskList = new ArrayList<>(Arrays.asList(testData));
+        //taskList = new ArrayList<>(Arrays.asList(testData));
+        //TESTING DATA
+        ArrayList<Task> taskList = new ArrayList<Task>();
+
+        for(int i = 0; i < testData.length; i++) {
+            String id = "" + i;
+
+            TaskDescription expandableDescription = new TaskDescription(id, testData[i]);
+            ArrayList<TaskDescription> expandableDescriptionArrayList = new ArrayList<TaskDescription>();
+            expandableDescriptionArrayList.add(expandableDescription);
+
+            taskList.add(new Task(id, testData[i], testData[i], testData[i],  testData[i], expandableDescriptionArrayList ));
+        }
 
         // initiate the progress bar and set it's initial max
         simpleProgressBar=(ProgressBar) findViewById(R.id.task_progressBar);
@@ -98,10 +111,10 @@ public class TaskListActivity extends AppCompatActivity {
         relativeLayout = (RelativeLayout) findViewById(R.id.activity_task_list);
 
         recyclerView = (RecyclerView) findViewById(R.id.task_list_recycler);
-        recyclerViewLayoutManager = new LinearLayoutManager(context);
-        recyclerView.setLayoutManager(recyclerViewLayoutManager);
+        recyclerViewLayoutManager = new LinearLayoutManager(this);
 
         taskViewAdapter = new TaskListAdapter(context, taskList);
+        recyclerView.setLayoutManager(recyclerViewLayoutManager);
         recyclerView.setAdapter(taskViewAdapter);
 
 

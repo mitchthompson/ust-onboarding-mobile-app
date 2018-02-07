@@ -1,7 +1,6 @@
 package com.example.practicumapp.adapters;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +10,15 @@ import android.widget.TextView;
 
 import com.example.practicumapp.R;
 import com.example.practicumapp.TaskListActivity;
+import com.example.practicumapp.models.Task;
+import com.example.practicumapp.models.TaskDescription;
+import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
+import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
+import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder;
+import com.thoughtbot.expandablerecyclerview.viewholders.GroupViewHolder;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by jsayler on 1/14/18.
@@ -25,7 +31,7 @@ import java.util.ArrayList;
  * TaskListViewHolder
  */
 
-public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskListViewHolder> {
+public class TaskListAdapter extends ExpandableRecyclerViewAdapter<TaskListAdapter.TaskListViewHolder, TaskListAdapter.TaskDescriptionViewHolder> {
 
     private Context taskContext;
     private View taskView;
@@ -34,10 +40,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
     //TODO: change this to an array of tasks from a workflow?
     private ArrayList<String> taskData = new ArrayList();
 
-    public TaskListAdapter(Context newContext, ArrayList<String> newData) {
+    public TaskListAdapter(Context newContext, List<Task> newData) {
+        super(newData);
         this.taskContext = newContext;
         inflater = LayoutInflater.from(taskContext);
-        this.taskData = newData;
+        //this.taskData = newData;
     }
 
     @Override
@@ -47,6 +54,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
         return taskViewHolder;
     }
 
+    /*
     @Override
     public void onBindViewHolder(TaskListViewHolder holder, int position) {
         //set task name
@@ -62,13 +70,38 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
 
         holder.taskCheckBox.setChecked(true);
     }
+    */
 
     @Override
     public int getItemCount() {
         return taskData.size();
     }
 
-    public class TaskListViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public TaskListViewHolder onCreateGroupViewHolder(ViewGroup parent, int viewType) {
+        View view = inflater.inflate(R.layout.task_items, parent, false);
+        return new TaskListViewHolder(view);
+    }
+
+    @Override
+    public TaskDescriptionViewHolder onCreateChildViewHolder(ViewGroup parent, int viewType) {
+        View view = inflater.inflate(R.layout.task_description_items, parent, false);
+        return new TaskDescriptionViewHolder(view);
+    }
+
+    @Override
+    public void onBindChildViewHolder(TaskDescriptionViewHolder holder, int flatPosition, ExpandableGroup group, int childIndex) {
+        final TaskDescription taskDescription = (TaskDescription) (group).getItems().get(childIndex);
+        holder.setTaskDescriptionText(taskDescription.getDescription());
+
+    }
+
+    @Override
+    public void onBindGroupViewHolder(TaskListViewHolder holder, int flatPosition, ExpandableGroup group) {
+        holder.setTaskTextView(group);
+    }
+
+    public class TaskListViewHolder extends GroupViewHolder {
         public CheckBox taskCheckBox;
         public TextView taskTextView;
         public TextView taskDescriptionView;
@@ -110,8 +143,28 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
                 }
             });
 
-
         }
 
+        public void setTaskTextView(ExpandableGroup group) {
+            taskTextView.setText(group.getTitle());
+        }
+
+    }
+
+    public class TaskDescriptionViewHolder extends ChildViewHolder {
+        private String taskDescriptionText;
+
+        public TaskDescriptionViewHolder(View itemView) {
+            super(itemView);
+            taskDescriptionText = itemView.findViewById(R.id.task_description).toString();
+        }
+
+        public void onBind(TaskDescription taskDescription) {
+            taskDescription.setDescription(taskDescriptionText.toString());
+        }
+
+        public void setTaskDescriptionText(String taskDescriptionTextIn) {
+            this.taskDescriptionText =  taskDescriptionTextIn;
+        }
     }
 }
