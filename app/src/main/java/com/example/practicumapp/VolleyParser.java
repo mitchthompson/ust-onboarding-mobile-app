@@ -108,12 +108,10 @@ public class VolleyParser {
                             for (int i = 0; i < employeesObject.length(); i++) {
                                 employees.put(employeesObject.names().getString(i), employeesObject.get(employeesObject.names().getString(i)).toString());
                             }
-//                            TODO GET task ids from the API and remove hardcoded task ids
-//                            JSONArray tasksObject = response.getJSONArray("tasks");
+                            JSONArray tasksObject = response.getJSONArray("tasks");
                             ArrayList<String> tasks = new ArrayList<>();
-                            for (int i = 0; i < 5; i++) {
-//                                tasks.add(tasksObject.get(i).toString());
-                                tasks.add("ECCD3A6ED4C54D2DA28C9CDD28F6417E");
+                            for (int i = 0; i < tasksObject.length(); i++) {
+                                tasks.add(tasksObject.get(i).toString());
                             }
                             User user = new User(id, firstName, lastName, email, phone, type, startDate, employees, workflow, tasks);
                             volleyUserResponseListener.onSuccess(user);
@@ -188,42 +186,28 @@ public class VolleyParser {
      * @exception JSONException JSON parsing error exception
      */
     public void getTask(String taskID, final VolleyTaskResponseListener volleyTaskResponseListener) {
-
-        String id = "ECCD3A6ED4C54D2DA28C9CDD28F6417E";
-        String taskName = "Cloud";
-        HashMap<String, String> taskDescriptions = new HashMap<String, String>();
-        taskDescriptions.put("manager", "Do something to complete this task.");
-        taskDescriptions.put("employee", "Do something to complete this task.");
-        String viewers = "manager";
-        Task singleTask = new Task(id, taskName, taskDescriptions, viewers);
-        volleyTaskResponseListener.onSuccess(singleTask);
-
-//        TODO Remove hardcoded task details, uncomment code below after the API is updated
-//        String urlWithParams = API_ADDRESS + "/task/" + taskID;
-//        MyVolleySingleton.getInstance(context).
-//                sendVolleyRequest(Request.Method.GET, urlWithParams, null, new VolleyResponseListener() {
-//                    @Override
-//                    public void onSuccess(JSONObject response) {
-//                        Log.d("VOLLEYPARSER", "Task : " + response.toString());
-//                        try {
-//                            String taskID = response.getString("id");
-//                            String taskName = response.getString("name");
-//                            JSONArray taskDescriptionsObject = response.getJSONArray("descriptions");
-//                            HashMap<String, String> taskDescriptions = new HashMap<String, String>();
-//                            for (int j = 0; j < taskDescriptionsObject.length(); j++) {
-//                                JSONObject singleTaskDescription = taskDescriptionsObject.getJSONObject(j);
-//                                taskDescriptions.put(singleTaskDescription.names().getString(j), singleTaskDescription.get(singleTaskDescription.names().getString(j)).toString());
-//                            }
-//                            String viewers = response.getString("viewers");
-//                            Log.d("VOLLEYPARSER", "Viewers : " + viewers);
-//
-//                            Task task = new Task(taskID, taskName, taskDescriptions, viewers);
-//                            volleyTaskResponseListener.onSuccess(task);
-//                        } catch (JSONException e1) {
-//                            e1.printStackTrace();
-//                        }
-//                    }
-//                });
+        String urlWithParams = API_ADDRESS + "/task/" + taskID;
+        MyVolleySingleton.getInstance(context).
+                sendVolleyRequest(Request.Method.GET, urlWithParams, null, new VolleyResponseListener() {
+                    @Override
+                    public void onSuccess(JSONObject response) {
+                        try {
+                            String taskID = response.getString("id");
+                            String taskName = response.getString("name");
+                            JSONArray taskDescriptionsObject = response.getJSONArray("descriptions");
+                            HashMap<String, String> taskDescriptions = new HashMap<String, String>();
+                            for (int j = 0; j < taskDescriptionsObject.length(); j++) {
+                                JSONObject singleTaskDescription = taskDescriptionsObject.getJSONObject(j);
+                                taskDescriptions.put(singleTaskDescription.names().getString(j), singleTaskDescription.get(singleTaskDescription.names().getString(j)).toString());
+                            }
+                            String viewers = response.getString("viewers");
+                            Task task = new Task(taskID, taskName, taskDescriptions, viewers);
+                            volleyTaskResponseListener.onSuccess(task);
+                        } catch (JSONException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                });
     }
 
 //  Update (UPDATE) functions
