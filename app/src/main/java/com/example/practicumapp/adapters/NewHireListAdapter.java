@@ -12,10 +12,12 @@ import com.example.practicumapp.R;
 import java.util.ArrayList;
 
 /**
- * Created by Mitch Thompson on 1/22/18.
+ *  This is the new hire list activity's view adapter. It takes New Hire data in ArrayList then
+ *  displays creates a recyclerview.
  *
- * This is the new hire list activity's view adapter. It takes New Hire data and displays in a recyclerview.
- *
+ * @author Mitch Thompson
+ * @since 1/22/2018
+ * @see com.example.practicumapp.NewHireListActivity
  */
 
 public class NewHireListAdapter extends RecyclerView.Adapter<NewHireListAdapter.NewHireListViewHolder> {
