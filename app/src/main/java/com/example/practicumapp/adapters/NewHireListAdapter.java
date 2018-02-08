@@ -5,7 +5,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.practicumapp.R;
 
@@ -43,7 +45,14 @@ public class NewHireListAdapter extends RecyclerView.Adapter<NewHireListAdapter.
 
     @Override
     public void onBindViewHolder(NewHireListViewHolder holder, int position) {
-        holder.newHireTextView.setText(newHireData.get(position).toString());
+        //holder.newHireTextView.setText(newHireData.get(position).toString());
+        holder.newHireBtn.setText(newHireData.get(position).toString());
+        holder.newHireBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "User ID", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -53,10 +62,12 @@ public class NewHireListAdapter extends RecyclerView.Adapter<NewHireListAdapter.
 
 
     public static class NewHireListViewHolder extends RecyclerView.ViewHolder {
-        public TextView newHireTextView;
+        //TextView newHireTextView;
+        Button newHireBtn;
         public NewHireListViewHolder(View v) {
             super(v);
-            newHireTextView = (TextView) v.findViewById(R.id.new_hire_list_item);
+            //newHireTextView = v.findViewById(R.id.new_hire_list_item);
+            newHireBtn = v.findViewById(R.id.new_hire_btn);
         }
     }
 }

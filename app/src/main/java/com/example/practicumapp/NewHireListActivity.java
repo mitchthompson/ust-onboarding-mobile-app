@@ -55,7 +55,7 @@ public class NewHireListActivity extends AppCompatActivity {
 
         //Enables tool bar & sets title displayed
         Toolbar myToolbar = findViewById(R.id.myToolbar);
-        myToolbar.setTitle("New Hire List");
+        myToolbar.setTitle("Employees");
         setSupportActionBar(myToolbar);
 
 
