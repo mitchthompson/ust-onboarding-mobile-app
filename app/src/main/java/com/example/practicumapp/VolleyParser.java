@@ -108,6 +108,14 @@ public class VolleyParser {
                             for (int i = 0; i < employeesObject.length(); i++) {
                                 employees.put(employeesObject.names().getString(i), employeesObject.get(employeesObject.names().getString(i)).toString());
                             }
+//                            TODO Remove hardcoded employees id and names
+                            employees.put("aabca894f000444fab8fb5fba882c445", "Mitch Thompson");
+                            employees.put("b8545e53bc484eb8869cd9e674ab5b2b", "Joseph Sayler");
+                            employees.put("89de97e9c89249498abe48526fc801af", "Luke Schwarz");
+                            employees.put("f2c9f53c0dc911e8ba890ed5f89f718b", "Suraj Upreti");
+                            employees.put("9262e89b2a9a4d0ba07dd7a406f585a0", "Bonnie Peterson");
+                            employees.put("3575121d5d9e417d85300d641f2828b7", "Justin Simmons");
+
                             JSONArray tasksObject = response.getJSONArray("tasks");
                             ArrayList<String> tasks = new ArrayList<>();
                             for (int i = 0; i < tasksObject.length(); i++) {
