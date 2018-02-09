@@ -65,8 +65,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(User user) {
                 Log.d(TAG, "VolleyParser User First Name : " + user.getFirstName());
-                Log.d(TAG, "VolleyParser Tasks : " + user.getTasks().toString());
-                Log.d(TAG, "VolleyParser Employees : " + user.getEmployees().toString());
+                Log.d(TAG, "VolleyParser User Completed Tasks : " + user.getTasks().toString());
+                Log.d(TAG, "VolleyParser Employees assigned to User : " + user.getEmployees().toString());
             }
         });
         volleyParser.getWorkflow("01", new VolleyWorkflowResponseListener() {
