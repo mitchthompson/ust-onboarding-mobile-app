@@ -32,6 +32,8 @@ import java.util.Map;
  * @since 1/22/2018
  * @see NewHireListAdapter
  * @see VolleyParser
+ *
+ *
  */
 
 public class NewHireListActivity extends AppCompatActivity {
@@ -59,6 +61,7 @@ public class NewHireListActivity extends AppCompatActivity {
         myToolbar.setTitle("Employees");
         setSupportActionBar(myToolbar);
 
+        //TODO Add functionality for user to search through list using searchview
 
         //sets click listener for add_new_hire_btn to launch AddNewHireActivity
         addNewHireButton = findViewById(R.id.add_new_hire_btn);
