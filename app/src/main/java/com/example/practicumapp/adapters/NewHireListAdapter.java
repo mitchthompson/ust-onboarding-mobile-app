@@ -28,12 +28,14 @@ public class NewHireListAdapter extends RecyclerView.Adapter<NewHireListAdapter.
     private View newHireView;
     private NewHireListViewHolder newHireViewHolder;
     private LayoutInflater inflater;
-    private ArrayList<String> newHireData;
+    private ArrayList<String> newHireName;
+    private ArrayList<String> newHireID;
 
-    public NewHireListAdapter(Context newContext, ArrayList<String> newData) {
+    public NewHireListAdapter(Context newContext, ArrayList<String> newNameData, ArrayList<String> newIDData) {
         this.context = newContext;
         inflater = LayoutInflater.from(context);
-        this.newHireData = newData;
+        this.newHireName = newNameData;
+        this.newHireID = newIDData;
     }
 
     @Override
@@ -44,20 +46,20 @@ public class NewHireListAdapter extends RecyclerView.Adapter<NewHireListAdapter.
     }
 
     @Override
-    public void onBindViewHolder(NewHireListViewHolder holder, int position) {
-        //holder.newHireTextView.setText(newHireData.get(position).toString());
-        holder.newHireBtn.setText(newHireData.get(position).toString());
+    public void onBindViewHolder(NewHireListViewHolder holder, final int position) {
+       // holder.newHireTextView.setText(newHireData.get(position).toString());
+        holder.newHireBtn.setText(newHireName.get(position).toString());
         holder.newHireBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "User ID", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, newHireID.get(position), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return newHireData.size();
+        return newHireName.size();
     }
 
 

@@ -42,8 +42,9 @@ public class NewHireListActivity extends AppCompatActivity {
     private RelativeLayout relativeLayout;
     private NewHireListAdapter newHireListAdapter;
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
-    private Map<String, String> employees;
+    private HashMap<String, String> employees;
     private ArrayList<String> newHireList;
+    private ArrayList<String> newHireIDs;
 
     private Button addNewHireButton;
 
@@ -71,23 +72,25 @@ public class NewHireListActivity extends AppCompatActivity {
         //Uses the Volleyparser to get all employees assigned to a manager using managers userID
         employees = new HashMap<>();
         newHireList = new ArrayList<>();
+        newHireIDs = new ArrayList<>();
         VolleyParser volleyParser = new VolleyParser(this.getApplicationContext());
         volleyParser.getUser("72AD9DBC60AE485782D43A1AE09279A4", new VolleyUserResponseListener() {
 
-            //if successful response assign employees to Hashmap then pass to NewHireListAdapter
+            //if successful response assign employees & IDs to ArrayList then pass to NewHireListAdapter
             @Override
             public void onSuccess(User user) {
                 employees = user.getEmployees();
                 for(Map.Entry<String, String> entry : employees.entrySet()){
-                    //Log.d(TAG, "Key: " + entry.getKey() + "Value: " + entry.getValue());
+                    Log.d(TAG, "Key: " + entry.getKey() + "Value: " + entry.getValue());
                     newHireList.add(entry.getValue());
+                    newHireIDs.add(entry.getKey());
                 }
                 relativeLayout = findViewById(R.id.new_hire_relativeLayout);
                 recyclerView = findViewById(R.id.new_hire_list_recycler);
                 recyclerViewLayoutManager = new LinearLayoutManager(context);
                 recyclerView.setLayoutManager(recyclerViewLayoutManager);
 
-                newHireListAdapter = new NewHireListAdapter(context, newHireList);
+                newHireListAdapter = new NewHireListAdapter(context, newHireList, newHireIDs);
                 recyclerView.setAdapter(newHireListAdapter);
 
             }
