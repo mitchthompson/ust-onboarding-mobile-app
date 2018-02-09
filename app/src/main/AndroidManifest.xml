@@ -38,6 +38,13 @@
                 android:value=".MainActivity" />
         </activity>
         <activity android:name=".NewHireListActivity"/>
+
+        <activity
+            android:name="com.microsoft.aad.adal.AuthenticationActivity"
+            android:exported="true"
+            android:label="title_login_hello_app" >
+        </activity>
+
     </application>
 
 </manifest>
