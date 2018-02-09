@@ -2,15 +2,23 @@ package com.example.practicumapp;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.practicumapp.Interfaces.VolleyUserResponseListener;
+import com.example.practicumapp.helpers.Constants;
 import com.example.practicumapp.models.User;
+import com.microsoft.aad.adal.AuthenticationCallback;
+import com.microsoft.aad.adal.AuthenticationContext;
+import com.microsoft.aad.adal.AuthenticationException;
+import com.microsoft.aad.adal.AuthenticationResult;
+import com.microsoft.aad.adal.PromptBehavior;
+
 
 /**
  *
@@ -27,16 +35,62 @@ import com.example.practicumapp.models.User;
  **/
 public class LoginActivity extends AppCompatActivity {
 
-    EditText unameField, pswdField;
-    Button submitLogin;
-    String userID, userPass;
+    private EditText unameField, pswdField;
+    private Button submitLogin;
+    private String userID, userPass;
+    private AuthenticationContext mContext;
+    private String TAG = "LoginActivity";
+    private AuthenticationCallback<AuthenticationResult> callback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Login();
+        //Login();
+
+// ADAL AAD login code TODO: use loginactivity UI to login, not MS's website in a webview
+//------------------------------------------------------------------------------------------------\\
+        mContext = new AuthenticationContext(LoginActivity.this, Constants.AUTHORITY_URL,
+                true);
+        callback = new AuthenticationCallback<AuthenticationResult>() {
+
+            @Override
+            public void onError(Exception exc) {
+                if (exc instanceof AuthenticationException) {
+                    //textViewStatus.setText("Cancelled");
+                    Log.d(TAG, "Cancelled");
+                } else {
+                    //textViewStatus.setText("Authentication error:" + exc.getMessage());
+                    Log.d(TAG, "Authentication error:" + exc.getMessage());
+                }
+            }
+
+            @Override
+            public void onSuccess(AuthenticationResult result) {
+                //mResult = result;
+
+                if (result == null || result.getAccessToken() == null || result.getAccessToken().isEmpty()) {
+                    //textViewStatus.setText("Token is empty");
+                    Log.d(TAG, "Token is empty");
+                } else {
+                    // request is successful
+                    Log.d(TAG, "Status:" + result.getStatus() + " Expires:" + result.getExpiresOn().toString());
+                    //textViewStatus.setText(PASSED);
+                }
+            }
+        };
+        mContext.acquireToken(LoginActivity.this, Constants.RESOURCE_ID, Constants.CLIENT_ID,
+                Constants.REDIRECT_URL, Constants.USER_HINT, PromptBehavior.Auto, "", callback);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (mContext != null) {
+            mContext.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+//------------------------------------------------------------------------------------------------\\
 
     void Login(){
         unameField = (EditText)findViewById(R.id.username);

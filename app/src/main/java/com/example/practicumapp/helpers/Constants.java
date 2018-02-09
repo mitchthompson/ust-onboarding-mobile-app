@@ -1,4 +1,4 @@
-package com.example.practicumapp;
+package com.example.practicumapp.helpers;
 
 import com.microsoft.aad.adal.AuthenticationResult;
 
