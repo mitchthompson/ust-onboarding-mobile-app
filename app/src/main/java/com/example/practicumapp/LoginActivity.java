@@ -17,6 +17,7 @@ import com.microsoft.aad.adal.AuthenticationCallback;
 import com.microsoft.aad.adal.AuthenticationContext;
 import com.microsoft.aad.adal.AuthenticationException;
 import com.microsoft.aad.adal.AuthenticationResult;
+import com.microsoft.aad.adal.ITokenCacheStore;
 import com.microsoft.aad.adal.PromptBehavior;
 
 
@@ -84,8 +85,14 @@ public class LoginActivity extends AppCompatActivity {
         // asks for a token by using the callback
         mContext.acquireToken(LoginActivity.this, Constants.RESOURCE_ID, Constants.CLIENT_ID,
                 Constants.REDIRECT_URL, Constants.USER_HINT, PromptBehavior.Auto, "", callback);
+
+        // gets token from cache and stores it in variable cache
+        ITokenCacheStore cache = mContext.getCache();
+        // debug code used to display the cache token as a string
+        Log.d(TAG, cache.toString());
     }
 
+    // handles the end of AuthenticationActivity after user enters creds and gets an auth code
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
