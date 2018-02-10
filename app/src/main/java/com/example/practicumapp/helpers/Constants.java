@@ -39,7 +39,7 @@ public class Constants {
     //public static String CLIENT_ID = "e6d65cc4-f9e8-444a-9ba6-c3c82ce8086b";
     //public static String RESOURCE_ID = "http://kidventus.com/TodoListService";
     //public static String REDIRECT_URL = "mstodo://com.microsoft.windowsazure.activedirectory.samples.microsofttasks";
-    //public static String USER_HINT = "";
+    public static String SERVICE_URL = "http://10.0.1.44:8080/tasks";
 
     // these are not used or changed
     public static String CORRELATION_ID = "";
@@ -48,13 +48,13 @@ public class Constants {
     public static AuthenticationResult CURRENT_RESULT = null;
     // Endpoint we are targeting for the deployed WebAPI service
 
-    // from Jason's personal AAD tenant
-    public static String SERVICE_URL = "http://10.0.1.44:8080/tasks";
-    public static String AUTHORITY_URL = "https://login.windows.net/jasondrewpanzergmail.onmicrosoft.com";
-    public static String CLIENT_ID = "650a6609-5463-4bc4-b7c6-19df7990a8bc";
-    public static String RESOURCE_ID = "https://jasondrewpanzergmail.onmicrosoft.com/TaskTrackerDemo";
-    public static String REDIRECT_URL = "http://TaskTrackerDemo";
-    public static String USER_HINT = "";
+    // from Jason (using Travis' AAD setup
+    public static String CLIENT_ID = "88c46aac-a41b-4015-9cf4-16f13b093156";
+    public static String RESOURCE_ID = "https://tkarp87live.onmicrosoft.com/ExampleAPI";
+    public static String REDIRECT_URL =  "https://exampleapiaadintegration.portal.azure-api.net/docs/services/5a79288d3a7fa7123837add2/console/oauth2/authorizationcode/callback";
+    public static String AUTHORITY_URL = "https://login.windows.net/tkarp87live.onmicrosoft.com/";
+    // user hint auto populates the username with the following:
+    public static String USER_HINT = "JasonPanzer@tkarp87live.onmicrosoft.com";
 
     // ------------------------------------------------------------------------------------------
 
