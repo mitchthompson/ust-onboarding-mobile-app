@@ -34,13 +34,14 @@ public class Constants {
     public static final String HEADER_AUTHORIZATION_VALUE_PREFIX = "Bearer ";
 
     // -------------------------------AAD PARAMETERS----------------------------------
-
+    // example parameters from the test code on microsoft's github site
     //public static String AUTHORITY_URL = "https://login.microsoftonline.com/common";
     //public static String CLIENT_ID = "e6d65cc4-f9e8-444a-9ba6-c3c82ce8086b";
     //public static String RESOURCE_ID = "http://kidventus.com/TodoListService";
     //public static String REDIRECT_URL = "mstodo://com.microsoft.windowsazure.activedirectory.samples.microsofttasks";
     //public static String USER_HINT = "";
 
+    // these are not used or changed
     public static String CORRELATION_ID = "";
     public static String EXTRA_QP = "";
     public static boolean FULL_SCREEN = true;
@@ -53,7 +54,7 @@ public class Constants {
     public static String CLIENT_ID = "650a6609-5463-4bc4-b7c6-19df7990a8bc";
     public static String RESOURCE_ID = "https://jasondrewpanzergmail.onmicrosoft.com/TaskTrackerDemo";
     public static String REDIRECT_URL = "http://TaskTrackerDemo";
-    public static String USER_HINT = "faruk@omercantest.onmicrosoft.com";
+    public static String USER_HINT = "";
 
     // ------------------------------------------------------------------------------------------
 

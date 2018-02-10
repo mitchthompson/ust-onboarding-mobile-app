@@ -50,8 +50,10 @@ public class LoginActivity extends AppCompatActivity {
 
 // ADAL AAD login code TODO: use loginactivity UI to login, not MS's website in a webview
 //------------------------------------------------------------------------------------------------\\
+        // creates new AuthenticationContext object
         mContext = new AuthenticationContext(LoginActivity.this, Constants.AUTHORITY_URL,
                 true);
+        // callback used when asking for a token
         callback = new AuthenticationCallback<AuthenticationResult>() {
 
             @Override
@@ -79,6 +81,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         };
+        // asks for a token by using the callback
         mContext.acquireToken(LoginActivity.this, Constants.RESOURCE_ID, Constants.CLIENT_ID,
                 Constants.REDIRECT_URL, Constants.USER_HINT, PromptBehavior.Auto, "", callback);
     }
