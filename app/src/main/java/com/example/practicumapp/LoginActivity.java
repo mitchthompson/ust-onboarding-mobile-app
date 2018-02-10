@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -14,7 +16,6 @@ import com.microsoft.aad.adal.AuthenticationCallback;
 import com.microsoft.aad.adal.AuthenticationContext;
 import com.microsoft.aad.adal.AuthenticationException;
 import com.microsoft.aad.adal.AuthenticationResult;
-import com.microsoft.aad.adal.ITokenCacheStore;
 import com.microsoft.aad.adal.PromptBehavior;
 
 /**
@@ -54,18 +55,30 @@ public class LoginActivity extends AppCompatActivity {
 
     // listens for button press and then calls adalLogin
     public void loadADAL(View v) {
-        Log.d(TAG,"loadADAL button press");
-        Toast.makeText(LoginActivity.this, "loadADAL button press", Toast.LENGTH_SHORT).show();
+        Log.d(TAG,"user login");
+        Toast.makeText(LoginActivity.this, "Logging in", Toast.LENGTH_SHORT).show();
         adalLogin(mContext);
     }
 
     // checks the cache for a token then outputs it as string to debug log
     public void checkForToken(View v) {
-        // gets token from cache and stores it in variable cache
-        ITokenCacheStore cache = mContext.getCache();
-        // debug code used to display the cache token as a string
-        Log.d(TAG, cache.toString());
-        Toast.makeText(this, cache.toString(), Toast.LENGTH_SHORT).show();
+        // debug code used to display cached token as a string
+        // will display a 'default' token if user is not logged in
+        Log.d(TAG, mContext.getCache().toString());
+        Toast.makeText(this, mContext.getCache().toString(), Toast.LENGTH_SHORT).show();
+    }
+
+    public void removeAllTokens(View v) {
+        // clear auth context tokens
+        mContext.getCache().removeAll();
+        // clean up browser cookies
+        CookieSyncManager.createInstance(LoginActivity.this);
+        CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.removeAllCookie();
+        CookieSyncManager.getInstance().sync();
+
+        Log.d(TAG, "user logout");
+        Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();
     }
 
     // handles the end of AuthenticationActivity after user enters creds and gets an auth code
@@ -75,8 +88,9 @@ public class LoginActivity extends AppCompatActivity {
         if (mContext != null) {
             mContext.onActivityResult(requestCode, resultCode, data);
         }
+        // shows the request/result codes in logcat
         Log.d(TAG, "request code: " + requestCode + " | resultCode: " + resultCode);
-        Toast.makeText(LoginActivity.this, "request code: " + requestCode + " | resultCode: " + resultCode, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(LoginActivity.this, "request code: " + requestCode + " | resultCode: " + resultCode, Toast.LENGTH_SHORT).show();
     }
 
     // used to create a callback and obtain a token from aad
@@ -89,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (exc instanceof AuthenticationException) {
                     //textViewStatus.setText("Cancelled");
                     Log.d(TAG, "Cancelled");
-                    Toast.makeText(LoginActivity.this, "Canceled by user.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Canceled", Toast.LENGTH_SHORT).show();
                 } else {
                     //textViewStatus.setText("Authentication error:" + exc.getMessage());
                     Log.d(TAG, "Authentication error:" + exc.getMessage());
