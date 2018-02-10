@@ -4,16 +4,20 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.practicumapp.Interfaces.VolleyUserResponseListener;
+import com.example.practicumapp.helpers.Constants;
 import com.example.practicumapp.models.User;
 import com.microsoft.aad.adal.AuthenticationCallback;
 import com.microsoft.aad.adal.AuthenticationContext;
+import com.microsoft.aad.adal.AuthenticationException;
 import com.microsoft.aad.adal.AuthenticationResult;
+import com.microsoft.aad.adal.PromptBehavior;
 
 
 /**
@@ -42,9 +46,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Login();
-    }
-/**
+        //Login();
+
 // ADAL AAD login code TODO: use loginactivity UI to login, not MS's website in a webview
 //------------------------------------------------------------------------------------------------\\
         // creates new AuthenticationContext object
@@ -91,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 //------------------------------------------------------------------------------------------------\\
-**/
+
     void Login(){
         unameField = (EditText)findViewById(R.id.username);
         pswdField = (EditText)findViewById(R.id.password);
