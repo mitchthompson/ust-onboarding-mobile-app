@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_addhire:
-                //startActivity(new Intent(MainActivity.this, ActivityName.class));
+                startActivity(new Intent(MainActivity.this, AddNewHireActivity.class));
                 return true;
 
             default:
