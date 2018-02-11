@@ -1,5 +1,7 @@
 package com.example.practicumapp;
 
+import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import java.util.ArrayList;
@@ -12,22 +14,28 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.widget.DatePicker;
+import android.app.DatePickerDialog;
+import java.util.Calendar;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.text.TextUtils;
+import android.app.ProgressDialog;
+import android.widget.ProgressBar;
+
+import org.w3c.dom.Text;
 
 public class AddNewHireActivity extends AppCompatActivity {
 
-    //TODO add date picker - see wireframe
-
-    private Spinner spinner1, spinner2;
-    private Button btnFinish;
-
-    //assign radio button variables
-    private RadioGroup employeeTypeGroup;
-    private RadioButton employeeTypeButton;
-    private Button btnDisplay;
+    private Spinner spinner1;
+    private Button btnCancel, btnDone;
+    private DatePickerDialog.OnDateSetListener onDateSetListener;
+    private EditText firstName, lastName, email, phone, date;
 
 
     @Override
@@ -38,12 +46,57 @@ public class AddNewHireActivity extends AppCompatActivity {
         addListenerOnButton();
         addListenerOnSpinnerItemSelection();
 
-         /*Enables tool bar & sets title displayed
-        Can customize menu items in res/menu/main_menu.xml
-        Can customize toolbar in res/layout/toolbar_layout.xml*/
+        // Initialize toolbar and set page title
         Toolbar myToolbar = findViewById(R.id.myToolbar);
         myToolbar.setTitle("Add New Hire");
         setSupportActionBar(myToolbar);
+
+        // Views
+        firstName = (EditText) findViewById(R.id.first_name);
+        lastName = (EditText) findViewById(R.id.last_name);
+        email = (EditText) findViewById(R.id.email);
+        phone = (EditText) findViewById(R.id.phone);
+        date = (EditText) findViewById(R.id.date);
+
+
+
+        // Add calendar settings for date picker
+        date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            /**
+             * Creates calendar settings for date picker and sets background
+             * @param View
+             */
+            public void onClick(View v) {
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dialog = new DatePickerDialog
+                        (AddNewHireActivity.this,
+                                android.R.style.Theme_Holo_Light_Dialog,
+                                onDateSetListener,
+                                year, month, day);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+
+            }
+        });
+
+        onDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            /**
+             * Sets date text for display in UI
+             * @param DatePicker view, year, month, day (int type)
+             */
+            public void onDateSet(DatePicker view, int year, int month, int day) {
+                month = month +1;
+                String dateDisplay = month + "/" + day + "/" + year;
+                date.setText(dateDisplay);
+
+            }
+        };
     }
 
     // Creates menu
@@ -53,7 +106,7 @@ public class AddNewHireActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    // Defines the actions after user selection of the menu items in the toolbar
+    // Defines the actions after user selection of the menu items from the drawer menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -64,6 +117,22 @@ public class AddNewHireActivity extends AppCompatActivity {
 
                 return true;
 
+            case R.id.action_login:
+                startActivity(new Intent(AddNewHireActivity.this, LoginActivity.class));
+                return true;
+
+            case R.id.action_tasklist:
+                startActivity(new Intent(AddNewHireActivity.this, TaskListActivity.class));
+                return true;
+
+            case R.id.action_newhirelist:
+                startActivity(new Intent(AddNewHireActivity.this, NewHireListActivity.class));
+                return true;
+
+            case R.id.action_addhire:
+                startActivity(new Intent(AddNewHireActivity.this, AddNewHireActivity.class));
+                return true;
+
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
@@ -72,24 +141,27 @@ public class AddNewHireActivity extends AppCompatActivity {
         }
     }
 
-    // Dropdown selections
+    /**
+     * Adds listeners for drop down menu selection for workflows
+     */
     public void addListenerOnSpinnerItemSelection() {
         spinner1 = (Spinner) findViewById(R.id.spinner1);
-        spinner2 = (Spinner) findViewById(R.id.spinner2);
     }
 
-    // Get the selected dropdown list value
+    /**
+     * Add listeners for spinner and buttons
+     */
     public void addListenerOnButton() {
 
-        // Add listenters to all page buttons
+        // Add listeners to all page buttons
         spinner1 = (Spinner) findViewById(R.id.spinner1);
-        spinner2 = (Spinner) findViewById(R.id.spinner2);
-        btnFinish = (Button) findViewById(R.id.btnFinish);
-        employeeTypeGroup = (RadioGroup) findViewById(R.id.radioEmployeeType);
+        btnDone = (Button) findViewById(R.id.btnDone);
+        btnCancel = (Button) findViewById(R.id.btnCancel);
 
 
-        //TODO edit setOnClickListener to include all form elements
-        btnFinish.setOnClickListener(new OnClickListener() {
+        // Perform activity when "Done" is selected -- for now just displays toast confirming drop
+        // down selection
+        btnDone.setOnClickListener(new OnClickListener() {
 
             //add toast to display selection
             @Override
@@ -97,11 +169,73 @@ public class AddNewHireActivity extends AppCompatActivity {
 
                 Toast.makeText(AddNewHireActivity.this,
                         "OnClickListener : " +
-                                "\nSpinner 1 : "+ String.valueOf(spinner1.getSelectedItem()) +
-                                "\nSpinner 2 : "+ String.valueOf(spinner2.getSelectedItem()),
+                                "\nSpinner : "+ String.valueOf(spinner1.getSelectedItem()),
                         Toast.LENGTH_SHORT).show();
             }
 
         });
     }
-}
+
+    /**
+     * Will be called when user clicks "Done" button on form. Validates form inputs and adds employee via
+     * the API. Errors generate a message and stop the execution.
+     */
+    //TODO: Call this method when "Done" button is clicked
+    public void addEmployee(){
+        String inputFirstName = firstName.getText().toString().trim();
+        String inputLastName = lastName.getText().toString().trim();
+        String inputEmail = email.getText().toString().trim();
+        String inputPhone = phone.getText().toString().trim();
+        //TODO: see if date picker EditText view can be cast to string in this way
+        String inputDate = date.getText().toString().trim();
+        //TODO: add variable for workflow once API workflow is determined (ie. number to indicate which workflow)
+
+        // Form validation for all fields
+        if(TextUtils.isEmpty(inputFirstName)){
+            // Show message
+            Toast.makeText(this, "Please enter first name", Toast.LENGTH_SHORT).show();
+
+            // Stops function from executing
+            return;
+        }
+
+        if(TextUtils.isEmpty(inputLastName)){
+            // Show message
+            Toast.makeText(this, "Please enter last name", Toast.LENGTH_SHORT).show();
+
+            // Stops function from executing
+            return;
+        }
+
+        if(TextUtils.isEmpty(inputEmail)){
+            // Show message
+            Toast.makeText(this, "Please enter email", Toast.LENGTH_SHORT).show();
+
+            // Stops function from executing
+            return;
+        }
+
+        if(TextUtils.isEmpty(inputPhone)){
+            // Show message
+            Toast.makeText(this, "Please enter phone", Toast.LENGTH_SHORT).show();
+
+            // Stops function from executing
+            return;
+        }
+
+        if(TextUtils.isEmpty(inputDate)){
+            // Show message
+            Toast.makeText(this, "Please enter hire date", Toast.LENGTH_SHORT).show();
+
+            // Stops function from executing
+            return;
+        }
+
+        // If validations are OK, show progress bar
+        //TODO: Add progress bar
+
+        //TODO: Add API POST method to add employee
+
+        }
+
+    }

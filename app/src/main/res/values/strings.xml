@@ -33,11 +33,10 @@
     <string name="prompt_employee_id">Employee ID</string>
     <string name="prompt_first_name">First name</string>
     <string name="prompt_last_name">Last name</string>
-    <string name="employee_internal">Internal</string>
-    <string name="employee_external">External</string>
-    <string name="btn_display">Display</string>
-    <string name="select_type">Select Employee Type</string>
-    <string name="btn_finish">Finish</string>
+    <string name="prompt_employee_email">Email</string>
+    <string name="prompt_employee_phone">Phone</string>
+    <string name="prompt_hire_date">Select Hire Date</string>
+    <string name="btn_done">Done</string>
     <string name="btn_cancel">Cancel</string>
 
 
