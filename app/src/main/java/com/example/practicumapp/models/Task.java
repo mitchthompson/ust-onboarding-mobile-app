@@ -3,11 +3,6 @@ package com.example.practicumapp.models;
 import java.util.HashMap;
 
 public class Task {
-import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
-
-import java.util.ArrayList;
-
-public class Task extends ExpandableGroup<TaskDescription> {
 
     private String id, name, viewers;
     private HashMap descriptions;
@@ -21,10 +16,6 @@ public class Task extends ExpandableGroup<TaskDescription> {
      * @param viewers      Employee Instructions for the task
      */
     public Task(String id, String name, HashMap descriptions, String viewers) {
-
-        public Task(String id, String name, String description, String employeeInstructions,
-                String managerInstructions, ArrayList<TaskDescription> childDescription) {
-        super(name, childDescription);
         this.id = id;
         this.name = name;
         this.descriptions = descriptions;

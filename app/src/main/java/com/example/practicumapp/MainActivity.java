@@ -1,15 +1,15 @@
 package com.example.practicumapp;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.practicumapp.Interfaces.VolleyTaskResponseListener;
@@ -18,8 +18,6 @@ import com.example.practicumapp.Interfaces.VolleyWorkflowResponseListener;
 import com.example.practicumapp.models.Task;
 import com.example.practicumapp.models.User;
 import com.example.practicumapp.models.Workflow;
-
-import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -73,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Workflow workflow) {
                 Log.d(TAG, "VolleyParser Workflow Task Name : " + workflow.getTasks().get(0).getName());
+                Log.d(TAG, "VolleyParser Workflow Task 1 Descriptions: " + workflow.getTasks().get(0).getDescriptions());
+//                Log.d(TAG, "VolleyParser Workflow Task 2 Descriptions: " + workflow.getTasks().get(1).getDescriptions());
+
             }
         });
         volleyParser.getTask("ECCD3A6ED4C54D2DA28C9CDD28F6417E", new VolleyTaskResponseListener() {

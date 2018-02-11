@@ -7,34 +7,28 @@ import android.os.Parcelable;
  * Created by lucasschwarz on 2/4/18.
  */
 
-public class TaskDescription implements Parcelable {
-    private String id, description;
+public class TaskDescriptionListItem implements Parcelable {
+    private String  description;
 
-    public TaskDescription(String id, String description) {
-        this.id = id;
+    public TaskDescriptionListItem(String description) {
         this.description = description;
     }
 
-    public TaskDescription(Parcel in) {
-        id = in.readString();
+    public TaskDescriptionListItem(Parcel in) {
         description = in.readString();
     }
 
-    public static final Creator<TaskDescription> CREATOR = new Creator<TaskDescription>() {
+    public static final Creator<TaskDescriptionListItem> CREATOR = new Creator<TaskDescriptionListItem>() {
         @Override
-        public TaskDescription createFromParcel(Parcel in) {
-            return new TaskDescription(in);
+        public TaskDescriptionListItem createFromParcel(Parcel in) {
+            return new TaskDescriptionListItem(in);
         }
 
         @Override
-        public TaskDescription[] newArray(int size) {
-            return new TaskDescription[size];
+        public TaskDescriptionListItem[] newArray(int size) {
+            return new TaskDescriptionListItem[size];
         }
     };
-
-    public String getId() {
-        return id;
-    }
 
     public String getDescription() {
         return description;
@@ -51,7 +45,7 @@ public class TaskDescription implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(id);
+        // parcel.writeString(id);
         parcel.writeString(description);
     }
 }

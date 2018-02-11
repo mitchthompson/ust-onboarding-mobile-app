@@ -1,8 +1,6 @@
 package com.example.practicumapp;
 
 import android.content.Context;
-import android.util.Log;
-
 
 import com.android.volley.Request;
 import com.example.practicumapp.Interfaces.VolleyResponseListener;
@@ -10,16 +8,16 @@ import com.example.practicumapp.Interfaces.VolleyTaskResponseListener;
 import com.example.practicumapp.Interfaces.VolleyUserResponseListener;
 import com.example.practicumapp.Interfaces.VolleyWorkflowResponseListener;
 import com.example.practicumapp.models.Task;
-import com.example.practicumapp.models.TaskDescription;
+import com.example.practicumapp.models.TaskDescriptionListItem;
 import com.example.practicumapp.models.User;
 import com.example.practicumapp.models.Workflow;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 
@@ -169,21 +167,27 @@ public class VolleyParser {
                                 String taskName = jsonObject.getString("name");
                                 JSONArray taskDescriptionsObject = jsonObject.getJSONArray("descriptions");
                                 HashMap<String, String> taskDescriptions = new HashMap<String, String>();
+                                //ArrayList<TaskDescriptionListItem> expandableDescriptionArrayList = new ArrayList<TaskDescriptionListItem>();
+
                                 for (int j = 0; j < taskDescriptionsObject.length(); j++) {
                                     JSONObject singleTaskDescription = taskDescriptionsObject.getJSONObject(j);
-                                    taskDescriptions.put(singleTaskDescription.names().getString(j), singleTaskDescription.get(singleTaskDescription.names().getString(j)).toString());
+                                    taskDescriptions.put(singleTaskDescription.names().getString(j),
+                                            singleTaskDescription.get(singleTaskDescription.names().getString(j)).toString());
+
+                                    /*
+                                    //These two lines probably have to go.
+                                    TaskDescriptionListItem expandableDescription = new TaskDescriptionListItem(singleTaskDescription.names().getString(j),
+                                            singleTaskDescription.get(singleTaskDescription.names().getString(j)).toString());
+                                    expandableDescriptionArrayList.add(expandableDescription);
+                                    */
                                 }
                                 String viewers = jsonObject.getString("viewers");
 
                                 Task singleTask = new Task(taskID, taskName, taskDescriptions, viewers);
-                                String taskDescription = jsonObject.getString("description");
-                                String employeeInstructions = jsonObject.getString("employeeInstructions");
-                                String managerInstructions = jsonObject.getString("managerInstructions");
-                                TaskDescription expandableDescription = new TaskDescription(taskID, taskDescription);
-                                ArrayList<TaskDescription> expandableDescriptionArrayList = new ArrayList<TaskDescription>();
-                                expandableDescriptionArrayList.add(expandableDescription);
 
-                                Task singleTask = new Task(taskID, taskName, taskDescription, employeeInstructions, managerInstructions, expandableDescriptionArrayList);
+
+
+                                //Task singleTask = new Task(taskID, taskName, taskDescription, employeeInstructions, managerInstructions, expandableDescriptionArrayList);
                                 tasks.add(singleTask);
                             }
                             Workflow workflow = new Workflow(id, name, description, tasks);
@@ -203,59 +207,35 @@ public class VolleyParser {
      */
     public void getTask(String taskID, final VolleyTaskResponseListener volleyTaskResponseListener) {
 
-        String id = "ECCD3A6ED4C54D2DA28C9CDD28F6417E";
-        String taskName = "Cloud";
-        HashMap<String, String> taskDescriptions = new HashMap<String, String>();
-        taskDescriptions.put("manager", "Do something to complete this task.");
-        taskDescriptions.put("employee", "Do something to complete this task.");
-        String viewers = "manager";
-        Task singleTask = new Task(id, taskName, taskDescriptions, viewers);
-        volleyTaskResponseListener.onSuccess(singleTask);
 
-//        TODO Remove hardcoded task details, uncomment code below after the API is updated
-//        String urlWithParams = API_ADDRESS + "/task/" + taskID;
-//        MyVolleySingleton.getInstance(context).
-//                sendVolleyRequest(Request.Method.GET, urlWithParams, null, new VolleyResponseListener() {
-//                    @Override
-//                    public void onSuccess(JSONObject response) {
-//                        Log.d("VOLLEYPARSER", "Task : " + response.toString());
-//                        try {
-//                            String taskID = response.getString("id");
-//                            String taskName = response.getString("name");
-//                            JSONArray taskDescriptionsObject = response.getJSONArray("descriptions");
-//                            HashMap<String, String> taskDescriptions = new HashMap<String, String>();
-//                            for (int j = 0; j < taskDescriptionsObject.length(); j++) {
-//                                JSONObject singleTaskDescription = taskDescriptionsObject.getJSONObject(j);
-//                                taskDescriptions.put(singleTaskDescription.names().getString(j), singleTaskDescription.get(singleTaskDescription.names().getString(j)).toString());
-//                            }
-//                            String viewers = response.getString("viewers");
-//                            Log.d("VOLLEYPARSER", "Viewers : " + viewers);
-//
-//                            Task task = new Task(taskID, taskName, taskDescriptions, viewers);
-//                            volleyTaskResponseListener.onSuccess(task);
-//                        } catch (JSONException e1) {
-//                            e1.printStackTrace();
-//                        }
-//                    }
-//                });
         String urlWithParams = API_ADDRESS + "/task/" + taskID;
         MyVolleySingleton.getInstance(context).
                 sendVolleyRequest(Request.Method.GET, urlWithParams, null, new VolleyResponseListener() {
                     @Override
                     public void onSuccess(JSONObject response) {
                         try {
-                                String taskID = response.getString("id");
-                                String taskName = response.getString("name");
-                                String taskDescription = response.getString("description");
-                                String employeeInstructions = response.getString("employeeInstructions");
-                                String managerInstructions = response.getString("managerInstructions");
+                            String taskID = response.getString("id");
+                            String taskName = response.getString("name");
+                            JSONArray taskDescriptionsObject = response.getJSONArray("descriptions");
+                            HashMap<String, String> taskDescriptions = new HashMap<String, String>();
+                            ArrayList<TaskDescriptionListItem> expandableDescriptionArrayList = new ArrayList<TaskDescriptionListItem>();
 
-                                TaskDescription expandableDescription = new TaskDescription(taskID, taskDescription);
-                                ArrayList<TaskDescription> expandableDescriptionArrayList = new ArrayList<TaskDescription>();
+                            for (int j = 0; j < taskDescriptionsObject.length(); j++) {
+                                JSONObject singleTaskDescription = taskDescriptionsObject.getJSONObject(j);
+                                taskDescriptions.put(singleTaskDescription.names().getString(j),
+                                        singleTaskDescription.get(singleTaskDescription.names().getString(j)).toString());
+                                /*
+                                // these two lines probably have to go:
+                                TaskDescriptionListItem expandableDescription = new TaskDescriptionListItem(singleTaskDescription.names().getString(j),
+                                        singleTaskDescription.get(singleTaskDescription.names().getString(j)).toString());
                                 expandableDescriptionArrayList.add(expandableDescription);
+                                */
+                            }
+                            String viewers = response.getString("viewers");
 
-                                Task task = new Task(taskID, taskName, taskDescription, employeeInstructions, managerInstructions, expandableDescriptionArrayList);
-                                volleyTaskResponseListener.onSuccess(task);
+                            Task singleTask = new Task(taskID, taskName, taskDescriptions, viewers);
+
+                            volleyTaskResponseListener.onSuccess(singleTask);
                             } catch (JSONException e1) {
                             e1.printStackTrace();
                         }
