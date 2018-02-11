@@ -19,17 +19,15 @@ import com.microsoft.aad.adal.AuthenticationResult;
 import com.microsoft.aad.adal.PromptBehavior;
 
 /**
- *
- * basic login activity using ADAL-- Joseph Sayler
- *
- * basic code to access AAD using ADAL
- *
- * TODO: implement methods from a login library to authenticate with API (done)
- * TODO: remove hardcoded username/password
- * TODO: implement better error handling / alerting user if username/password incorrect
- * TODO: re-write these comments to conform with our JavaDoc standards
- *
+ * Basic login activity using ADAL. Displays a sign in page to enter credentials and gain access to system resources.
+ * @author Joseph Sayler
+ * @version 1.0
  **/
+// TODO: implement methods from a login library to authenticate with API (done)
+// TODO: remove hardcoded username/password
+// TODO: implement better error handling / alerting user if username/password incorrect
+// TODO: re-write these comments to conform with our JavaDoc standards
+
 public class LoginActivity extends AppCompatActivity {
 
     private EditText unameField, pswdField;
@@ -54,6 +52,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     // listens for button press and then calls adalLogin
+
+    /**
+     * Initiates the login process when activated
+     */
     public void loadADAL(View v) {
         Log.d(TAG,"user login");
         Toast.makeText(LoginActivity.this, "Logging in", Toast.LENGTH_SHORT).show();
@@ -61,6 +63,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     // checks the cache for a token then outputs it as string to debug log
+    /**
+     * Testing method to display the token
+     */
     public void checkForToken(View v) {
         // debug code used to display cached token as a string
         // will display a 'default' token if user is not logged in
@@ -68,6 +73,9 @@ public class LoginActivity extends AppCompatActivity {
         Toast.makeText(this, mContext.getCache().toString(), Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Removes user token and cleans up cache. Acts as a way to log out of AD.
+     */
     public void removeAllTokens(View v) {
         // clear auth context tokens
         mContext.getCache().removeAll();
@@ -82,6 +90,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     // handles the end of AuthenticationActivity after user enters creds and gets an auth code
+    /**
+     * Handles the end of AuthenticationActivity after user enters credentials and receives authorization code.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -94,6 +105,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     // used to create a callback and obtain a token from aad
+
+    /**
+     * Creates callback required to get a token from AAD. Then uses AuthenticationContext to request
+     * the token. The act of requesting the token opens a WebView that loads the AAD login screen.
+     */
     protected void adalLogin(AuthenticationContext context) {
         Log.d(TAG,"trying to obtain token from AAD" + context);
         // callback used when asking for a token
