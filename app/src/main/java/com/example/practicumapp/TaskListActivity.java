@@ -162,9 +162,8 @@ public class TaskListActivity extends AppCompatActivity {
                     taskListItems.add(new TaskListItem(taskName,taskDescriptionListItems));
                 }
 
-
-                relativeLayout = (RelativeLayout) findViewById(R.id.activity_task_list);
                 //recyclerView gets kicked off in here, because then we've verified that we have data to display.
+                relativeLayout = (RelativeLayout) findViewById(R.id.activity_task_list);
                 adapter = new TaskListAdapter(taskListItems);
                 recyclerView.setLayoutManager(layoutManager);
                 recyclerView.setAdapter(adapter);
@@ -173,35 +172,6 @@ public class TaskListActivity extends AppCompatActivity {
                 simpleProgressBar.setMax(taskList.size());
             }
         });
-
-
-
-
-
-        /*
-        this is leftover from testing with hardcoded data...
-        for(int i = 0; i < testData.length; i++) {
-            String id = "" + i;
-
-            TaskDescriptionListItem expandableDescription = new TaskDescriptionListItem(id, testData[i]);
-            ArrayList<TaskDescriptionListItem> expandableDescriptionArrayList = new ArrayList<TaskDescriptionListItem>();
-            expandableDescriptionArrayList.add(expandableDescription);
-
-            taskList.add(new Task(id, testData[i], testData[i], testData[i],  testData[i], expandableDescriptionArrayList ));
-        }
-        */
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     /**
