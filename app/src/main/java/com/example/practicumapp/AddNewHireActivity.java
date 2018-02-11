@@ -24,13 +24,18 @@ import android.app.DatePickerDialog;
 import java.util.Calendar;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.text.TextUtils;
+import android.app.ProgressDialog;
+import android.widget.ProgressBar;
+
+import org.w3c.dom.Text;
 
 public class AddNewHireActivity extends AppCompatActivity {
 
     private Spinner spinner1;
     private Button btnCancel, btnDone;
     private DatePickerDialog.OnDateSetListener onDateSetListener;
-    private EditText date;
+    private EditText firstName, lastName, email, phone, date;
 
 
     @Override
@@ -46,8 +51,16 @@ public class AddNewHireActivity extends AppCompatActivity {
         myToolbar.setTitle("Add New Hire");
         setSupportActionBar(myToolbar);
 
-        // Add calendar settings for date picker
+        // Views
+        firstName = (EditText) findViewById(R.id.first_name);
+        lastName = (EditText) findViewById(R.id.last_name);
+        email = (EditText) findViewById(R.id.email);
+        phone = (EditText) findViewById(R.id.phone);
         date = (EditText) findViewById(R.id.date);
+
+
+
+        // Add calendar settings for date picker
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             /**
@@ -162,4 +175,67 @@ public class AddNewHireActivity extends AppCompatActivity {
 
         });
     }
-}
+
+    /**
+     * Will be called when user clicks "Done" button on form. Validates form inputs and adds employee via
+     * the API. Errors generate a message and stop the execution.
+     */
+    //TODO: Call this method when "Done" button is clicked
+    public void addEmployee(){
+        String inputFirstName = firstName.getText().toString().trim();
+        String inputLastName = lastName.getText().toString().trim();
+        String inputEmail = email.getText().toString().trim();
+        String inputPhone = phone.getText().toString().trim();
+        //TODO: see if date picker EditText view can be cast to string in this way
+        String inputDate = date.getText().toString().trim();
+        //TODO: add variable for workflow once API workflow is determined (ie. number to indicate which workflow)
+
+        // Form validation for all fields
+        if(TextUtils.isEmpty(inputFirstName)){
+            // Show message
+            Toast.makeText(this, "Please enter first name", Toast.LENGTH_SHORT).show();
+
+            // Stops function from executing
+            return;
+        }
+
+        if(TextUtils.isEmpty(inputLastName)){
+            // Show message
+            Toast.makeText(this, "Please enter last name", Toast.LENGTH_SHORT).show();
+
+            // Stops function from executing
+            return;
+        }
+
+        if(TextUtils.isEmpty(inputEmail)){
+            // Show message
+            Toast.makeText(this, "Please enter email", Toast.LENGTH_SHORT).show();
+
+            // Stops function from executing
+            return;
+        }
+
+        if(TextUtils.isEmpty(inputPhone)){
+            // Show message
+            Toast.makeText(this, "Please enter phone", Toast.LENGTH_SHORT).show();
+
+            // Stops function from executing
+            return;
+        }
+
+        if(TextUtils.isEmpty(inputDate)){
+            // Show message
+            Toast.makeText(this, "Please enter hire date", Toast.LENGTH_SHORT).show();
+
+            // Stops function from executing
+            return;
+        }
+
+        // If validations are OK, show progress bar
+        //TODO: Add progress bar
+
+        //TODO: Add API POST method to add employee
+
+        }
+
+    }
