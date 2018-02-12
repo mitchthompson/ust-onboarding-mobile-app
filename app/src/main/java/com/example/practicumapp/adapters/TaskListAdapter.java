@@ -16,14 +16,10 @@ import java.util.List;
 /**
  * Created by jsayler on 1/14/18.
  *
- * JS - this is the task activity's view adapter. it takes data piped into it and displays it in the
- * recycler view
- *
- * any changes here will probably need to be made when creating the expandable line items as
- * indicated on the wireframe. this will require modifications to onBindViewHolder and the
- * TaskListViewHolder
+ * Modified by lschwarz on 2/11/18
+ * TaskListAdapter creates the ViewHolders both for the TaskListItems and also the TaskDescriptionListItems.
+ * This is how the expandable RecyclerView gets created.
  */
-
 public class TaskListAdapter extends ExpandableRecyclerViewAdapter<TaskListItemViewHolder, TaskDescriptionListItemViewHolder> {
 
     public TaskListAdapter(List<? extends ExpandableGroup> groups) {

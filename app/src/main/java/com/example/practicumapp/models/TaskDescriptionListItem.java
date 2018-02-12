@@ -4,12 +4,16 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by lucasschwarz on 2/4/18.
+ * Specific Java class used in the expandable RecyclerView on the TaskListActivity
  */
 
 public class TaskDescriptionListItem implements Parcelable {
-    private String  description;
+    private String description;
 
+    /**
+     * General constructor
+     * @param description is the description of the associated TaskListItem
+     */
     public TaskDescriptionListItem(String description) {
         this.description = description;
     }
@@ -30,6 +34,10 @@ public class TaskDescriptionListItem implements Parcelable {
         }
     };
 
+    /**
+     * General description Getter
+     * @return description
+     */
     public String getDescription() {
         return description;
     }
