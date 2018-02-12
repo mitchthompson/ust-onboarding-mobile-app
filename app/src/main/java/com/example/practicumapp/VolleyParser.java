@@ -110,12 +110,18 @@ public class VolleyParser {
                             for (int i = 0; i < employeesObject.length(); i++) {
                                 employees.put(employeesObject.names().getString(i), employeesObject.get(employeesObject.names().getString(i)).toString());
                             }
-//                            TODO GET task ids from the API and remove hardcoded task ids
-//                            JSONArray tasksObject = response.getJSONArray("tasks");
+//                            TODO Remove hardcoded employees id and names
+                            employees.put("aabca894f000444fab8fb5fba882c445", "Mitch Thompson");
+                            employees.put("b8545e53bc484eb8869cd9e674ab5b2b", "Joseph Sayler");
+                            employees.put("89de97e9c89249498abe48526fc801af", "Luke Schwarz");
+                            employees.put("f2c9f53c0dc911e8ba890ed5f89f718b", "Suraj Upreti");
+                            employees.put("9262e89b2a9a4d0ba07dd7a406f585a0", "Bonnie Peterson");
+                            employees.put("3575121d5d9e417d85300d641f2828b7", "Justin Simmons");
+
+                            JSONArray tasksObject = response.getJSONArray("tasks");
                             ArrayList<String> tasks = new ArrayList<>();
-                            for (int i = 0; i < 5; i++) {
-//                                tasks.add(tasksObject.get(i).toString());
-                                tasks.add("ECCD3A6ED4C54D2DA28C9CDD28F6417E");
+                            for (int i = 0; i < tasksObject.length(); i++) {
+                                tasks.add(tasksObject.get(i).toString());
                             }
                             User user = new User(id, firstName, lastName, email, phone, type, startDate, employees, workflow, tasks);
                             volleyUserResponseListener.onSuccess(user);
@@ -193,7 +199,8 @@ public class VolleyParser {
      * @exception JSONException JSON parsing error exception
      */
     public void getTask(String taskID, final VolleyTaskResponseListener volleyTaskResponseListener) {
-        String urlWithParams = API_ADDRESS + "/task/" + taskID;
+
+                String urlWithParams = API_ADDRESS + "/task/" + taskID;
         MyVolleySingleton.getInstance(context).
                 sendVolleyRequest(Request.Method.GET, urlWithParams, null, new VolleyResponseListener() {
                     @Override
@@ -205,15 +212,13 @@ public class VolleyParser {
                             HashMap<String, String> taskDescriptions = new HashMap<String, String>();
                             for (int j = 0; j < taskDescriptionsObject.length(); j++) {
                                 JSONObject singleTaskDescription = taskDescriptionsObject.getJSONObject(j);
-                                taskDescriptions.put(singleTaskDescription.names().getString(j),
-                                        singleTaskDescription.get(singleTaskDescription.names().getString(j)).toString());
+                                taskDescriptions.put(singleTaskDescription.names().getString(j), singleTaskDescription.get(singleTaskDescription.names().getString(j)).toString());
                             }
                             String viewers = response.getString("viewers");
 
                             Task singleTask = new Task(taskID, taskName, taskDescriptions, viewers);
-
                             volleyTaskResponseListener.onSuccess(singleTask);
-                            } catch (JSONException e1) {
+                        } catch (JSONException e1) {
                             e1.printStackTrace();
                         }
                     }

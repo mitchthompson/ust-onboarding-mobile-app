@@ -1,21 +1,26 @@
 package com.example.practicumapp.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
 
 import com.example.practicumapp.R;
+import com.example.practicumapp.TaskListActivity;
 
 import java.util.ArrayList;
 
 /**
- * Created by Mitch Thompson on 1/22/18.
+ *  This is the new hire list activity's view adapter. It takes New Hire data in ArrayLists then
+ *  creates a recyclerview. Each row in list will be launch TaskListActivity passing that row's
+ *  userID and name with intent.
  *
- * This is the new hire list activity's view adapter. It takes New Hire data and displays in a recyclerview.
- *
+ * @author Mitch Thompson
+ * @since 1/22/2018
+ * @see com.example.practicumapp.NewHireListActivity
  */
 
 public class NewHireListAdapter extends RecyclerView.Adapter<NewHireListAdapter.NewHireListViewHolder> {
@@ -24,12 +29,15 @@ public class NewHireListAdapter extends RecyclerView.Adapter<NewHireListAdapter.
     private View newHireView;
     private NewHireListViewHolder newHireViewHolder;
     private LayoutInflater inflater;
-    private ArrayList<String> newHireData;
+    private ArrayList<String> newHireName;
+    private ArrayList<String> newHireID;
 
-    public NewHireListAdapter(Context newContext, ArrayList<String> newData) {
+    public NewHireListAdapter(Context newContext, ArrayList<String> newNameData, ArrayList<String> newIDData) {
         this.context = newContext;
         inflater = LayoutInflater.from(context);
-        this.newHireData = newData;
+        this.newHireName = newNameData;
+        this.newHireID = newIDData;
+
     }
 
     @Override
@@ -40,21 +48,36 @@ public class NewHireListAdapter extends RecyclerView.Adapter<NewHireListAdapter.
     }
 
     @Override
-    public void onBindViewHolder(NewHireListViewHolder holder, int position) {
-        holder.newHireTextView.setText(newHireData.get(position).toString());
+    public void onBindViewHolder(NewHireListViewHolder holder, final int position) {
+        holder.newHireBtn.setText(newHireName.get(position).toString());
+        holder.newHireBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(context, newHireID.get(position), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(v.getContext(), TaskListActivity.class);
+                intent.putExtra("userID",  newHireID.get(position));
+                intent.putExtra("name", newHireName.get(position).toString());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                v.getContext().startActivity(intent);
+            }
+        });
+
+
     }
 
     @Override
     public int getItemCount() {
-        return newHireData.size();
+        return newHireName.size();
     }
 
 
     public static class NewHireListViewHolder extends RecyclerView.ViewHolder {
-        public TextView newHireTextView;
+        //TextView newHireTextView;
+        Button newHireBtn;
+
         public NewHireListViewHolder(View v) {
             super(v);
-            newHireTextView = (TextView) v.findViewById(R.id.new_hire_list_item);
+            newHireBtn = v.findViewById(R.id.new_hire_btn);
         }
     }
 }
