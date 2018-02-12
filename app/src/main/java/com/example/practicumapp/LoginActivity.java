@@ -9,6 +9,8 @@ import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.practicumapp.helpers.Constants;
@@ -21,12 +23,10 @@ import com.microsoft.aad.adal.PromptBehavior;
 /**
  * Basic login activity using ADAL. Displays a sign in page to enter credentials and gain access to system resources.
  * @author Joseph Sayler
- * @version 1.0
+ * @version 1.1
  **/
-// TODO: implement methods from a login library to authenticate with API (done)
-// TODO: remove hardcoded username/password
-// TODO: implement better error handling / alerting user if username/password incorrect
-// TODO: re-write these comments to conform with our JavaDoc standards
+
+// TODO: use loginactivity UI to login, not MS's website in a webview (??)
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -35,48 +35,63 @@ public class LoginActivity extends AppCompatActivity {
     private String userID, userPass;
 
     private AuthenticationContext mContext;
+    //private AuthenticationCallback<AuthenticationResult> callback;
+    private AuthenticationResult loginResults;
+
     private String TAG = "LoginActivity";
-    private AuthenticationCallback<AuthenticationResult> callback;
+
+    private ScrollView authOutput;
+    private TextView testOutput_tenantID;
+    private TextView testOutput_dispID;
+    private TextView testOutput_status;
+    private TextView testOutput_lname;
+    private TextView testOutput_tokenID;
+    private TextView testOutput_fname;
+    private TextView testOutput_expiryDate;
+    private TextView testOutput_authHeader;
+    private TextView testOutput_userID;
+    private TextView testOutput_accToken;
+    private TextView noDataOutput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         //Login();
-
-        // ADAL AAD login code TODO: use loginactivity UI to login, not MS's website in a webview (??)
-//------------------------------------------------------------------------------------------------\\
+//-----------------------------Begin ADAL AAD login code------------------------------------------\\
         // creates new AuthenticationContext object
         mContext = new AuthenticationContext(LoginActivity.this, Constants.AUTHORITY_URL,
                 true);
+        authOutput = (ScrollView) findViewById(R.id.aadOutput);
+        testOutput_tenantID = (TextView) findViewById(R.id.tenantID);
+        testOutput_dispID = (TextView) findViewById(R.id.dispID);
+        testOutput_status = (TextView) findViewById(R.id.status);
+        testOutput_lname = (TextView) findViewById(R.id.lname);
+        testOutput_tokenID = (TextView) findViewById(R.id.tokenID);
+        testOutput_fname = (TextView) findViewById(R.id.fname);
+        testOutput_expiryDate = (TextView) findViewById(R.id.expiryDate);
+        testOutput_authHeader = (TextView) findViewById(R.id.authHeader);
+        testOutput_userID = (TextView) findViewById(R.id.userID);
+        testOutput_accToken = (TextView) findViewById(R.id.accToken);
+        noDataOutput = (TextView) findViewById(R.id.noData);
     }
-
-    // listens for button press and then calls adalLogin
-
     /**
      * Initiates the login process when activated
+     * @param v Holds the current view being displayed
      */
-    public void loadADAL(View v) {
+    public void adalLogin(View v) {
         Log.d(TAG,"user login");
-        Toast.makeText(LoginActivity.this, "Logging in", Toast.LENGTH_SHORT).show();
-        adalLogin(mContext);
+        popUp("Logging in");
+        // asks for a token by generating a callback that returns the necessary information
+        mContext.acquireToken(LoginActivity.this, Constants.RESOURCE_ID, Constants.CLIENT_ID,
+                Constants.REDIRECT_URL, Constants.USER_HINT, PromptBehavior.Auto, "", getAdalAuth());
+        Log.d(TAG,"accessing login data");
     }
-
-    // checks the cache for a token then outputs it as string to debug log
-    /**
-     * Testing method to display the token
-     */
-    public void checkForToken(View v) {
-        // debug code used to display cached token as a string
-        // will display a 'default' token if user is not logged in
-        Log.d(TAG, mContext.getCache().toString());
-        Toast.makeText(this, mContext.getCache().toString(), Toast.LENGTH_SHORT).show();
-    }
-
     /**
      * Removes user token and cleans up cache. Acts as a way to log out of AD.
+     * @param v Holds the current view being displayed
      */
-    public void removeAllTokens(View v) {
+    public void adalLogout(View v) {
         // clear auth context tokens
         mContext.getCache().removeAll();
         // clean up browser cookies
@@ -84,14 +99,24 @@ public class LoginActivity extends AppCompatActivity {
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.removeAllCookie();
         CookieSyncManager.getInstance().sync();
-
-        Log.d(TAG, "user logout");
-        Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();
+        // clears out values set after authentication
+        loginResults = null;
+        dataOutput(v, loginResults);
+        Log.d(TAG, "logout - removing tokens and cookies");
+        popUp("Logged out");
     }
-
-    // handles the end of AuthenticationActivity after user enters creds and gets an auth code
+    /**
+     * Displays login info on button click
+     * @param v Holds the current view being displayed
+     */
+    public void getLoginRestuls(View v) {
+        dataOutput(v, loginResults);
+    }
     /**
      * Handles the end of AuthenticationActivity after user enters credentials and receives authorization code.
+     * @param requestCode indicates the type of request
+     * @param resultCode indicates result of the login attempt
+     * @param data data returned after request has been made
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -99,53 +124,90 @@ public class LoginActivity extends AppCompatActivity {
         if (mContext != null) {
             mContext.onActivityResult(requestCode, resultCode, data);
         }
-        // shows the request/result codes in logcat
-        Log.d(TAG, "request code: " + requestCode + " | resultCode: " + resultCode);
-        //Toast.makeText(LoginActivity.this, "request code: " + requestCode + " | resultCode: " + resultCode, Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "request code: " + requestCode + " | result code: " + resultCode + " | data: "+ data);
+        //popUp("request code: " + requestCode + " | resultCode: " + resultCode);
     }
-
-    // used to create a callback and obtain a token from aad
-
     /**
      * Creates callback required to get a token from AAD. Then uses AuthenticationContext to request
      * the token. The act of requesting the token opens a WebView that loads the AAD login screen.
+     * @return a new AuthenticationCallback containing information about state of the login request
      */
-    protected void adalLogin(AuthenticationContext context) {
-        Log.d(TAG,"trying to obtain token from AAD" + context);
-        // callback used when asking for a token
-        callback = new AuthenticationCallback<AuthenticationResult>() {
+    protected AuthenticationCallback getAdalAuth() {
+        Log.d(TAG,"Obtaining token from AAD");
+        // returns auth info depending on success of request
+        return new AuthenticationCallback<AuthenticationResult>() {
             @Override
             public void onError(Exception exc) {
                 if (exc instanceof AuthenticationException) {
-                    //textViewStatus.setText("Cancelled");
                     Log.d(TAG, "Cancelled");
-                    Toast.makeText(LoginActivity.this, "Canceled", Toast.LENGTH_SHORT).show();
+                    popUp("Canceled");
                 } else {
                     //textViewStatus.setText("Authentication error:" + exc.getMessage());
                     Log.d(TAG, "Authentication error:" + exc.getMessage());
-                    Toast.makeText(LoginActivity.this, "Authentication error:" + exc.getMessage(), Toast.LENGTH_SHORT).show();
+                    popUp("Authentication error:" + exc.getMessage());
                 }
             }
             @Override
             public void onSuccess(AuthenticationResult result) {
                 if (result == null || result.getAccessToken() == null || result.getAccessToken().isEmpty()) {
-                    //textViewStatus.setText("Token is empty");
                     Log.d(TAG, "Token is empty");
-                    Toast.makeText(LoginActivity.this, "Token is empty", Toast.LENGTH_SHORT).show();
+                    popUp("Token is empty");
                 } else {
                     // request is successful
-                    Log.d(TAG, "Status:" + result.getStatus() + " Expires:" + result.getExpiresOn().toString());
-                    Toast.makeText(LoginActivity.this, "Status:" + result.getStatus() + " Expires:" + result.getExpiresOn().toString(), Toast.LENGTH_SHORT).show();
-                    //textViewStatus.setText(PASSED);
+                    loginResults = result;
+                    //popUp("Status: " + loginStatus + " | Expires: " + expiryDate);
                 }
             }
         };
-        // asks for a token by using the callback
-        mContext.acquireToken(LoginActivity.this, Constants.RESOURCE_ID, Constants.CLIENT_ID,
-                Constants.REDIRECT_URL, Constants.USER_HINT, PromptBehavior.Auto, "", callback);
     }
-
-//------------------------------------------------------------------------------------------------\\
+    /**
+     * Helper method to display Toast pop ups for debugging purposes
+     * @param inputText String that is to be displayed inside the Toast
+     */
+    private void popUp(String inputText){
+        Toast.makeText(this, inputText, Toast.LENGTH_SHORT).show();
+    }
+    /**
+     * Gathers data from login token and displays the information on screen
+     * @param v Holds the current view being displayed
+     * @param loginData AuthenticationResult object obtained after login attempt
+     */
+    // TODO: this needs to be cleaned up and compacted to be more efficient and easier to look at
+    public void dataOutput(View v, AuthenticationResult loginData) {
+        if (loginData == null || loginData.getAccessToken() == null || loginData.getAccessToken().isEmpty()) {
+            authOutput.setVisibility(View.GONE);
+            noDataOutput.setVisibility(View.VISIBLE);
+            Log.d(TAG, "No login data to display");
+            noDataOutput.setText("No login data to display");
+        } else {
+            authOutput.setVisibility(View.VISIBLE);
+            noDataOutput.setVisibility(View.GONE);
+            Log.d(TAG, "Status: " + loginData.getStatus().toString() +
+                    "\nLogin expires: " + loginData.getExpiresOn().toString() +
+                    "\nEmail: " + loginData.getUserInfo().getDisplayableId() +
+                    "\nFirst name: " + loginData.getUserInfo().getGivenName() +
+                    "\nLast name: " + loginData.getUserInfo().getFamilyName() +
+                    "\nUserID: " + loginData.getUserInfo().getUserId() +
+                    "\nTenant ID: " + loginData.getTenantId() +
+                    "\nToken ID:            " + loginData.getIdToken() +
+                    "\nAccess Token:        " + loginData.getAccessToken() +
+                    "\nAuth Header:  " + loginData.createAuthorizationHeader());// +
+                    //"\nID Provider: " + loginResults.getUserInfo().getIdentityProvider() +
+                    //"\nPassword change URL: " + loginResults.getUserInfo().getPasswordChangeUrl() +
+                    //"\nPassword expires on: " + loginResults.getUserInfo().getPasswordExpiresOn());
+            testOutput_status.setText("Status: " + loginData.getStatus().toString());
+            testOutput_expiryDate.setText("Login expires: " + loginData.getExpiresOn().toString());
+            testOutput_dispID.setText("Email: " + loginData.getUserInfo().getDisplayableId());
+            testOutput_fname.setText("First name: " + loginData.getUserInfo().getGivenName());
+            testOutput_lname.setText("Last name: " + loginData.getUserInfo().getFamilyName());
+            testOutput_userID.setText("UserID: " + loginData.getUserInfo().getUserId());
+            testOutput_tenantID.setText("Tenant ID: " + loginData.getTenantId());
+            testOutput_tokenID.setText("Token ID\n" + loginData.getIdToken());
+            testOutput_accToken.setText("Access Token\n" + loginData.getAccessToken());
+            testOutput_authHeader.setText("Auth Header\n" + loginData.createAuthorizationHeader());
+        }
+    }
+//---------------------------------End ADAL AAD login code----------------------------------------\\
 /**
     void Login(){
         unameField = (EditText)findViewById(R.id.username);
