@@ -1,22 +1,24 @@
 package com.example.practicumapp;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.android.volley.Request;
+import com.example.practicumapp.Interfaces.VolleyResponseListener;
 import com.example.practicumapp.Interfaces.VolleyTaskResponseListener;
 import com.example.practicumapp.Interfaces.VolleyUserResponseListener;
-import com.example.practicumapp.Interfaces.VolleyResponseListener;
 import com.example.practicumapp.Interfaces.VolleyWorkflowResponseListener;
 import com.example.practicumapp.models.Task;
 import com.example.practicumapp.models.User;
 import com.example.practicumapp.models.Workflow;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+
 
 /**
  * JSON parser class for User, Workflow and Task
@@ -169,11 +171,14 @@ public class VolleyParser {
                                 String taskID = jsonObject.getString("id");
                                 String taskName = jsonObject.getString("name");
                                 JSONArray taskDescriptionsObject = jsonObject.getJSONArray("descriptions");
+
                                 HashMap<String, String> taskDescriptions = new HashMap<String, String>();
                                 for (int j = 0; j < taskDescriptionsObject.length(); j++) {
                                     JSONObject singleTaskDescription = taskDescriptionsObject.getJSONObject(j);
-                                    taskDescriptions.put(singleTaskDescription.names().getString(j), singleTaskDescription.get(singleTaskDescription.names().getString(j)).toString());
+                                    taskDescriptions.put(singleTaskDescription.names().getString(j),
+                                            singleTaskDescription.get(singleTaskDescription.names().getString(j)).toString());
                                 }
+
                                 String viewers = jsonObject.getString("viewers");
                                 Task singleTask = new Task(taskID, taskName, taskDescriptions, viewers);
                                 tasks.add(singleTask);
@@ -194,7 +199,8 @@ public class VolleyParser {
      * @exception JSONException JSON parsing error exception
      */
     public void getTask(String taskID, final VolleyTaskResponseListener volleyTaskResponseListener) {
-        String urlWithParams = API_ADDRESS + "/task/" + taskID;
+
+                String urlWithParams = API_ADDRESS + "/task/" + taskID;
         MyVolleySingleton.getInstance(context).
                 sendVolleyRequest(Request.Method.GET, urlWithParams, null, new VolleyResponseListener() {
                     @Override
@@ -209,8 +215,9 @@ public class VolleyParser {
                                 taskDescriptions.put(singleTaskDescription.names().getString(j), singleTaskDescription.get(singleTaskDescription.names().getString(j)).toString());
                             }
                             String viewers = response.getString("viewers");
-                            Task task = new Task(taskID, taskName, taskDescriptions, viewers);
-                            volleyTaskResponseListener.onSuccess(task);
+
+                            Task singleTask = new Task(taskID, taskName, taskDescriptions, viewers);
+                            volleyTaskResponseListener.onSuccess(singleTask);
                         } catch (JSONException e1) {
                             e1.printStackTrace();
                         }
