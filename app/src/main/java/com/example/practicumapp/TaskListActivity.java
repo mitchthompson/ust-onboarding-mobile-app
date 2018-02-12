@@ -39,7 +39,6 @@ import java.util.HashMap;
  * displays its contents upon tapping
  *
  *
- * TODO: add description under each item
  * TODO: create onclick listeners for checking the checkboxes and expanding each item's description
  * TODO: add progress bar
  * TODO: update progress bar when checkbox is clicked
@@ -80,7 +79,6 @@ public class TaskListActivity extends AppCompatActivity {
         // Enables ToolBar with employee name and ID
         Toolbar myToolbar = findViewById(R.id.main_toolbar);
 
-
         //Declare the ActionBar with ProgressBar
         ActionMenuView employeeProgressBar = (ActionMenuView) findViewById(R.id.progress_toolbar);
 
@@ -89,9 +87,6 @@ public class TaskListActivity extends AppCompatActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.task_list_recycler);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-
-
-
 
         myToolbar.setTitle("Task List");
         setSupportActionBar(myToolbar);
@@ -108,18 +103,6 @@ public class TaskListActivity extends AppCompatActivity {
 
         employeeNameTextView.setText(employeeName);
         employeeIdTextView.setText(employeeId);
-
-
-
-        // contains dummy data from arrays.xml
-        // either we change this variable name and continue to get the data from the array, or we
-        // call the API directly here?
-        //testData = getResources().getStringArray(R.array.task_list);
-
-        // converts array into a list for use with the adapter
-        //taskList = new ArrayList<>(Arrays.asList(testData));
-        //TESTING DATA
-        //ArrayList<Task> taskList = new ArrayList<Task>();
 
         VolleyParser volleyParser = new VolleyParser(this.getApplicationContext());
 
