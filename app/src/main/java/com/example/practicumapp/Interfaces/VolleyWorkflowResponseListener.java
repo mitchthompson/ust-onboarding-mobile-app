@@ -7,7 +7,7 @@ import com.example.practicumapp.models.Workflow;
  * This interface enable callbacks to any activity after workflow response is received using volley
  */
 
-public interface WorkflowResponseCallback {
+public interface VolleyWorkflowResponseListener {
 
     void onSuccess(Workflow workflow); // Called after user json response is received successfully
 

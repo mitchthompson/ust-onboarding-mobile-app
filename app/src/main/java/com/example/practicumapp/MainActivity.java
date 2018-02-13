@@ -1,19 +1,21 @@
 package com.example.practicumapp;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.practicumapp.Interfaces.UserResponseCallback;
-import com.example.practicumapp.Interfaces.WorkflowResponseCallback;
+import com.example.practicumapp.Interfaces.VolleyTaskResponseListener;
+import com.example.practicumapp.Interfaces.VolleyUserResponseListener;
+import com.example.practicumapp.Interfaces.VolleyWorkflowResponseListener;
+import com.example.practicumapp.models.Task;
 import com.example.practicumapp.models.User;
 import com.example.practicumapp.models.Workflow;
 
@@ -55,22 +57,32 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // TODO Remove UserParser and WorkflowParser code below (For testing purposes only)
-        UserParser userParser = new UserParser(this.getApplicationContext());
-        userParser.getUser("72AD9DBC-60AE-4857-82D4-3A1AE09279A4", new UserResponseCallback() {
+        // TODO Remove volleyParser code below (For testing purposes only)
+        VolleyParser volleyParser = new VolleyParser(this.getApplicationContext());
+        volleyParser.getUser("72AD9DBC60AE485782D43A1AE09279A4", new VolleyUserResponseListener() {
             @Override
             public void onSuccess(User user) {
-                Log.d(TAG, "User First Name : " + user.getFirstName());
+                Log.d(TAG, "VolleyParser User First Name : " + user.getFirstName());
+                Log.d(TAG, "VolleyParser User Completed Tasks : " + user.getTasks().toString());
+                Log.d(TAG, "VolleyParser Employees assigned to User : " + user.getEmployees().toString());
+            }
+        });
+        volleyParser.getWorkflow("01", new VolleyWorkflowResponseListener() {
+            @Override
+            public void onSuccess(Workflow workflow) {
+                Log.d(TAG, "VolleyParser Workflow Task Name : " + workflow.getTasks().get(0).getName());
+                Log.d(TAG, "VolleyParser Workflow Task 1 Descriptions: " + workflow.getTasks().get(0).getDescriptions());
+//                Log.d(TAG, "VolleyParser Workflow Task 2 Descriptions: " + workflow.getTasks().get(1).getDescriptions());
+
+            }
+        });
+        volleyParser.getTask("ECCD3A6ED4C54D2DA28C9CDD28F6417E", new VolleyTaskResponseListener() {
+            @Override
+            public void onSuccess(Task task) {
+                Log.d(TAG, "VolleyParser Task Name : " + task.getName());
             }
         });
 
-        WorkflowParser workflowParser = new WorkflowParser(this.getApplicationContext());
-        workflowParser.getWorkflow("01", new WorkflowResponseCallback() {
-            @Override
-            public void onSuccess(Workflow workflow) {
-                Log.d(TAG, "Workflow Task Name : " + workflow.getTasks().get(0).getName());
-            }
-        });
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -105,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_addhire:
-                //startActivity(new Intent(MainActivity.this, ActivityName.class));
+                startActivity(new Intent(MainActivity.this, AddNewHireActivity.class));
                 return true;
 
             default:

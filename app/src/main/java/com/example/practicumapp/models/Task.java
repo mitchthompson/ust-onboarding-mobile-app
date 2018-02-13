@@ -1,34 +1,53 @@
 package com.example.practicumapp.models;
 
+import java.util.HashMap;
+
 public class Task {
 
-    private String id, name, description, employeeInstructions, managerInstructions;
+    private String id, name, viewers;
+    private HashMap descriptions;
 
-    public Task(String id, String name, String description, String employeeInstructions, String managerInstructions) {
+    /**
+     * Constructor
+     *
+     * @param id           Unique id of the task
+     * @param name         Display name of the task
+     * @param descriptions Descriptions of the task
+     * @param viewers      Employee Instructions for the task
+     */
+    public Task(String id, String name, HashMap descriptions, String viewers) {
         this.id = id;
         this.name = name;
-        this.description = description;
-        this.employeeInstructions = employeeInstructions;
-        this.managerInstructions = managerInstructions;
+        this.descriptions = descriptions;
+        this.viewers = viewers;
     }
 
+    /**
+     * @return Unique id of the task
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * @return Display name of the task
+     */
     public String getName() {
         return name;
     }
 
-    public String getDescription() {
-        return description;
+    /**
+     * @return Descriptions of the task
+     */
+    public HashMap getDescriptions() {
+        return descriptions;
     }
 
-    public String getEmployeeInstructions() {
-        return employeeInstructions;
+    /**
+     * @return Employee Instructions for the task
+     */
+    public String getViewers() {
+        return viewers;
     }
 
-    public  String getManagerInstructions() {
-        return managerInstructions;
-    }
 }

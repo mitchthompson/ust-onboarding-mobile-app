@@ -7,6 +7,13 @@ public class Workflow {
     private String id, name, description;
     private ArrayList<Task> tasks;
 
+    /**
+     * Constructor
+     * @param id Unique id of the workflow
+     * @param name Display name of the workflow
+     * @param description Description of the workflow
+     * @param tasks ArrayList of task objects for the workflow
+     */
     public Workflow (String id, String name, String description, ArrayList<Task> tasks) {
         this.id = id;
         this.name = name;
@@ -14,18 +21,30 @@ public class Workflow {
         this.tasks = tasks;
     }
 
+    /**
+     * @return Unique id of the workflow
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * @return Display name of the workflow
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * @return Description of the workflow
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * @return ArrayList of task objects for the workflow
+     */
     public ArrayList<Task> getTasks() {
         return tasks;
     }
