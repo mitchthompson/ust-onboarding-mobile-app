@@ -110,7 +110,8 @@ public class VolleyParser {
                             for (int i = 0; i < employeesObject.length(); i++) {
                                 employees.put(employeesObject.names().getString(i), employeesObject.get(employeesObject.names().getString(i)).toString());
                             }
-//                            TODO Remove hardcoded employees id and names
+
+//                          TODO Remove hardcoded employees id and names
                             employees.put("aabca894f000444fab8fb5fba882c445", "Mitch Thompson");
                             employees.put("b8545e53bc484eb8869cd9e674ab5b2b", "Joseph Sayler");
                             employees.put("89de97e9c89249498abe48526fc801af", "Luke Schwarz");
@@ -123,6 +124,12 @@ public class VolleyParser {
                             for (int i = 0; i < tasksObject.length(); i++) {
                                 tasks.add(tasksObject.get(i).toString());
                             }
+
+//                          TODO Remove hardcoded completed tasks ids
+                            tasks.add("LKJLKLIOC54D2DA2389CVBV98XCCVV");
+                            tasks.add("POIPIEJEWWC54D2DA23894IO098DSF");
+                            tasks.add("NNBMBBBEE54D2DA23892300293ERIU");
+
                             User user = new User(id, firstName, lastName, email, phone, type, startDate, employees, workflow, tasks);
                             volleyUserResponseListener.onSuccess(user);
                         } catch (JSONException e) {
@@ -183,7 +190,8 @@ public class VolleyParser {
                                 Task singleTask = new Task(taskID, taskName, taskDescriptions, viewers);
                                 tasks.add(singleTask);
                             }
-                            Workflow workflow = new Workflow(id, name, description, tasks);
+//                            TODO Remove getSampleTasks method with tasks
+                            Workflow workflow = new Workflow(id, name, description, getSampleTasks(tasks));
                             volleyWorkflowResponseListener.onSuccess(workflow);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -315,4 +323,24 @@ public class VolleyParser {
         //  TODO Code to delete an existing task
     }
 
+//  TODO Remove getSampleTasks function (For testing purpose only)
+    public ArrayList getSampleTasks(ArrayList tasks) {
+        ArrayList sampleTasks = tasks;
+        HashMap<String, String> taskDescriptions = new HashMap<String, String>();
+        taskDescriptions.put("manager", "Do something to complete this task.");
+        taskDescriptions.put("employee", "Do something to complete this task.");
+        Task firstTask = new Task("ECCD3A6ED4C54D2DA23894IODSJKF3", "Setup AD login id and password", taskDescriptions, "manager");
+        Task secondTask = new Task("DSKLFDJ4C54D2DA23894IO3894DSJK", "Setup company email address", taskDescriptions, "manager");
+        Task thirdTask = new Task("LKJLKLIOC54D2DA2389CVBV98XCCVV", "Setup employee id", taskDescriptions, "manager");
+        Task fourthTask = new Task("WEOIURE234C54D2DA209JKLSDFIUIO", "Get documents from HR", taskDescriptions, "manager");
+        Task fifthTask = new Task("POIPIEJEWWC54D2DA23894IO098DSF", "Check with manager", taskDescriptions, "manager");
+        Task sixthTask = new Task("NNBMBBBEE54D2DA23892300293ERIU", "Work on your first project", taskDescriptions, "manager");
+        sampleTasks.add(firstTask);
+        sampleTasks.add(secondTask);
+        sampleTasks.add(thirdTask);
+        sampleTasks.add(fourthTask);
+        sampleTasks.add(fifthTask);
+        sampleTasks.add(sixthTask);
+        return sampleTasks;
+    }
 }
