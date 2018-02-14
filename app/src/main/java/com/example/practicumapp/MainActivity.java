@@ -2,7 +2,6 @@ package com.example.practicumapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -10,6 +9,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -133,10 +134,14 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_logout:
                 // User chose the "Log Out" item...
-                Toast.makeText(getApplicationContext(), "Logout toast. Cheers!",
-                        Toast.LENGTH_SHORT).show();
-
-                return true;
+                //Toast.makeText(getApplicationContext(), "Logout toast. Cheers!", Toast.LENGTH_SHORT).show();
+                // clean up browser cookies
+                CookieSyncManager.createInstance(MainActivity.this);
+                CookieManager cookieManager = CookieManager.getInstance();
+                cookieManager.removeAllCookie();
+                CookieSyncManager.getInstance().sync();
+                Log.d("Main Activity Logout", "clearing cookies and logging out");
+                //return true;
 
             // TODO Remove following action items from actionbar here and in res/main_menu.xml
 
