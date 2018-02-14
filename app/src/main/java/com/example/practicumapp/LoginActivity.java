@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText unameField, pswdField;
     private Button submitLogin;
-    private String userID, userPass;
+    private String userID, userPass, authToken, accessToken;
 
     private AuthenticationContext mContext;
     //private AuthenticationCallback<AuthenticationResult> callback;
@@ -52,11 +52,13 @@ public class LoginActivity extends AppCompatActivity {
     private TextView testOutput_userID;
     private TextView testOutput_accToken;
     private TextView noDataOutput;
+    private Button btnSkipLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         //Login();
 //-----------------------------Begin ADAL AAD login code------------------------------------------\\
         // creates new AuthenticationContext object
@@ -74,6 +76,18 @@ public class LoginActivity extends AppCompatActivity {
         testOutput_userID = (TextView) findViewById(R.id.userID);
         testOutput_accToken = (TextView) findViewById(R.id.accToken);
         noDataOutput = (TextView) findViewById(R.id.noData);
+
+        btnSkipLogin = findViewById(R.id.btnSkipLogin);
+
+        btnSkipLogin.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("authToken", "Tester Auth");
+                intent.putExtra("accessToken", "Test Access");
+                startActivity(intent);
+            }
+        });
     }
     /**
      * Initiates the login process when activated
@@ -86,6 +100,8 @@ public class LoginActivity extends AppCompatActivity {
         mContext.acquireToken(LoginActivity.this, Constants.RESOURCE_ID, Constants.CLIENT_ID,
                 Constants.REDIRECT_URL, Constants.USER_HINT, PromptBehavior.Auto, "", getAdalAuth());
         Log.d(TAG,"accessing login data");
+
+
     }
     /**
      * Removes user token and cleans up cache. Acts as a way to log out of AD.
@@ -104,6 +120,12 @@ public class LoginActivity extends AppCompatActivity {
         dataOutput(v, loginResults);
         Log.d(TAG, "logout - removing tokens and cookies");
         popUp("Logged out");
+
+        // Redirect user to MainActivity and remove authentication extras
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.removeExtra("authToken");
+        intent.removeExtra("accessToken");
+        startActivity(intent);
     }
     /**
      * Displays login info on button click
@@ -111,6 +133,11 @@ public class LoginActivity extends AppCompatActivity {
      */
     public void getLoginRestuls(View v) {
         dataOutput(v, loginResults);
+        // Redirect user to MainActivity and add authentication tokens
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("authToken", authToken);
+        intent.putExtra("accessToken", accessToken);
+        startActivity(intent);
     }
     /**
      * Handles the end of AuthenticationActivity after user enters credentials and receives authorization code.
@@ -192,9 +219,9 @@ public class LoginActivity extends AppCompatActivity {
                     "\nToken ID:            " + loginData.getIdToken() +
                     "\nAccess Token:        " + loginData.getAccessToken() +
                     "\nAuth Header:  " + loginData.createAuthorizationHeader());// +
-                    //"\nID Provider: " + loginResults.getUserInfo().getIdentityProvider() +
-                    //"\nPassword change URL: " + loginResults.getUserInfo().getPasswordChangeUrl() +
-                    //"\nPassword expires on: " + loginResults.getUserInfo().getPasswordExpiresOn());
+            //"\nID Provider: " + loginResults.getUserInfo().getIdentityProvider() +
+            //"\nPassword change URL: " + loginResults.getUserInfo().getPasswordChangeUrl() +
+            //"\nPassword expires on: " + loginResults.getUserInfo().getPasswordExpiresOn());
             testOutput_status.setText("Status: " + loginData.getStatus().toString());
             testOutput_expiryDate.setText("Login expires: " + loginData.getExpiresOn().toString());
             testOutput_dispID.setText("Email: " + loginData.getUserInfo().getDisplayableId());
@@ -205,108 +232,111 @@ public class LoginActivity extends AppCompatActivity {
             testOutput_tokenID.setText("Token ID\n" + loginData.getIdToken());
             testOutput_accToken.setText("Access Token\n" + loginData.getAccessToken());
             testOutput_authHeader.setText("Auth Header\n" + loginData.createAuthorizationHeader());
+            authToken = loginData.createAuthorizationHeader();
+            accessToken = loginData.getAccessToken();
         }
     }
 //---------------------------------End ADAL AAD login code----------------------------------------\\
 /**
-    void Login(){
-        unameField = (EditText)findViewById(R.id.username);
-        pswdField = (EditText)findViewById(R.id.password);
-        submitLogin = (Button)findViewById(R.id.loginButton);
+ void Login(){
+ unameField = (EditText)findViewById(R.id.username);
+ pswdField = (EditText)findViewById(R.id.password);
+ submitLogin = (Button)findViewById(R.id.loginButton);
 
-        submitLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                userID = unameField.getText().toString().trim();
-                userPass = pswdField.getText().toString().trim();
+ submitLogin.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v) {
+userID = unameField.getText().toString().trim();
+userPass = pswdField.getText().toString().trim();
 
-                UserLoginTask login = new UserLoginTask(userID, userPass);
-                login.execute();
-                /*
-                if(userID.equals("admin") && userPass.equals("admin")){
-                    Toast.makeText(LoginActivity.this, "Username and Password is correct", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(LoginActivity.this, TaskListActivity.class));
-                }else{
-                    Toast.makeText(LoginActivity.this, "Username or Password is incorrect", Toast.LENGTH_SHORT).show();
-                }
-                */
+UserLoginTask login = new UserLoginTask(userID, userPass);
+login.execute();
+/*
+if(userID.equals("admin") && userPass.equals("admin")){
+Toast.makeText(LoginActivity.this, "Username and Password is correct", Toast.LENGTH_SHORT).show();
+startActivity(new Intent(LoginActivity.this, TaskListActivity.class));
+}else{
+Toast.makeText(LoginActivity.this, "Username or Password is incorrect", Toast.LENGTH_SHORT).show();
+}
+ */
 /**            }
-        });
-    }
+ });
+ }
 
-    /**
-     * Represents an asynchronous login task used to authenticate
-     * the user.
-     */
+ /**
+ * Represents an asynchronous login task used to authenticate
+ * the user.
+ */
 /**
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+ public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final String mUserID;
-        private final String mPassword;
+ private final String mUserID;
+ private final String mPassword;
 
-        /**
-         * Constructor for UserLoginTask that accepts two parameters (user's ID and password), uses
-         * these parameters to send a call to the API to get the specified user. If the user's password
-         * matches, the user is redirected to the TaskListActivity. If the password doesn't match,
-         * the LoginActivity is reloaded and the user is notified that the user/pass is incorrect.
-         *
-         * @param id user's ID
-         * @param password user's password
-         */
+ /**
+ * Constructor for UserLoginTask that accepts two parameters (user's ID and password), uses
+ * these parameters to send a call to the API to get the specified user. If the user's password
+ * matches, the user is redirected to the TaskListActivity. If the password doesn't match,
+ * the LoginActivity is reloaded and the user is notified that the user/pass is incorrect.
+ *
+ * @param id user's ID
+ * @param password user's password
+ */
 /**        UserLoginTask(String id, String password) {
-            mUserID = id;
-            mPassword = password;
-        }
+ mUserID = id;
+ mPassword = password;
+ }
 
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: Request username and compare password with specified username
+ @Override
+ protected Boolean doInBackground(Void... params) {
+ // TODO: Request username and compare password with specified username
 
-            try {
-                VolleyParser getJson = new VolleyParser(getApplicationContext());
-                getJson.getUser(mUserID, new VolleyUserResponseListener() {
-                    @Override
-                    public void onSuccess(User user) {
-                        if (mUserID.equals(user.getId().replace("-",""))) {
-                            String temp = "Email: " + user.getEmail() + "\nFirst: " + user.getFirstName() + "\nLast: " + user.getLastName()
-                                    + "\nStartDate: " + user.getStartDate() + "\nType: " + user.getType() + "\nID: " + user.getId()
-                                    + "\nPhone: " + user.getPhone();
-                            Toast.makeText(getApplicationContext(), temp, Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(LoginActivity.this, TaskListActivity.class));
-                        }
-                        else {
-                            startActivity(new Intent(LoginActivity.this, LoginActivity.class));
-                            Toast.makeText(getApplicationContext(), "Incorrect User/Pass", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+ try {
+ VolleyParser getJson = new VolleyParser(getApplicationContext());
+ getJson.getUser(mUserID, new VolleyUserResponseListener() {
+ @Override
+ public void onSuccess(User user) {
+ if (mUserID.equals(user.getId().replace("-",""))) {
+ String temp = "Email: " + user.getEmail() + "\nFirst: " + user.getFirstName() + "\nLast: " + user.getLastName()
+ + "\nStartDate: " + user.getStartDate() + "\nType: " + user.getType() + "\nID: " + user.getId()
+ + "\nPhone: " + user.getPhone();
+ Toast.makeText(getApplicationContext(), temp, Toast.LENGTH_LONG).show();
+ startActivity(new Intent(LoginActivity.this, TaskListActivity.class));
+ }
+ else {
+ startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+ Toast.makeText(getApplicationContext(), "Incorrect User/Pass", Toast.LENGTH_LONG).show();
+ }
+ }
+ });
 
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
+ Thread.sleep(2000);
+ } catch (InterruptedException e) {
+ return false;
+ }
 
-            return true;
-        }
+ return true;
+ }
 
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            //mAuthTask = null;
-            //showProgress(false);
+ @Override
+ protected void onPostExecute(final Boolean success) {
+ //mAuthTask = null;
+ //showProgress(false);
 
-            if (success) {
-                finish();
-            } else {
-               // mPasswordView.setError(getString(R.string.error_incorrect_password));
-               // mPasswordView.requestFocus();
-            }
-        }
+ if (success) {
+ finish();
+ } else {
+ // mPasswordView.setError(getString(R.string.error_incorrect_password));
+ // mPasswordView.requestFocus();
+ }
+ }
 
-        @Override
-        protected void onCancelled() {
-            //mAuthTask = null;
-            //showProgress(false);
-        }
-    }
+ @Override
+ protected void onCancelled() {
+ //mAuthTask = null;
+ //showProgress(false);
+ }
+ }
  **/
+
 }
