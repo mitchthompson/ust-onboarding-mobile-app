@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText unameField, pswdField;
     private Button submitLogin;
-    private String userID, userPass;
+    private String userID, userPass, authToken, accessToken;
 
     private AuthenticationContext mContext;
     //private AuthenticationCallback<AuthenticationResult> callback;
@@ -52,11 +52,13 @@ public class LoginActivity extends AppCompatActivity {
     private TextView testOutput_userID;
     private TextView testOutput_accToken;
     private TextView noDataOutput;
+    private Button btnSkipLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         //Login();
 //-----------------------------Begin ADAL AAD login code------------------------------------------\\
         // creates new AuthenticationContext object
@@ -74,6 +76,18 @@ public class LoginActivity extends AppCompatActivity {
         testOutput_userID = (TextView) findViewById(R.id.userID);
         testOutput_accToken = (TextView) findViewById(R.id.accToken);
         noDataOutput = (TextView) findViewById(R.id.noData);
+
+        btnSkipLogin = findViewById(R.id.btnSkipLogin);
+
+        btnSkipLogin.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("authToken", "Tester Auth");
+                intent.putExtra("accessToken", "Test Access");
+                startActivity(intent);
+            }
+        });
     }
     /**
      * Initiates the login process when activated
@@ -86,6 +100,8 @@ public class LoginActivity extends AppCompatActivity {
         mContext.acquireToken(LoginActivity.this, Constants.RESOURCE_ID, Constants.CLIENT_ID,
                 Constants.REDIRECT_URL, Constants.USER_HINT, PromptBehavior.Auto, "", getAdalAuth());
         Log.d(TAG,"accessing login data");
+
+
     }
     /**
      * Removes user token and cleans up cache. Acts as a way to log out of AD.
@@ -104,6 +120,12 @@ public class LoginActivity extends AppCompatActivity {
         dataOutput(v, loginResults);
         Log.d(TAG, "logout - removing tokens and cookies");
         popUp("Logged out");
+
+        // Redirect user to MainActivity and remove authentication extras
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.removeExtra("authToken");
+        intent.removeExtra("accessToken");
+        startActivity(intent);
     }
     /**
      * Displays login info on button click
@@ -111,6 +133,11 @@ public class LoginActivity extends AppCompatActivity {
      */
     public void getLoginRestuls(View v) {
         dataOutput(v, loginResults);
+        // Redirect user to MainActivity and add authentication tokens
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("authToken", authToken);
+        intent.putExtra("accessToken", accessToken);
+        startActivity(intent);
     }
     /**
      * Handles the end of AuthenticationActivity after user enters credentials and receives authorization code.
@@ -205,6 +232,8 @@ public class LoginActivity extends AppCompatActivity {
             testOutput_tokenID.setText("Token ID\n" + loginData.getIdToken());
             testOutput_accToken.setText("Access Token\n" + loginData.getAccessToken());
             testOutput_authHeader.setText("Auth Header\n" + loginData.createAuthorizationHeader());
+            authToken = loginData.createAuthorizationHeader();
+            accessToken = loginData.getAccessToken();
         }
     }
 //---------------------------------End ADAL AAD login code----------------------------------------\\
@@ -309,4 +338,5 @@ Toast.makeText(LoginActivity.this, "Username or Password is incorrect", Toast.LE
  }
  }
  **/
+
 }

@@ -2,6 +2,7 @@ package com.example.practicumapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -24,7 +25,10 @@ public class MainActivity extends AppCompatActivity {
 
     private Button taskListButton;
     private Button loginButton;
+
     private static final String TAG = MainActivity.class.getName(); // Constant for logging data
+    private String authToken;
+    private String accessToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +42,27 @@ public class MainActivity extends AppCompatActivity {
         myToolbar.setTitle("Main Activity");
         setSupportActionBar(myToolbar);
 
+        /*final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Do something after 100ms
 
+            }
+        }, 10000);*/
+        try {
+            validateUser();
+        }catch (Exception e){
+            Log.e("TOKENS", "No tokens passed");
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
         // TODO: remove temporary test buttons when not needed
 
 
         taskListButton = findViewById(R.id.task_list_button);
         loginButton = findViewById(R.id.login_button);
+
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -53,9 +72,14 @@ public class MainActivity extends AppCompatActivity {
 
         taskListButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, TaskListActivity.class));
+                Intent intent = new Intent(MainActivity.this, TaskListActivity.class);
+                intent.putExtra("authToken", authToken);
+                intent.putExtra("accessToken", accessToken);
+                startActivity(intent);
             }
         });
+
+
 
         // TODO Remove volleyParser code below (For testing purposes only)
         VolleyParser volleyParser = new VolleyParser(this.getApplicationContext());
@@ -83,6 +107,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void validateUser(){
+        // Gets the authentication tokens from previous activity
+        Bundle bundle = getIntent().getExtras();
+        authToken = bundle.getString("authToken");
+        accessToken = bundle.getString("accessToken");
+        if (authToken.isEmpty() || accessToken.isEmpty()){
+            Toast.makeText(getApplicationContext(), "User is not validated", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "User is validated with tokens \nAuth: " +
+                    authToken + "\nAccess: " + accessToken, Toast.LENGTH_LONG).show();
+        }
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
