@@ -91,13 +91,12 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "VolleyParser Employees assigned to User : " + user.getEmployees().toString());
             }
         });
-        volleyParser.getWorkflow("01", new VolleyWorkflowResponseListener() {
+        volleyParser.getWorkflow("ECCD3A6ED4C54D2DA28C9CDD28F6417E", new VolleyWorkflowResponseListener() {
             @Override
             public void onSuccess(Workflow workflow) {
-                Log.d(TAG, "VolleyParser Workflow Task Name : " + workflow.getTasks().get(0).getName());
-                Log.d(TAG, "VolleyParser Workflow Task 1 Descriptions: " + workflow.getTasks().get(0).getDescriptions());
-//                Log.d(TAG, "VolleyParser Workflow Task 2 Descriptions: " + workflow.getTasks().get(1).getDescriptions());
-
+                for (int i = 0; i < workflow.getTasks().size(); i++) {
+                    Log.d(TAG, "Workflow Task Name : " + workflow.getTasks().get(i).getName());
+                }
             }
         });
         volleyParser.getTask("ECCD3A6ED4C54D2DA28C9CDD28F6417E", new VolleyTaskResponseListener() {
