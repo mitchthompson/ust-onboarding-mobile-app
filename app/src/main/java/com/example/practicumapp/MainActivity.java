@@ -24,8 +24,7 @@ import com.example.practicumapp.models.Workflow;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button taskListButton;
-    private Button loginButton;
+    private Button taskListButton, loginButton, newHireButton;
 
     private static final String TAG = MainActivity.class.getName(); // Constant for logging data
     private String authToken;
@@ -63,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         taskListButton = findViewById(R.id.task_list_button);
         loginButton = findViewById(R.id.login_button);
-
+        newHireButton = findViewById(R.id.new_hire_button);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -77,6 +76,12 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("authToken", authToken);
                 intent.putExtra("accessToken", accessToken);
                 startActivity(intent);
+            }
+        });
+
+        newHireButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, NewHireListActivity.class));
             }
         });
 
@@ -142,24 +147,6 @@ public class MainActivity extends AppCompatActivity {
                 CookieSyncManager.getInstance().sync();
                 Log.d("Main Activity Logout", "clearing cookies and logging out");
                 //return true;
-
-            // TODO Remove following action items from actionbar here and in res/main_menu.xml
-
-            case R.id.action_login:
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                return true;
-
-            case R.id.action_tasklist:
-                startActivity(new Intent(MainActivity.this, TaskListActivity.class));
-                return true;
-
-            case R.id.action_newhirelist:
-                startActivity(new Intent(MainActivity.this, NewHireListActivity.class));
-                return true;
-
-            case R.id.action_addhire:
-                startActivity(new Intent(MainActivity.this, AddNewHireActivity.class));
-                return true;
 
             default:
                 // If we got here, the user's action was not recognized.
