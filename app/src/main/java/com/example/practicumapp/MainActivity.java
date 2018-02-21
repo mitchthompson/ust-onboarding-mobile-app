@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     private Button loginButton;
 
     private static final String TAG = MainActivity.class.getName(); // Constant for logging data
+
+    // Used for retrieving/sending auth tokens
     private String authToken;
     private String accessToken;
 
@@ -50,20 +52,15 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }, 10000);*/
-        try {
-            validateUser();
-        }catch (Exception e){
-            Log.e("TOKENS", "No tokens passed");
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(intent);
-        }
+
+
         // TODO: remove temporary test buttons when not needed
 
 
         taskListButton = findViewById(R.id.task_list_button);
         loginButton = findViewById(R.id.login_button);
 
-
+        // TODO Verify if this is needed since the user should be redirected to LoginActivity if not logged in
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -107,19 +104,30 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        validateUser();
     }
 
+    /*
+    * Attempts to validate the user by getting the intent's extras, where auth tokens are stored.
+    * If they exist, the user is validated and able to use the current activity.
+    * If they do not exist, the user is redirected to the LoginActivity.
+    */
     private void validateUser(){
-        // Gets the authentication tokens from previous activity
-        Bundle bundle = getIntent().getExtras();
-        authToken = bundle.getString("authToken");
-        accessToken = bundle.getString("accessToken");
-        if (authToken.isEmpty() || accessToken.isEmpty()){
-            Toast.makeText(getApplicationContext(), "User is not validated", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(getApplicationContext(), "User is validated with tokens \nAuth: " +
-                    authToken + "\nAccess: " + accessToken, Toast.LENGTH_LONG).show();
+        try {
+            Bundle bundle = getIntent().getExtras();
+            authToken = bundle.getString("authToken");
+            accessToken = bundle.getString("accessToken");
+            if (authToken.isEmpty() || accessToken.isEmpty()){
+                Toast.makeText(getApplicationContext(), "User is not validated", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "User is validated with tokens for MainActivity", Toast.LENGTH_LONG).show();
+            }
+        }catch (Exception e){
+            Log.e("TOKENS", "No tokens passed");
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
         }
+
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -137,6 +145,10 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Logout toast. Cheers!",
                         Toast.LENGTH_SHORT).show();
 
+                // Removes extras from intent (invalidates user)
+                getIntent().removeExtra("authToken");
+                getIntent().removeExtra("accessToken");
+                validateUser();
                 return true;
 
             // TODO Remove following action items from actionbar here and in res/main_menu.xml
@@ -164,4 +176,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
+    // TODO Add onResume, onPause, onStop, onDestroy, etc. to determine what to do when user leaves the app
 }

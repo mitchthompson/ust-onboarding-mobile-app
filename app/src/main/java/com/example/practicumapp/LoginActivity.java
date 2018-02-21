@@ -52,7 +52,6 @@ public class LoginActivity extends AppCompatActivity {
     private TextView testOutput_userID;
     private TextView testOutput_accToken;
     private TextView noDataOutput;
-    private Button btnSkipLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +76,11 @@ public class LoginActivity extends AppCompatActivity {
         testOutput_accToken = (TextView) findViewById(R.id.accToken);
         noDataOutput = (TextView) findViewById(R.id.noData);
 
-        btnSkipLogin = findViewById(R.id.btnSkipLogin);
 
+
+        // Passes Tester tokens for validation without the need to login.
+        // TODO Delete this when testing is complete.
+        Button btnSkipLogin = findViewById(R.id.btnSkipLogin);
         btnSkipLogin.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
@@ -89,6 +91,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
     /**
      * Initiates the login process when activated
      * @param v Holds the current view being displayed
@@ -121,11 +124,8 @@ public class LoginActivity extends AppCompatActivity {
         Log.d(TAG, "logout - removing tokens and cookies");
         popUp("Logged out");
 
-        // Redirect user to MainActivity and remove authentication extras
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.removeExtra("authToken");
-        intent.removeExtra("accessToken");
-        startActivity(intent);
+        getIntent().removeExtra("authToken");
+        getIntent().removeExtra("accessToken");
     }
     /**
      * Displays login info on button click
@@ -133,11 +133,22 @@ public class LoginActivity extends AppCompatActivity {
      */
     public void getLoginRestuls(View v) {
         dataOutput(v, loginResults);
-        // Redirect user to MainActivity and add authentication tokens
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("authToken", authToken);
-        intent.putExtra("accessToken", accessToken);
-        startActivity(intent);
+
+        try {
+            if (loginResults == null){
+                Toast.makeText(getApplicationContext(), "User is not validated", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "User is validated with tokens for App", Toast.LENGTH_LONG).show();
+                // Redirect user to MainActivity and add authentication tokens to the intent
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra("authToken", authToken);
+                intent.putExtra("accessToken", accessToken);
+                startActivity(intent);
+            }
+        }catch (Exception e){
+            Log.e("TOKENS", "No tokens passed");
+        }
+
     }
     /**
      * Handles the end of AuthenticationActivity after user enters credentials and receives authorization code.
@@ -232,6 +243,8 @@ public class LoginActivity extends AppCompatActivity {
             testOutput_tokenID.setText("Token ID\n" + loginData.getIdToken());
             testOutput_accToken.setText("Access Token\n" + loginData.getAccessToken());
             testOutput_authHeader.setText("Auth Header\n" + loginData.createAuthorizationHeader());
+
+            // Assigns auth tokens to variables to be passed to MainActivity via intent
             authToken = loginData.createAuthorizationHeader();
             accessToken = loginData.getAccessToken();
         }
