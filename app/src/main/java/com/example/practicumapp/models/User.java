@@ -36,6 +36,33 @@ public class User {
     }
 
     /**
+     * Constructor to use when creating a new user object to send to the API
+     * @param firstName User's first name
+     * @param lastName User's last name
+     * @param email User's email
+     * @param phone User's phone number
+     * @param type User's type can be one of the following - "employee" or "manager"
+     * @param startDate User's date of employment
+     * @param workflow Workflow id assigned to the user
+     */
+    public User(String firstName, String lastName, String email, String phone, String type, String startDate, String workflow) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phone = phone;
+        this.type = type;
+        this.startDate = startDate;
+        this.workflow = workflow;
+    }
+
+    /**
+     * Set User's id
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    /**
      * @return User's id
      */
     public String getId() {

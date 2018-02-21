@@ -21,6 +21,9 @@ import com.example.practicumapp.models.Task;
 import com.example.practicumapp.models.User;
 import com.example.practicumapp.models.Workflow;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -100,10 +103,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        volleyParser.getTask("ECCD3A6ED4C54D2DA28C9CDD28F6417E", new VolleyTaskResponseListener() {
+
+        User user = new User("Suraj", "Upreti", "upretisuraj11@gmail.com", "206-000-0000", "manager", "2018/2/12", "72AD9DBC60AE485782D43A1AE09279A4");
+        volleyParser.addNewUser(user, new VolleyUserResponseListener() {
             @Override
-            public void onSuccess(Task task) {
-                Log.d(TAG, "VolleyParser Task Name : " + task.getName());
+            public void onSuccess(User user) {
+                Log.d(TAG, "VolleyParser Created User id : " + user.getId());
             }
         });
 
