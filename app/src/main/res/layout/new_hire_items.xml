@@ -17,7 +17,6 @@
             android:text=""
             android:textAlignment="textStart"
             android:textAppearance="@style/TextAppearance.AppCompat"
-            android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp"
             android:drawableRight="@drawable/ic_chevron_right_black_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -28,7 +27,7 @@
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray"/>
+            android:background="@color/divider"/>
 
     </android.support.constraint.ConstraintLayout>
 
