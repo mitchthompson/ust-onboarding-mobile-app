@@ -22,6 +22,13 @@ public class Workflow {
     }
 
     /**
+     * Set an unique id for the workflow
+     */
+    public void setID(String id) {
+        this.id = id;
+    }
+
+    /**
      * @return Unique id of the workflow
      */
     public String getId() {

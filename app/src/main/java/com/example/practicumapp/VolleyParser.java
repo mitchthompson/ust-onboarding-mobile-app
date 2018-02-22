@@ -1,10 +1,10 @@
 package com.example.practicumapp;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.example.practicumapp.Interfaces.VolleyResponseListener;
-import com.example.practicumapp.Interfaces.VolleyTaskResponseListener;
 import com.example.practicumapp.Interfaces.VolleyUserResponseListener;
 import com.example.practicumapp.Interfaces.VolleyWorkflowResponseListener;
 import com.example.practicumapp.models.Task;
@@ -18,8 +18,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
-
 /**
  * JSON parser class for User, Workflow and Task
  * This class sends and retrieves JSON data from the API using volley
@@ -28,7 +26,7 @@ import java.util.HashMap;
 public class VolleyParser {
 
     private Context context; // Application Context
-    private static final String API_ADDRESS = "https://virtserver.swaggerhub.com/kari_bullard/Cloud-Practicum/1.0.5"; // URL to retrieve JSON data
+    private static final String API_ADDRESS = "https://virtserver.swaggerhub.com/kari_bullard/Cloud-Practicum/1.0.6"; // URL to retrieve JSON data
 
     /**
      * Constructor
@@ -44,42 +42,50 @@ public class VolleyParser {
      * Add a new user
      * @param user user object of the new user
      */
-    public void addNewUser(User user) {
-        //  TODO Code to add a new user
-    }
+    public void addNewUser(final User user, final VolleyUserResponseListener volleyUserResponseListener) {
+        String urlWithParams = API_ADDRESS + "/user";
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("firstName", user.getFirstName());
+        parameters.put("lastName", user.getLastName());
+        parameters.put("email", user.getEmail());
+        parameters.put("phone", user.getPhone());
+        parameters.put("startDate", user.getStartDate());
+        parameters.put("workflow", user.getWorkflow());
 
-    /**
-     * Assign a user to a workflow
-     * @param userID User id of a user
-     * @param workflowID Workflow id
-     */
-    public void assignUserToWorkflow(String userID, String workflowID) {
-        //  TODO Code to assign user to a workflow
-    }
-
-    /**
-     * Assign an employee to a manager
-     * @param managerID Manager id
-     * @param employeeID Employee id
-     */
-    public void assignEmployeeToManager(String managerID, String employeeID) {
-        //  TODO Code to assign an employee to a manager
+        MyVolleySingleton.getInstance(context)
+                .sendGETRequest(Request.Method.POST, urlWithParams, null, parameters, new VolleyResponseListener() {
+                    @Override
+                    public void onSuccess(JSONObject response) {
+//                      TODO Return newly created user id
+                        Log.d("VolleyParser", "User ID : " + response.toString());
+                        volleyUserResponseListener.onSuccess(user);
+                    }
+                });
     }
 
     /**
      * Add a new workflow
      * @param workflow workflow object of a new workflow
      */
-    public void createNewWorkflow(Workflow workflow) {
+    public void createNewWorkflow(final Workflow workflow, final VolleyWorkflowResponseListener volleyWorkflowResponseListener) {
         //  TODO Code to create a new workflow
-    }
+        String urlWithParams = API_ADDRESS + "/workflow";
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("id", workflow.getId());
+        parameters.put("name", workflow.getName());
+        parameters.put("description", workflow.getDescription());
+        parameters.put("tasks", workflow.getTasks().toString());
 
-    /**
-     * Add a new task
-     * @param task Task object of a new task
-     */
-    public void createNewTask(Task task) {
-        //  TODO Code to create a new task
+        MyVolleySingleton.getInstance(context)
+                .sendGETRequest(Request.Method.POST, urlWithParams, null, parameters, new VolleyResponseListener() {
+                    @Override
+                    public void onSuccess(JSONObject response) {
+//                      TODO Return newly created workflow id
+                        workflow.setID("f1f183b8169e11e8b6420ed5f89f718b");
+                        volleyWorkflowResponseListener.onSuccess(workflow);
+                        Log.d("VolleyParser", "Workflow ID : " + response.toString());
+                    }
+                });
     }
 
 //  Read (GET) functions
@@ -93,7 +99,7 @@ public class VolleyParser {
     public void getUser(String userID, final VolleyUserResponseListener volleyUserResponseListener) {
         String urlWithParams = API_ADDRESS + "/user/" + userID;
         MyVolleySingleton.getInstance(context)
-                .sendVolleyRequest(Request.Method.GET, urlWithParams, null, new VolleyResponseListener() {
+                .sendGETRequest(Request.Method.GET, urlWithParams, null, new HashMap<String, String>(), new VolleyResponseListener() {
                     @Override
                     public void onSuccess(JSONObject response) {
                         try {
@@ -140,22 +146,6 @@ public class VolleyParser {
     }
 
     /**
-     * Get completed task ids from the API
-     * @param userID User id
-     */
-//    public void getCompletedTasks(String userID) {
-        //  TODO Code to return all completed tasks, return task ids JSON array
-//    }
-
-    /**
-     * Get all employees assigned to a manager
-     * @param managerID Manager id
-     */
-    public void getAssignedEmployees(String managerID) {
-        //  TODO Code to return all employees assigned to a manager, return employee ids JSON array
-    }
-
-    /**
      * Get workflow info from the API and callback on success
      * @param workflowID Id of the workflow
      * @param volleyWorkflowResponseListener Interface definition for a callback to be invoked when a response is received
@@ -164,7 +154,7 @@ public class VolleyParser {
     public void getWorkflow(String workflowID, final VolleyWorkflowResponseListener volleyWorkflowResponseListener) {
         String urlWithParams = API_ADDRESS + "/workflow/" + workflowID;
         MyVolleySingleton.getInstance(context).
-                sendVolleyRequest(Request.Method.GET, urlWithParams, null, new VolleyResponseListener() {
+                sendGETRequest(Request.Method.GET, urlWithParams, null, new HashMap<String, String>(), new VolleyResponseListener() {
                     @Override
                     public void onSuccess(JSONObject response) {
                         try {
@@ -200,39 +190,6 @@ public class VolleyParser {
                 });
     }
 
-    /**
-     * Get task info from the API and callback on success
-     * @param taskID Id of the workflow
-     * @param volleyTaskResponseListener Interface definition for a callback to be invoked when a response is received
-     * @exception JSONException JSON parsing error exception
-     */
-    public void getTask(String taskID, final VolleyTaskResponseListener volleyTaskResponseListener) {
-
-                String urlWithParams = API_ADDRESS + "/task/" + taskID;
-        MyVolleySingleton.getInstance(context).
-                sendVolleyRequest(Request.Method.GET, urlWithParams, null, new VolleyResponseListener() {
-                    @Override
-                    public void onSuccess(JSONObject response) {
-                        try {
-                            String taskID = response.getString("id");
-                            String taskName = response.getString("name");
-                            JSONArray taskDescriptionsObject = response.getJSONArray("descriptions");
-                            HashMap<String, String> taskDescriptions = new HashMap<String, String>();
-                            for (int j = 0; j < taskDescriptionsObject.length(); j++) {
-                                JSONObject singleTaskDescription = taskDescriptionsObject.getJSONObject(j);
-                                taskDescriptions.put(singleTaskDescription.names().getString(j), singleTaskDescription.get(singleTaskDescription.names().getString(j)).toString());
-                            }
-                            String viewers = response.getString("viewers");
-
-                            Task singleTask = new Task(taskID, taskName, taskDescriptions, viewers);
-                            volleyTaskResponseListener.onSuccess(singleTask);
-                        } catch (JSONException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
-                });
-    }
-
 //  Update (UPDATE) functions
 
     /**
@@ -253,24 +210,6 @@ public class VolleyParser {
         //  TODO Function to update an existing workflow
     }
 
-    /**
-     * Mark a specific task by a user as completed
-     * @param userID User id of a user
-     * @param taskID Task id
-     */
-    public void markTaskAsCompleted(String userID, String taskID) {
-        //  TODO Code to mark a task as completed by a specific user
-    }
-
-    /**
-     * Update an existing task
-     * @param taskID Task id
-     * @param task Updated task object of an existing task
-     */
-    public void updateTask(String taskID, Task task) {
-        //  TODO Function to update an existing task
-    }
-
 //  Delete (DELETE) functions
 
     /**
@@ -282,45 +221,11 @@ public class VolleyParser {
     }
 
     /**
-     * Mark an existing task as incomplete
-     * @param userID User id
-     * @param taskID Task id
-     */
-    public void markTaskAsIncomplete(String userID, String taskID) {
-        //  TODO Code to delete a completed task
-    }
-
-    /**
-     * Remove an existing user from a workflow
-     * @param userID User id
-     */
-    public void removeUserFromWorkflow(String userID) {
-        //  TODO Code to unassign a user from a workflow
-    }
-
-    /**
-     * Unassign a user from a manager
-     * @param managerID Manager id
-     * @param userID User id
-     */
-    public void removeUserFromManager(String managerID, String userID) {
-        //  TODO Code to unassign an employee from a manager
-    }
-
-    /**
      * Delete an existing workflow
      * @param workflowID Workflow id
      */
     public void deleteWorkflow(String workflowID) {
         //  TODO Code to delete an existing workflow
-    }
-
-    /**
-     * Delete an existing task
-     * @param taskID Task id
-     */
-    public void deleteTask(String taskID) {
-        //  TODO Code to delete an existing task
     }
 
 //  TODO Remove getSampleTasks function (For testing purpose only)
