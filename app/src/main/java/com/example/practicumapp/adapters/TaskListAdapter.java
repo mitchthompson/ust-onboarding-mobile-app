@@ -1,5 +1,6 @@
 package com.example.practicumapp.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ import java.util.List;
  */
 public class TaskListAdapter extends ExpandableRecyclerViewAdapter<TaskListItemViewHolder, TaskDescriptionListItemViewHolder> {
 
+    Context context;
+
     public TaskListAdapter(List<? extends ExpandableGroup> groups) {
         super(groups);
     }
@@ -29,6 +32,7 @@ public class TaskListAdapter extends ExpandableRecyclerViewAdapter<TaskListItemV
     @Override
     public TaskListItemViewHolder onCreateGroupViewHolder(ViewGroup parent, int viewType){
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.task_items,parent,false);
+
         return new TaskListItemViewHolder(view);
     }
 
@@ -46,7 +50,13 @@ public class TaskListAdapter extends ExpandableRecyclerViewAdapter<TaskListItemV
     }
 
     @Override
-    public void onBindGroupViewHolder(TaskListItemViewHolder holder, int flatPosition, ExpandableGroup group) {
+    public void onBindGroupViewHolder(final TaskListItemViewHolder holder, int flatPosition, final ExpandableGroup group) {
+
         holder.setTaskName(group);
+
+
+
+
+
     }
 }

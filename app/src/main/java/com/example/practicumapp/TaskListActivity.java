@@ -52,7 +52,7 @@ public class TaskListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RelativeLayout relativeLayout;
 
-    private ProgressBar simpleProgressBar;
+    public static ProgressBar simpleProgressBar;
 
 
     // variables for...why?
@@ -164,8 +164,6 @@ public class TaskListActivity extends AppCompatActivity {
 
                         // progress bar size depends on the size of the tasklist.
                         simpleProgressBar.setMax(taskList.size());
-
-                        // TODO: OnClick Listener for the Checkbox
                     }
                 });
             }
@@ -175,7 +173,7 @@ public class TaskListActivity extends AppCompatActivity {
     /**
      * Helper method to calculate and redraw the progress bar whenever a checkbox is checked
      */
-    public void ProgressBarIncrement(int increment) {
+    public static void ProgressBarIncrement(int increment) {
 
         /* I might need this code later
         //int maxValue=simpleProgressBar.getMax(); // get maximum value of the progress bar
