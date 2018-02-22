@@ -2,7 +2,6 @@ package com.example.practicumapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -10,6 +9,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -23,8 +24,7 @@ import com.example.practicumapp.models.Workflow;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button taskListButton;
-    private Button loginButton;
+    private Button taskListButton, loginButton, newHireButton;
 
     private static final String TAG = MainActivity.class.getName(); // Constant for logging data
 
@@ -58,9 +58,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         taskListButton = findViewById(R.id.task_list_button);
-        loginButton = findViewById(R.id.login_button);
 
         // TODO Verify if this is needed since the user should be redirected to LoginActivity if not logged in
+        loginButton = findViewById(R.id.login_button);
+
+
+        newHireButton = findViewById(R.id.new_hire_button);
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -76,6 +80,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        newHireButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, NewHireListActivity.class));
+            }
+        });
+
 
 
         // TODO Remove volleyParser code below (For testing purposes only)
@@ -88,13 +98,12 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "VolleyParser Employees assigned to User : " + user.getEmployees().toString());
             }
         });
-        volleyParser.getWorkflow("01", new VolleyWorkflowResponseListener() {
+        volleyParser.getWorkflow("ECCD3A6ED4C54D2DA28C9CDD28F6417E", new VolleyWorkflowResponseListener() {
             @Override
             public void onSuccess(Workflow workflow) {
-                Log.d(TAG, "VolleyParser Workflow Task Name : " + workflow.getTasks().get(0).getName());
-                Log.d(TAG, "VolleyParser Workflow Task 1 Descriptions: " + workflow.getTasks().get(0).getDescriptions());
-//                Log.d(TAG, "VolleyParser Workflow Task 2 Descriptions: " + workflow.getTasks().get(1).getDescriptions());
-
+                for (int i = 0; i < workflow.getTasks().size(); i++) {
+                    Log.d(TAG, "Workflow Task Name : " + workflow.getTasks().get(i).getName());
+                }
             }
         });
         volleyParser.getTask("ECCD3A6ED4C54D2DA28C9CDD28F6417E", new VolleyTaskResponseListener() {
@@ -144,29 +153,16 @@ public class MainActivity extends AppCompatActivity {
                 // User chose the "Log Out" item...
                 Toast.makeText(getApplicationContext(), "Logout toast. Cheers!",
                         Toast.LENGTH_SHORT).show();
-
+                // clean up browser cookies
+                CookieSyncManager.createInstance(MainActivity.this);
+                CookieManager cookieManager = CookieManager.getInstance();
+                cookieManager.removeAllCookie();
+                CookieSyncManager.getInstance().sync();
+                Log.d("Main Activity Logout", "clearing cookies and logging out");
                 // Removes extras from intent (invalidates user)
                 getIntent().removeExtra("authToken");
                 getIntent().removeExtra("accessToken");
                 validateUser();
-                return true;
-
-            // TODO Remove following action items from actionbar here and in res/main_menu.xml
-
-            case R.id.action_login:
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                return true;
-
-            case R.id.action_tasklist:
-                startActivity(new Intent(MainActivity.this, TaskListActivity.class));
-                return true;
-
-            case R.id.action_newhirelist:
-                startActivity(new Intent(MainActivity.this, NewHireListActivity.class));
-                return true;
-
-            case R.id.action_addhire:
-                startActivity(new Intent(MainActivity.this, AddNewHireActivity.class));
                 return true;
 
             default:

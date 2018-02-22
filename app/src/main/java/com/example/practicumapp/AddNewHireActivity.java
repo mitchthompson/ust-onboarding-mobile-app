@@ -117,22 +117,6 @@ public class AddNewHireActivity extends AppCompatActivity {
 
                 return true;
 
-            case R.id.action_login:
-                startActivity(new Intent(AddNewHireActivity.this, LoginActivity.class));
-                return true;
-
-            case R.id.action_tasklist:
-                startActivity(new Intent(AddNewHireActivity.this, TaskListActivity.class));
-                return true;
-
-            case R.id.action_newhirelist:
-                startActivity(new Intent(AddNewHireActivity.this, NewHireListActivity.class));
-                return true;
-
-            case R.id.action_addhire:
-                startActivity(new Intent(AddNewHireActivity.this, AddNewHireActivity.class));
-                return true;
-
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
