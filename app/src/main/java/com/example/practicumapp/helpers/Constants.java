@@ -30,7 +30,7 @@ public class Constants {
     public static String REDIRECT_URL =  "https://exampleapiaadintegration.portal.azure-api.net/docs/services/5a79288d3a7fa7123837add2/console/oauth2/authorizationcode/callback";
     public static String AUTHORITY_URL = "https://login.windows.net/tkarp87live.onmicrosoft.com/";
     // user hint auto populates the username with the following:
-    public static String USER_HINT = "JasonPanzer@tkarp87live.onmicrosoft.com";
+    public static String USER_HINT = ""; // = "JasonPanzer@tkarp87live.onmicrosoft.com";
     static final String TABLE_WORKITEM = "WorkItem";
     // updated the above lines with what I **think** they should be (replaced com.example.test
     // with com.example.practicumapp or practicumapp
