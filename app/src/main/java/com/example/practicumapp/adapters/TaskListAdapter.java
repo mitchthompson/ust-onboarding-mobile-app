@@ -4,14 +4,18 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 import com.example.practicumapp.R;
 import com.example.practicumapp.TaskDescriptionListItemViewHolder;
+import com.example.practicumapp.TaskListActivity;
 import com.example.practicumapp.TaskListItemViewHolder;
 import com.example.practicumapp.models.TaskDescriptionListItem;
+import com.example.practicumapp.models.TaskListItem;
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,9 +28,14 @@ import java.util.List;
 public class TaskListAdapter extends ExpandableRecyclerViewAdapter<TaskListItemViewHolder, TaskDescriptionListItemViewHolder> {
 
     Context context;
+    private ArrayList<TaskListItem> taskListItems = new ArrayList<>();
+
 
     public TaskListAdapter(List<? extends ExpandableGroup> groups) {
         super(groups);
+        for(int i = 0; i < groups.size(); i++) {
+            taskListItems.add((TaskListItem) groups.get(i));
+        }
     }
 
     @Override
@@ -51,8 +60,29 @@ public class TaskListAdapter extends ExpandableRecyclerViewAdapter<TaskListItemV
 
     @Override
     public void onBindGroupViewHolder(final TaskListItemViewHolder holder, int flatPosition, final ExpandableGroup group) {
-
+        final TaskListItem myItem = taskListItems.get(flatPosition);
         holder.setTaskName(group);
+
+        //in some cases, it will prevent unwanted situations
+        holder.checkBox.setOnCheckedChangeListener(null);
+
+        //if true, checkbox will be selected, else unselected
+        holder.checkBox.setChecked(myItem.isChecked());
+
+        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                myItem.setChecked(b);
+
+                if(myItem.isChecked()) {
+                    TaskListActivity.ProgressBarIncrement(1);
+                }
+                else {
+                    TaskListActivity.ProgressBarIncrement(-1);
+                }
+            }
+        });
+
 
 
 

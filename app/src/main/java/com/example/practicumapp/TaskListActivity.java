@@ -136,12 +136,18 @@ public class TaskListActivity extends AppCompatActivity {
                         // ArrayList of Tasks
                         taskList = workflow.getTasks();
 
+                        // progress bar size depends on the size of the tasklist.
+                        simpleProgressBar.setMax(taskList.size());
+                        // set progress to 0 initially
+                        simpleProgressBar.setProgress(0);
+
                         // taskListItems ArrayList is needed to feed to the RecyclerView
                         ArrayList<TaskListItem> taskListItems = new ArrayList<>();
 
                         // iterate through taskList and populate taskListItems
                         for(int i = 0; i < taskList.size(); i++) {
                             Task task = (Task) taskList.get(i);
+                            String taskId = task.getId();
                             String taskName = task.getName();
                             HashMap<String, String> taskDescriptionMap = task.getDescriptions();
                             ArrayList<TaskDescriptionListItem> taskDescriptionListItems = new ArrayList<>();
@@ -151,10 +157,15 @@ public class TaskListActivity extends AppCompatActivity {
                             if(userType.equals("employee")) {
                                 taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("employee")));
                             }
-                            taskListItems.add(new TaskListItem(taskName,taskDescriptionListItems));
-                        }
+                            TaskListItem taskListItemToAdd = new TaskListItem(taskName,taskDescriptionListItems);
 
-                        // TODO: Logic to determine whether User has completed a task or not
+                            // Check if this taskItem has been completed.
+                            if(completedTasks.contains(taskId)) {
+                                taskListItemToAdd.setChecked(true);
+                                ProgressBarIncrement(1);
+                            }
+                            taskListItems.add(taskListItemToAdd);
+                        }
 
                         // recyclerView gets kicked off in here, because we know we have data to display.
                         relativeLayout = (RelativeLayout) findViewById(R.id.activity_task_list);
@@ -162,8 +173,7 @@ public class TaskListActivity extends AppCompatActivity {
                         recyclerView.setLayoutManager(layoutManager);
                         recyclerView.setAdapter(adapter);
 
-                        // progress bar size depends on the size of the tasklist.
-                        simpleProgressBar.setMax(taskList.size());
+
                     }
                 });
             }
