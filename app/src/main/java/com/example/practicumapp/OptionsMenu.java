@@ -1,5 +1,6 @@
 package com.example.practicumapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -26,6 +27,9 @@ public class OptionsMenu extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_debug:
+                startActivity(new Intent(OptionsMenu.this, DebugActivity.class));
+                Log.d(TAG,"debug menu activity selected");
             case R.id.action_logout:
                 Log.d(TAG,"logout pressed");
             default:
