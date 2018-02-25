@@ -14,7 +14,6 @@ public class MainActivity extends OptionsMenu {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar myToolbar = findViewById(R.id.myToolbar);
-        myToolbar.setTitle("Main Activity");
         setSupportActionBar(myToolbar);
      }
 }

@@ -20,7 +20,6 @@ public class OptionsMenu extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
-        Log.d(TAG, "menu event");
         return true;
     }
 
