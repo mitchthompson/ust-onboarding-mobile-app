@@ -13,6 +13,7 @@ public class TaskListItem extends ExpandableGroup<TaskDescriptionListItem> {
 
     private String taskName;
     private boolean isChecked;
+    private String taskID;
 
     /**
      * Each TaskListItem has an arrayList of descriptions that go along with it.
@@ -42,5 +43,13 @@ public class TaskListItem extends ExpandableGroup<TaskDescriptionListItem> {
 
     public boolean isChecked() {
         return isChecked;
+    }
+
+    public String getTaskID() {
+        return taskID;
+    }
+
+    public void setTaskID(String taskID) {
+        this.taskID = taskID;
     }
 }

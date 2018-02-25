@@ -10,6 +10,7 @@ import com.example.practicumapp.R;
 import com.example.practicumapp.TaskDescriptionListItemViewHolder;
 import com.example.practicumapp.TaskListActivity;
 import com.example.practicumapp.TaskListItemViewHolder;
+import com.example.practicumapp.VolleyParser;
 import com.example.practicumapp.models.TaskDescriptionListItem;
 import com.example.practicumapp.models.TaskListItem;
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
@@ -29,6 +30,7 @@ public class TaskListAdapter extends ExpandableRecyclerViewAdapter<TaskListItemV
 
     Context context;
     private ArrayList<TaskListItem> taskListItems = new ArrayList<>();
+    private VolleyParser adapterVolleyParser;
 
 
     public TaskListAdapter(List<? extends ExpandableGroup> groups) {
@@ -68,6 +70,8 @@ public class TaskListAdapter extends ExpandableRecyclerViewAdapter<TaskListItemV
 
         //if true, checkbox will be selected, else unselected
         holder.checkBox.setChecked(myItem.isChecked());
+        adapterVolleyParser = new VolleyParser(context);
+
 
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -76,9 +80,11 @@ public class TaskListAdapter extends ExpandableRecyclerViewAdapter<TaskListItemV
 
                 if(myItem.isChecked()) {
                     TaskListActivity.ProgressBarIncrement(1);
+                    adapterVolleyParser.markTaskAsCompleted(TaskListActivity.SendUserId(), myItem.getTaskID());
                 }
                 else {
                     TaskListActivity.ProgressBarIncrement(-1);
+                    adapterVolleyParser.markTaskAsIncomplete(TaskListActivity.SendUserId(), myItem.getTaskID());
                 }
             }
         });

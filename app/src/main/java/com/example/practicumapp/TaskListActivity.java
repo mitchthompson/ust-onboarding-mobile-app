@@ -55,9 +55,10 @@ public class TaskListActivity extends AppCompatActivity {
     public static ProgressBar simpleProgressBar;
 
 
-    // variables for...why?
+    // taskList is the list of Tasks from the workflow
     private ArrayList taskList;
-    private String employeeId = "72AD9DBC60AE485782D43A1AE09279A4";
+
+    public static String employeeId = "72AD9DBC60AE485782D43A1AE09279A4";
     private String employeeName = "";
     private String userType = "";
     private String workflowId;
@@ -158,6 +159,7 @@ public class TaskListActivity extends AppCompatActivity {
                                 taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("employee")));
                             }
                             TaskListItem taskListItemToAdd = new TaskListItem(taskName,taskDescriptionListItems);
+                            taskListItemToAdd.setTaskID(taskId);
 
                             // Check if this taskItem has been completed.
                             if(completedTasks.contains(taskId)) {
@@ -193,5 +195,9 @@ public class TaskListActivity extends AppCompatActivity {
 
         // let the built in increment method do the work. Also works on a negative increment.
         simpleProgressBar.incrementProgressBy(increment);
+    }
+
+    public static String SendUserId() {
+        return employeeId;
     }
 }
