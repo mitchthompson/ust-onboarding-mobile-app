@@ -1,15 +1,11 @@
 package com.example.practicumapp;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -45,7 +41,7 @@ import java.util.HashMap;
  * TODO: update progress bar when checkbox is clicked
  */
 
-public class TaskListActivity extends AppCompatActivity {
+public class TaskListActivity extends OptionsMenu {
     //TAG for logging
     private static final String TAG = TaskListActivity.class.getName(); // Constant for logging data
 
@@ -161,32 +157,6 @@ public class TaskListActivity extends AppCompatActivity {
                 // TODO: OnClick Listener for the Checkbox
             }
         });
-    }
-
-
-    // Creates menu
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.main_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    // Defines the actions after user selection of the menu items from the drawer menu
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_logout:
-                // User chose the "Log Out" item...
-                //Toast.makeText(getApplicationContext(), "Logout toast. Cheers!",Toast.LENGTH_SHORT).show();
-                Log.d(TAG,"logout pressed");
-                return true;
-
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-
-        }
     }
 
     /**

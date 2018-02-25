@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
@@ -17,7 +16,7 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
-public class AddNewHireActivity extends AppCompatActivity {
+public class AddNewHireActivity extends OptionsMenu {
 
     private Spinner spinner1;
     private Button btnCancel, btnDone;

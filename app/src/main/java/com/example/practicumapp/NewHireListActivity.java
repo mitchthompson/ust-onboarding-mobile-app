@@ -3,14 +3,10 @@ package com.example.practicumapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -35,7 +31,8 @@ import java.util.Map;
  *
  */
 
-public class NewHireListActivity extends AppCompatActivity {
+public class NewHireListActivity extends OptionsMenu {
+
     private static final String TAG = NewHireListActivity.class.getName(); // Constant for logging data
 
     private Context context;
@@ -99,36 +96,6 @@ public class NewHireListActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    /**
-     * Creates actionbar menu and inflates menu hierarchy from menu/main_menu.xml.
-     * @param menu The options menu which items are placed
-     * @return boolean
-     */
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.main_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-
-    // Defines the actions after user selection of the menu items from the drawer menu
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_logout:
-                // User chose the "Log Out" item...
-                //Toast.makeText(getApplicationContext(), "Logout toast. Cheers!",Toast.LENGTH_SHORT).show();
-                Log.d(TAG,"logout pressed");
-                return true;
-
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-
-        }
     }
 
 }

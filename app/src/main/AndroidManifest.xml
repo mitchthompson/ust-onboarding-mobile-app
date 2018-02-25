@@ -15,45 +15,50 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".LoginActivity"
+        <activity
+            android:name=".LoginActivity"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
-        <activity android:name=".AddNewHireActivity"
+        <activity
+            android:name=".AddNewHireActivity"
             android:parentActivityName=".NewHireListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".NewHireListActivity" />
         </activity>
-
-        <activity android:name=".TaskListActivity"
+        <activity
+            android:name=".TaskListActivity"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
-        <activity android:name=".NewHireListActivity"
+        <activity
+            android:name=".NewHireListActivity"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
+        <activity
+            android:name=".DebugActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
         <activity
             android:name="com.microsoft.aad.adal.AuthenticationActivity"
             android:exported="true"
             android:label="title_login_hello_app" />
-
-        <activity android:name=".DebugActivity"/>
-
+        <activity android:name=".OptionsMenu"></activity>
     </application>
 
 </manifest>
