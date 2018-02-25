@@ -19,7 +19,7 @@ public class DebugActivity extends OptionsMenu {
         Can customize menu items in res/menu/main_menu.xml
         Can customize toolbar in res/layout/toolbar_layout.xml*/
         Toolbar myToolbar = findViewById(R.id.myToolbar);
-        myToolbar.setTitle("Main Activity");
+        myToolbar.setTitle("Debug Menu");
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
