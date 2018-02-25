@@ -20,7 +20,7 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
 
-    <Button
+    <!--<Button
         android:id="@+id/login_button"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="200dp"
@@ -32,7 +32,7 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/myToolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/myToolbar" />-->
 
     <Button
         android:id="@+id/task_list_button"
@@ -46,7 +46,7 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_button" />
+        app:layout_constraintTop_toBottomOf="@+id/myToolbar" />
 
     <Button
         android:id="@+id/new_hire_button"

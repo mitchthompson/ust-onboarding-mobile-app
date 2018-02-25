@@ -2,25 +2,24 @@ package com.example.practicumapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
-import android.widget.SearchView;
 
 import com.example.practicumapp.Interfaces.VolleyUserResponseListener;
 import com.example.practicumapp.adapters.NewHireListAdapter;
 import com.example.practicumapp.models.User;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,7 +59,8 @@ public class NewHireListActivity extends AppCompatActivity {
         Toolbar myToolbar = findViewById(R.id.myToolbar);
         myToolbar.setTitle("Employees");
         setSupportActionBar(myToolbar);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         //TODO Add functionality for user to search through list using searchview
 
         //sets click listener for add_new_hire_btn to launch AddNewHireActivity
@@ -110,6 +110,25 @@ public class NewHireListActivity extends AppCompatActivity {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+
+    // Defines the actions after user selection of the menu items from the drawer menu
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_logout:
+                // User chose the "Log Out" item...
+                //Toast.makeText(getApplicationContext(), "Logout toast. Cheers!",Toast.LENGTH_SHORT).show();
+                Log.d(TAG,"logout pressed");
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
 }
