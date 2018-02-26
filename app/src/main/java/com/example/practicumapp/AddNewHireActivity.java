@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
-public class AddNewHireActivity extends OptionsMenu {
+public class AddNewHireActivity extends MainActivity {
 
     private Spinner spinner1;
     private Button btnCancel, btnDone;

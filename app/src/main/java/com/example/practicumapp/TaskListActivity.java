@@ -41,7 +41,7 @@ import java.util.HashMap;
  * TODO: update progress bar when checkbox is clicked
  */
 
-public class TaskListActivity extends OptionsMenu {
+public class TaskListActivity extends MainActivity {
     //TAG for logging
     private static final String TAG = TaskListActivity.class.getName(); // Constant for logging data
 
@@ -81,8 +81,6 @@ public class TaskListActivity extends OptionsMenu {
 
         myToolbar.setTitle("Task List");
         setSupportActionBar(myToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         //check for a passed in bundle of userID/name and set it if it exists
         if(getIntent().hasExtra("userID")) {

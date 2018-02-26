@@ -31,7 +31,7 @@ import java.util.Map;
  *
  */
 
-public class NewHireListActivity extends OptionsMenu {
+public class NewHireListActivity extends MainActivity {
 
     private static final String TAG = NewHireListActivity.class.getName(); // Constant for logging data
 
@@ -56,8 +56,7 @@ public class NewHireListActivity extends OptionsMenu {
         Toolbar myToolbar = findViewById(R.id.myToolbar);
         myToolbar.setTitle("Employees");
         setSupportActionBar(myToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         //TODO Add functionality for user to search through list using searchview
 
         //sets click listener for add_new_hire_btn to launch AddNewHireActivity

@@ -6,7 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 
-public class DebugActivity extends OptionsMenu {
+public class DebugActivity extends MainActivity {
 
     private Button taskListButton, newHireButton;
     private String TAG = "Debug Activity";
@@ -21,8 +21,6 @@ public class DebugActivity extends OptionsMenu {
         Toolbar myToolbar = findViewById(R.id.myToolbar);
         myToolbar.setTitle("Debug Menu");
         setSupportActionBar(myToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
         // TODO: remove temporary test buttons when not needed
         taskListButton = findViewById(R.id.task_list_button);
         newHireButton = findViewById(R.id.new_hire_button);
@@ -36,6 +34,7 @@ public class DebugActivity extends OptionsMenu {
                 startActivity(new Intent(DebugActivity.this, NewHireListActivity.class));
             }
         });
+
         // TODO Remove volleyParser code below (For testing purposes only)
         /*VolleyParser volleyParser = new VolleyParser(this.getApplicationContext());
         volleyParser.getUser("72AD9DBC60AE485782D43A1AE09279A4", new VolleyUserResponseListener() {

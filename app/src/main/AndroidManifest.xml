@@ -15,7 +15,6 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -58,7 +57,6 @@
             android:name="com.microsoft.aad.adal.AuthenticationActivity"
             android:exported="true"
             android:label="title_login_hello_app" />
-        <activity android:name=".OptionsMenu"></activity>
     </application>
 
 </manifest>
