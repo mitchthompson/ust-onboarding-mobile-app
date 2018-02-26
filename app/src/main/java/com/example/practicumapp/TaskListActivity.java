@@ -1,7 +1,6 @@
 package com.example.practicumapp;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -42,7 +41,7 @@ import java.util.HashMap;
  * TODO: update progress bar when checkbox is clicked
  */
 
-public class TaskListActivity extends AppCompatActivity {
+public class TaskListActivity extends MainActivity {
     //TAG for logging
     private static final String TAG = TaskListActivity.class.getName(); // Constant for logging data
 

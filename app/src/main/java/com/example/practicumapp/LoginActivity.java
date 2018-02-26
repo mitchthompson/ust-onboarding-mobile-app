@@ -8,7 +8,6 @@ import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,20 +25,12 @@ import com.microsoft.aad.adal.PromptBehavior;
  * @version 1.1
  **/
 
-// TODO: use loginactivity UI to login, not MS's website in a webview (??)
-
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText unameField, pswdField;
-    private Button submitLogin;
-    private String userID, userPass, authToken, accessToken;
-
+    private String authToken, accessToken;
     private AuthenticationContext mContext;
-    //private AuthenticationCallback<AuthenticationResult> callback;
     private AuthenticationResult loginResults;
-
     private String TAG = "LoginActivity";
-
     private ScrollView authOutput;
     private TextView testOutput_tenantID;
     private TextView testOutput_dispID;
@@ -52,14 +43,12 @@ public class LoginActivity extends AppCompatActivity {
     private TextView testOutput_userID;
     private TextView testOutput_accToken;
     private TextView noDataOutput;
+    //private AuthenticationCallback<AuthenticationResult> callback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        //Login();
-//-----------------------------Begin ADAL AAD login code------------------------------------------\\
         // creates new AuthenticationContext object
         mContext = new AuthenticationContext(LoginActivity.this, Constants.AUTHORITY_URL,
                 true);
@@ -75,15 +64,11 @@ public class LoginActivity extends AppCompatActivity {
         testOutput_userID = (TextView) findViewById(R.id.userID);
         testOutput_accToken = (TextView) findViewById(R.id.accToken);
         noDataOutput = (TextView) findViewById(R.id.noData);
-
-
-
         // Passes Tester tokens for validation without the need to login.
         // TODO Delete this when testing is complete.
         Button btnSkipLogin = findViewById(R.id.btnSkipLogin);
         btnSkipLogin.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra("authToken", "Tester Auth");
                 intent.putExtra("accessToken", "Test Access");
@@ -91,20 +76,17 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
     /**
      * Initiates the login process when activated
      * @param v Holds the current view being displayed
      */
     public void adalLogin(View v) {
         Log.d(TAG,"user login");
-        popUp("Logging in");
+        //popUp("Logging in");
         // asks for a token by generating a callback that returns the necessary information
         mContext.acquireToken(LoginActivity.this, Constants.RESOURCE_ID, Constants.CLIENT_ID,
                 Constants.REDIRECT_URL, Constants.USER_HINT, PromptBehavior.Auto, "", getAdalAuth());
         Log.d(TAG,"accessing login data");
-
-
     }
     /**
      * Removes user token and cleans up cache. Acts as a way to log out of AD.
@@ -122,34 +104,11 @@ public class LoginActivity extends AppCompatActivity {
         loginResults = null;
         dataOutput(v, loginResults);
         Log.d(TAG, "logout - removing tokens and cookies");
-        popUp("Logged out");
-
+        //popUp("Logged out");
         getIntent().removeExtra("authToken");
         getIntent().removeExtra("accessToken");
     }
-    /**
-     * Displays login info on button click
-     * @param v Holds the current view being displayed
-     */
-    public void getLoginRestuls(View v) {
-        dataOutput(v, loginResults);
 
-        try {
-            if (loginResults == null){
-                Toast.makeText(getApplicationContext(), "User is not validated", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getApplicationContext(), "User is validated with tokens for App", Toast.LENGTH_LONG).show();
-                // Redirect user to MainActivity and add authentication tokens to the intent
-                Intent intent = new Intent(this, MainActivity.class);
-                intent.putExtra("authToken", authToken);
-                intent.putExtra("accessToken", accessToken);
-                startActivity(intent);
-            }
-        }catch (Exception e){
-            Log.e("TOKENS", "No tokens passed");
-        }
-
-    }
     /**
      * Handles the end of AuthenticationActivity after user enters credentials and receives authorization code.
      * @param requestCode indicates the type of request
@@ -178,18 +137,18 @@ public class LoginActivity extends AppCompatActivity {
             public void onError(Exception exc) {
                 if (exc instanceof AuthenticationException) {
                     Log.d(TAG, "Cancelled");
-                    popUp("Canceled");
+                    //popUp("Canceled");
                 } else {
                     //textViewStatus.setText("Authentication error:" + exc.getMessage());
                     Log.d(TAG, "Authentication error:" + exc.getMessage());
-                    popUp("Authentication error:" + exc.getMessage());
+                    //popUp("Authentication error:" + exc.getMessage());
                 }
             }
             @Override
             public void onSuccess(AuthenticationResult result) {
                 if (result == null || result.getAccessToken() == null || result.getAccessToken().isEmpty()) {
                     Log.d(TAG, "Token is empty");
-                    popUp("Token is empty");
+                    //popUp("Token is empty");
                 } else {
                     // request is successful
                     loginResults = result;
@@ -198,6 +157,31 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
     }
+
+    /**
+     * Displays login info on button click
+     * @param v Holds the current view being displayed
+     */
+    public void getLoginRestuls(View v) {
+        dataOutput(v, loginResults);
+        try {
+            if (loginResults == null){
+                //Toast.makeText(getApplicationContext(), "User is not validated", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "User is not validated");
+            } else {
+                //Toast.makeText(getApplicationContext(), "User is validated with tokens for App", Toast.LENGTH_LONG).show();
+                Log.d(TAG, "User is validated with tokens for App");
+                // Redirect user to MainActivity and add authentication tokens to the intent
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra("authToken", authToken);
+                intent.putExtra("accessToken", accessToken);
+                startActivity(intent);
+            }
+        }catch (Exception e){
+            Log.e("TOKENS", "No tokens passed");
+        }
+    }
+
     /**
      * Helper method to display Toast pop ups for debugging purposes
      * @param inputText String that is to be displayed inside the Toast
@@ -243,113 +227,10 @@ public class LoginActivity extends AppCompatActivity {
             testOutput_tokenID.setText("Token ID\n" + loginData.getIdToken());
             testOutput_accToken.setText("Access Token\n" + loginData.getAccessToken());
             testOutput_authHeader.setText("Auth Header\n" + loginData.createAuthorizationHeader());
-
             // Assigns auth tokens to variables to be passed to MainActivity via intent
             authToken = loginData.createAuthorizationHeader();
             accessToken = loginData.getAccessToken();
         }
     }
 //---------------------------------End ADAL AAD login code----------------------------------------\\
-/**
- void Login(){
- unameField = (EditText)findViewById(R.id.username);
- pswdField = (EditText)findViewById(R.id.password);
- submitLogin = (Button)findViewById(R.id.loginButton);
-
- submitLogin.setOnClickListener(new View.OnClickListener() {
-@Override
-public void onClick(View v) {
-userID = unameField.getText().toString().trim();
-userPass = pswdField.getText().toString().trim();
-
-UserLoginTask login = new UserLoginTask(userID, userPass);
-login.execute();
-/*
-if(userID.equals("admin") && userPass.equals("admin")){
-Toast.makeText(LoginActivity.this, "Username and Password is correct", Toast.LENGTH_SHORT).show();
-startActivity(new Intent(LoginActivity.this, TaskListActivity.class));
-}else{
-Toast.makeText(LoginActivity.this, "Username or Password is incorrect", Toast.LENGTH_SHORT).show();
-}
- */
-/**            }
- });
- }
-
- /**
- * Represents an asynchronous login task used to authenticate
- * the user.
- */
-/**
- public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
- private final String mUserID;
- private final String mPassword;
-
- /**
- * Constructor for UserLoginTask that accepts two parameters (user's ID and password), uses
- * these parameters to send a call to the API to get the specified user. If the user's password
- * matches, the user is redirected to the TaskListActivity. If the password doesn't match,
- * the LoginActivity is reloaded and the user is notified that the user/pass is incorrect.
- *
- * @param id user's ID
- * @param password user's password
- */
-/**        UserLoginTask(String id, String password) {
- mUserID = id;
- mPassword = password;
- }
-
- @Override
- protected Boolean doInBackground(Void... params) {
- // TODO: Request username and compare password with specified username
-
- try {
- VolleyParser getJson = new VolleyParser(getApplicationContext());
- getJson.getUser(mUserID, new VolleyUserResponseListener() {
- @Override
- public void onSuccess(User user) {
- if (mUserID.equals(user.getId().replace("-",""))) {
- String temp = "Email: " + user.getEmail() + "\nFirst: " + user.getFirstName() + "\nLast: " + user.getLastName()
- + "\nStartDate: " + user.getStartDate() + "\nType: " + user.getType() + "\nID: " + user.getId()
- + "\nPhone: " + user.getPhone();
- Toast.makeText(getApplicationContext(), temp, Toast.LENGTH_LONG).show();
- startActivity(new Intent(LoginActivity.this, TaskListActivity.class));
- }
- else {
- startActivity(new Intent(LoginActivity.this, LoginActivity.class));
- Toast.makeText(getApplicationContext(), "Incorrect User/Pass", Toast.LENGTH_LONG).show();
- }
- }
- });
-
- Thread.sleep(2000);
- } catch (InterruptedException e) {
- return false;
- }
-
- return true;
- }
-
- @Override
- protected void onPostExecute(final Boolean success) {
- //mAuthTask = null;
- //showProgress(false);
-
- if (success) {
- finish();
- } else {
- // mPasswordView.setError(getString(R.string.error_incorrect_password));
- // mPasswordView.requestFocus();
- }
- }
-
- @Override
- protected void onCancelled() {
- //mAuthTask = null;
- //showProgress(false);
- }
- }
- **/
-
 }
