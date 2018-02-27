@@ -240,12 +240,18 @@ public class VolleyParser {
         Task fourthTask = new Task("WEOIURE234C54D2DA209JKLSDFIUIO", "Get documents from HR", taskDescriptions, "manager");
         Task fifthTask = new Task("POIPIEJEWWC54D2DA23894IO098DSF", "Check with manager", taskDescriptions, "manager");
         Task sixthTask = new Task("NNBMBBBEE54D2DA23892300293ERIU", "Work on your first project", taskDescriptions, "manager");
+        Task seventhTask = new Task("NNBMBBBEE54D2DA23892300293ERIU", "Work on your second project", taskDescriptions, "manager");
+        Task eigthTask = new Task("NNBMBBBEE54D2DA23892300293ERIU", "Work on your Third project", taskDescriptions, "manager");
+
         sampleTasks.add(firstTask);
         sampleTasks.add(secondTask);
         sampleTasks.add(thirdTask);
         sampleTasks.add(fourthTask);
         sampleTasks.add(fifthTask);
         sampleTasks.add(sixthTask);
+        sampleTasks.add(seventhTask);
+        sampleTasks.add(eigthTask);
+
         return sampleTasks;
     }
 }
