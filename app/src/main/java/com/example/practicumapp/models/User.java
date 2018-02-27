@@ -63,6 +63,20 @@ public class User {
     }
 
     /**
+     * Mark a task as completed
+     */
+    public void markTaskAsCompleted(String taskID) {
+        this.tasks.add(taskID);
+    }
+
+    /**
+     * Mark a task as incomplete
+     */
+    public void markTaskAsIncomplete(String taskID) {
+        this.tasks.remove(taskID);
+    }
+
+    /**
      * @return User's id
      */
     public String getId() {

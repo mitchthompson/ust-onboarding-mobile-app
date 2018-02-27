@@ -2,11 +2,13 @@ package com.example.practicumapp;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.example.practicumapp.Interfaces.VolleyResponseListener;
 import com.example.practicumapp.Interfaces.VolleyUserResponseListener;
 import com.example.practicumapp.Interfaces.VolleyWorkflowResponseListener;
+import com.example.practicumapp.Interfaces.VolleyWorkflowsListResponseListener;
 import com.example.practicumapp.models.Task;
 import com.example.practicumapp.models.User;
 import com.example.practicumapp.models.Workflow;
@@ -26,7 +28,7 @@ import java.util.HashMap;
 public class VolleyParser {
 
     private Context context; // Application Context
-    private static final String API_ADDRESS = "https://virtserver.swaggerhub.com/kari_bullard/Cloud-Practicum/1.0.6"; // URL to retrieve JSON data
+    private static final String API_ADDRESS = "https://virtserver.swaggerhub.com/kari_bullard/Cloud-Practicum/1.0.7"; // URL to retrieve JSON data
 
     /**
      * Constructor
@@ -152,7 +154,7 @@ public class VolleyParser {
      * @exception JSONException JSON parsing error exception
      */
     public void getWorkflow(String workflowID, final VolleyWorkflowResponseListener volleyWorkflowResponseListener) {
-        String urlWithParams = API_ADDRESS + "/workflow/" + workflowID;
+        String urlWithParams = API_ADDRESS + "/workflows/" + workflowID;
         MyVolleySingleton.getInstance(context).
                 sendGETRequest(Request.Method.GET, urlWithParams, null, new HashMap<String, String>(), new VolleyResponseListener() {
                     @Override
@@ -190,6 +192,33 @@ public class VolleyParser {
                 });
     }
 
+
+    /**
+     * Get workflows list from the API and callback on success
+     * @param volleyWorkflowsListResponseListener Interface definition for a callback to be invoked when a response is received
+     * @exception JSONException JSON parsing error exception
+     */
+    public void getWorkflows(final VolleyWorkflowsListResponseListener volleyWorkflowsListResponseListener) {
+        String urlWithParams = API_ADDRESS + "/workflows/";
+        MyVolleySingleton.getInstance(context).sendVolleyRequest(urlWithParams, new VolleyResponseListener() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                HashMap<String, String> workflows = new HashMap<String, String>();
+                try {
+                    JSONArray workflowsList = response.getJSONArray("workflows");
+                    for (int j = 0; j < workflowsList.length(); j++) {
+                        JSONObject singleWorkflow = workflowsList.getJSONObject(j);
+                        workflows.put(singleWorkflow.getString("id"),
+                                singleWorkflow.getString("name"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                volleyWorkflowsListResponseListener.onSuccess(workflows);
+            }
+            });
+    }
+
 //  Update (UPDATE) functions
 
     /**
@@ -208,6 +237,38 @@ public class VolleyParser {
      */
     public void updateWorkflow(String workflowID, Workflow workflow) {
         //  TODO Function to update an existing workflow
+    }
+
+    /**
+     * Mark a task as completed
+     * @param userID User id
+     * @param taskID Task id
+     */
+    public void markTaskAsCompleted(final String userID, final String taskID) {
+        getUser(userID, new VolleyUserResponseListener() {
+            @Override
+            public void onSuccess(User user) {
+                user.markTaskAsCompleted(taskID);
+                Log.d("VolleyParser", "Updated user info : " + user.getTasks().toString());
+                updateUser(userID, user);
+            }
+        });
+    }
+
+    /**
+     * Mark a task as incomplete
+     * @param userID User id
+     * @param taskID Task id
+     */
+    public void markTaskAsInComplete(final String userID, final String taskID) {
+        getUser(userID, new VolleyUserResponseListener() {
+            @Override
+            public void onSuccess(User user) {
+                user.markTaskAsIncomplete(taskID);
+                Log.d("VolleyParser", "Updated user info : " + user.getTasks().toString());
+                updateUser(userID, user);
+            }
+        });
     }
 
 //  Delete (DELETE) functions
