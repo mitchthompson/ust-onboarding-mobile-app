@@ -69,7 +69,7 @@ public class VolleyParser {
      * Add a new workflow
      * @param workflow workflow object of a new workflow
      */
-    public void createNewWorkflow(final Workflow workflow, final VolleyWorkflowResponseListener volleyWorkflowResponseListener) {
+    public void addNewWorkflow(final Workflow workflow, final VolleyWorkflowResponseListener volleyWorkflowResponseListener) {
         //  TODO Code to create a new workflow
         String urlWithParams = API_ADDRESS + "/workflow";
         HashMap<String, String> parameters = new HashMap<>();
