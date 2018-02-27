@@ -9,12 +9,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.support.v7.widget.Toolbar;
-import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -34,6 +32,18 @@ import android.text.TextUtils;
 
 import com.example.practicumapp.Interfaces.VolleyUserResponseListener;
 import com.example.practicumapp.models.User;
+
+/**
+ * Add New Hire Activity. A form that lets a manager user add a new employee. After user submission,
+ * makes API with volleyparser to add new user.
+ *
+ * @author Bonnie Peterson
+ * @author Mitch Thompson
+ * @since 1/22/2018
+ * @see VolleyParser
+ *
+ *
+ */
 
 public class AddNewHireActivity extends AppCompatActivity {
     private static final String TAG = AddNewHireActivity.class.getName(); // Constant for logging data
@@ -141,7 +151,9 @@ public class AddNewHireActivity extends AppCompatActivity {
         });
     }
 
-    // add items into spinner dynamically
+    /**
+     * Add items into spinner dynamically
+     */
     public void addItemsOnWorkflowSpinner() {
         //TODO: get workflow list from api call
         workflow = findViewById(R.id.workflow_ID);
@@ -232,6 +244,7 @@ public class AddNewHireActivity extends AppCompatActivity {
 
         Log.d(TAG, "User: " + newUser.toString());
 
+        //TODO: make API call to add new user
 //        VolleyParser volleyParser = new VolleyParser(this.getApplicationContext());
 //        volleyParser.addNewUser((User) newUser,  new VolleyUserResponseListener(){
 //                    @Override
@@ -242,30 +255,15 @@ public class AddNewHireActivity extends AppCompatActivity {
 
         }
 
-    // Creates menu
+    /**
+     * Creates actionbar menu and inflates menu hierarchy from menu/main_menu.xml.
+     * @param menu The options menu which items are placed
+     * @return boolean
+     */
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
-    }
-
-    // Defines the actions after user selection of the menu items from the drawer menu
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_logout:
-                // User chose the "Log Out" item...
-                Toast.makeText(getApplicationContext(), "Logout toast. Cheers!",
-                        Toast.LENGTH_SHORT).show();
-
-                return true;
-
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-
-        }
     }
 
     }
