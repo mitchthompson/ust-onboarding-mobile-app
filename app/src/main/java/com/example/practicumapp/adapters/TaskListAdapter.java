@@ -76,15 +76,17 @@ public class TaskListAdapter extends ExpandableRecyclerViewAdapter<TaskListItemV
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                //set the state to the changed value
                 myItem.setChecked(b);
 
+                //increment Progress bar and send data to the API
                 if(myItem.isChecked()) {
                     TaskListActivity.ProgressBarIncrement(1);
-                    adapterVolleyParser.markTaskAsCompleted(TaskListActivity.SendUserId(), myItem.getTaskID());
+                    //adapterVolleyParser.markTaskAsCompleted(TaskListActivity.SendUserId(), myItem.getTaskID());
                 }
                 else {
                     TaskListActivity.ProgressBarIncrement(-1);
-                    adapterVolleyParser.markTaskAsIncomplete(TaskListActivity.SendUserId(), myItem.getTaskID());
+                    //adapterVolleyParser.markTaskAsIncomplete(TaskListActivity.SendUserId(), myItem.getTaskID());
                 }
             }
         });
