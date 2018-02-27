@@ -33,22 +33,37 @@ public class TaskListItem extends ExpandableGroup<TaskDescriptionListItem> {
         this.taskName = nameIn;
     }
 
+    /**
+     * @return
+     */
     public String getTaskName() {
         return taskName;
     }
 
+    /**
+     * @param checked
+     */
     public void setChecked(boolean checked) {
         isChecked = checked;
     }
 
+    /**
+     * @return
+     */
     public boolean isChecked() {
         return isChecked;
     }
 
+    /**
+     * @return
+     */
     public String getTaskID() {
         return taskID;
     }
 
+    /**
+     * @param taskID
+     */
     public void setTaskID(String taskID) {
         this.taskID = taskID;
     }

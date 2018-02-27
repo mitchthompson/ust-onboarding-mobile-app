@@ -25,21 +25,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * JS - main task activity; this will show all of the tasks that an employee needs to complete
- * dummy data is in an arrayList form - this can be changed depending on how the API team sends over
- * info to us (probably as json?). we can convert this to an arraylist (keeping the rest of the
- * code the same) or we can find some other data structure to use
- *
- * onclick listeners will need to be created to support interacting with the list of data (checking
- * the checkboxes, etc)
- *
- * the current (1/14/18) wireframe details line item descriptions that drop down upon tapping
- * an item. this will probably involve creating a more robust adapter for the recyclerview that
- * displays its contents upon tapping
- *
- *
- * TODO: create onclick listeners for checking the checkboxes and expanding each item's description
- * TODO: update progress bar when checkbox is clicked
+ * This activity will show all tasks that an employee needs to complete
+ * Data is fetched using API calls to get employee info and then workflow info
  */
 
 public class TaskListActivity extends AppCompatActivity {
@@ -76,7 +63,7 @@ public class TaskListActivity extends AppCompatActivity {
 
         // Go and grab all our UI Elements from the layouts
         TextView employeeNameTextView = (TextView)findViewById(R.id.EmployeeName);
-        TextView employeeIdTextView = (TextView)findViewById(R.id.EmployeeID);
+        //TextView employeeIdTextView = (TextView)findViewById(R.id.EmployeeID);
         Toolbar myToolbar = findViewById(R.id.main_toolbar);
         ActionMenuView progressActionMenu = (ActionMenuView) findViewById(R.id.progress_toolbar);
         simpleProgressBar = (ProgressBar) findViewById(R.id.task_progressBar);
@@ -97,11 +84,11 @@ public class TaskListActivity extends AppCompatActivity {
 
         // else tell the user that something got weird in the UI
         else {
-            employeeName = "Not Included in the Bundle";
+            employeeName = "Employee Name Not Included in the Bundle";
         }
 
         employeeNameTextView.setText(employeeName);
-        employeeIdTextView.setText(employeeId);
+        //employeeIdTextView.setText(employeeId);
 
         volleyParser = new VolleyParser(this.getApplicationContext());
 
