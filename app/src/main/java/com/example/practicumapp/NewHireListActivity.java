@@ -10,7 +10,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
-
+import android.support.v7.widget.SearchView;
+import android.app.SearchManager;
+import android.widget.SearchView.OnQueryTextListener;
 import com.example.practicumapp.Interfaces.VolleyUserResponseListener;
 import com.example.practicumapp.adapters.NewHireListAdapter;
 import com.example.practicumapp.models.User;
@@ -43,6 +45,7 @@ public class NewHireListActivity extends MainActivity {
     private HashMap<String, String> employees;
     private ArrayList<String> newHireList;
     private ArrayList<String> newHireIDs;
+    SearchView searchView;
 
     private Button addNewHireButton;
 
@@ -51,6 +54,8 @@ public class NewHireListActivity extends MainActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_hire_list);
         context = getApplicationContext();
+
+        searchView = (SearchView) findViewById(R.id.searchView);
 
         //Enables tool bar & sets title displayed
         Toolbar myToolbar = findViewById(R.id.myToolbar);
@@ -91,6 +96,22 @@ public class NewHireListActivity extends MainActivity {
 
                 newHireListAdapter = new NewHireListAdapter(context, newHireList, newHireIDs);
                 recyclerView.setAdapter(newHireListAdapter);
+
+                //events
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        newHireListAdapter.getFilter().filter(newText);
+                        return false;
+                    }
+                });
 
             }
         });
