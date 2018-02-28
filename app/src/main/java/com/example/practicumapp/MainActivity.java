@@ -34,10 +34,13 @@ TODO work on preventing user from returning to login screen using back button, a
  */
 
 public class MainActivity extends AppCompatActivity {
-
+    /*
+    * Allows login data to be accessed by other activities by using mResult.getAccessToken or any
+    * other method associated with AuthenticationResult
+    */
+    protected static AuthenticationResult mResult;
     private final String TAG = MainActivity.class.getName();
     protected AuthenticationContext mContext;
-    protected static AuthenticationResult mResult;
     private AuthenticationCallback<AuthenticationResult> callback;
     private Button login_button;
     private final static String EMPLOYEE = "employee@tkarp87live.onmicrosoft.com";
