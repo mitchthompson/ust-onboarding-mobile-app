@@ -1,7 +1,9 @@
 package com.example.practicumapp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -33,16 +35,20 @@ TODO work on preventing user from returning to login screen using back button, a
 
 public class MainActivity extends AppCompatActivity {
 
-    private String TAG = "Main Activity";
-    protected AuthenticationContext mContext;
-    protected AuthenticationResult mResult;
+    private final String TAG = MainActivity.class.getName();
+    private AuthenticationContext mContext;
     private AuthenticationCallback<AuthenticationResult> callback;
     private Button login_button;
     private final static String EMPLOYEE = "employee@tkarp87live.onmicrosoft.com";
     private final static String MANAGER = "manager@tkarp87live.onmicrosoft.com";
+    /**
+     * Allows login data to be accessed by other activities by using mResult.getAccessToken or any
+     * other method associated with AuthenticationResult.
+     */
+    protected static AuthenticationResult mResult;
 
     /**
-     * AuthContext and AuthCalback are created upon activity creation.
+     * AuthContext and AuthCallback are created upon activity creation.
      *
      * AuthenticationContext is required to set up the 'context' of the authentication - it
      * provides URL and other necessary info to start the login process.
@@ -58,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar myToolbar = findViewById(R.id.myToolbar);
         setSupportActionBar(myToolbar);
+
         mContext = new AuthenticationContext(MainActivity.this, Constants.AUTHORITY_URL, true);
         callback = new AuthenticationCallback<AuthenticationResult>() {
             @Override
@@ -93,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-     }
+    }
 
     /**
      * Handles the end of AuthenticationActivity after user enters credentials and receives authorization code.
@@ -114,12 +121,7 @@ public class MainActivity extends AppCompatActivity {
      * main activity screen once called.
      */
     protected void adalLogout() {
-        CookieSyncManager.createInstance(getApplicationContext());
-        CookieManager cookieManager = CookieManager.getInstance();
-        cookieManager.removeSessionCookie();
-        CookieSyncManager.getInstance().sync();
-        mContext.getCache().removeAll();
-        mResult = null;
+        clearLogin();
         startActivity(new Intent(MainActivity.this, MainActivity.class));
         Log.d(TAG,"User Logout");
     }
@@ -189,5 +191,30 @@ public class MainActivity extends AppCompatActivity {
                 "\nToken ID:            " + mResult.getIdToken() +
                 "\nAccess Token:        " + mResult.getAccessToken() +
                 "\nAuth Header:  " + mResult.createAuthorizationHeader());
+    }
+
+    /**
+     * Clears stored cookies of login data
+     */
+    public void clearLogin(){
+        CookieSyncManager.createInstance(getApplicationContext());
+        CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.removeSessionCookie();
+        CookieSyncManager.getInstance().sync();
+        mContext.getCache().removeAll();
+        mResult = null;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        clearLogin();
+        finish();
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        clearLogin();
     }
 }

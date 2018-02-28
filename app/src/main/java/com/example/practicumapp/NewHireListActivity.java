@@ -8,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.support.v7.widget.SearchView;
@@ -117,5 +119,4 @@ public class NewHireListActivity extends MainActivity {
         });
 
     }
-
 }

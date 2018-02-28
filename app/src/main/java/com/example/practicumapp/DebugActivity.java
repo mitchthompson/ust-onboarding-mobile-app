@@ -15,6 +15,8 @@ public class DebugActivity extends MainActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debug);
+
+
          /*Enables tool bar & sets title displayed
         Can customize menu items in res/menu/main_menu.xml
         Can customize toolbar in res/layout/toolbar_layout.xml*/
@@ -88,4 +90,5 @@ public class DebugActivity extends MainActivity {
     }*/
 
     // TODO Add onResume, onPause, onStop, onDestroy, etc. to determine what to do when user leaves the app
+
 }

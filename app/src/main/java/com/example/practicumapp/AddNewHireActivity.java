@@ -2,6 +2,8 @@ package com.example.practicumapp;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -9,6 +11,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.Menu;
@@ -33,6 +41,7 @@ import android.text.TextUtils;
 import com.example.practicumapp.Interfaces.VolleyWorkflowsListResponseListener;
 
 
+
 /**
  * Add New Hire Activity. A form that lets a manager user add a new employee. After user submission,
  * makes API with volleyparser to add new user.
@@ -46,8 +55,7 @@ import com.example.practicumapp.Interfaces.VolleyWorkflowsListResponseListener;
  */
 
 public class AddNewHireActivity extends AppCompatActivity {
-    private static final String TAG = AddNewHireActivity.class.getName(); // Constant for logging data
-
+    private static final String TAG = AddNewHireActivity.class.getName();
     private Spinner workflow;
     private Button btnCancel, btnDone;
     private DatePickerDialog.OnDateSetListener onDateSetListener;
@@ -255,8 +263,7 @@ public class AddNewHireActivity extends AppCompatActivity {
         Log.d(TAG, "User: " + newUser.toString());
 
         //TODO: make API call to add new user
-
-        }
+    }
 
     /**
      * Creates actionbar menu and inflates menu hierarchy from menu/main_menu.xml.
@@ -268,5 +275,6 @@ public class AddNewHireActivity extends AppCompatActivity {
         menuInflater.inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
+}
 
-    }
+
