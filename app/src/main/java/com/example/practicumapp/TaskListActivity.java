@@ -190,22 +190,4 @@ public class TaskListActivity extends MainActivity {
         return employeeId;
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-
-
-    }
-
-    @Override
-    protected void onDestroy(){
-        super.onDestroy();
-
-        CookieSyncManager.createInstance(getApplicationContext());
-        CookieManager cookieManager = CookieManager.getInstance();
-        cookieManager.removeSessionCookie();
-        CookieSyncManager.getInstance().sync();
-        mContext.getCache().removeAll();
-        mResult = null;
-    }
 }

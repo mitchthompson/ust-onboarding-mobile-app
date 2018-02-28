@@ -90,10 +90,5 @@ public class DebugActivity extends MainActivity {
     }*/
 
     // TODO Add onResume, onPause, onStop, onDestroy, etc. to determine what to do when user leaves the app
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
 
-
-    }
 }

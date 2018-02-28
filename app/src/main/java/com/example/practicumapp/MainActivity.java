@@ -1,7 +1,9 @@
 package com.example.practicumapp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -94,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-     }
+    }
 
     /**
      * Handles the end of AuthenticationActivity after user enters credentials and receives authorization code.
@@ -115,12 +117,7 @@ public class MainActivity extends AppCompatActivity {
      * main activity screen once called.
      */
     protected void adalLogout() {
-        CookieSyncManager.createInstance(getApplicationContext());
-        CookieManager cookieManager = CookieManager.getInstance();
-        cookieManager.removeSessionCookie();
-        CookieSyncManager.getInstance().sync();
-        mContext.getCache().removeAll();
-        mResult = null;
+        clearLogin();
         startActivity(new Intent(MainActivity.this, MainActivity.class));
         Log.d(TAG,"User Logout");
     }
@@ -192,22 +189,26 @@ public class MainActivity extends AppCompatActivity {
                 "\nAuth Header:  " + mResult.createAuthorizationHeader());
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-
-
-    }
-
-    @Override
-    protected void onDestroy(){
-        super.onDestroy();
-
+    public void clearLogin(){
         CookieSyncManager.createInstance(getApplicationContext());
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.removeSessionCookie();
         CookieSyncManager.getInstance().sync();
         mContext.getCache().removeAll();
         mResult = null;
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        clearLogin();
+        finish();
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+
+        clearLogin();
     }
 }
