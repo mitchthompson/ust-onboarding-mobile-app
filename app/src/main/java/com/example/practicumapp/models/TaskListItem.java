@@ -12,6 +12,8 @@ import java.util.List;
 public class TaskListItem extends ExpandableGroup<TaskDescriptionListItem> {
 
     private String taskName;
+    private boolean isChecked;
+    private String taskID;
 
     /**
      * Each TaskListItem has an arrayList of descriptions that go along with it.
@@ -29,5 +31,40 @@ public class TaskListItem extends ExpandableGroup<TaskDescriptionListItem> {
      */
     public void setTaskName(String nameIn) {
         this.taskName = nameIn;
+    }
+
+    /**
+     * @return
+     */
+    public String getTaskName() {
+        return taskName;
+    }
+
+    /**
+     * @param checked
+     */
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
+
+    /**
+     * @return
+     */
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    /**
+     * @return
+     */
+    public String getTaskID() {
+        return taskID;
+    }
+
+    /**
+     * @param taskID
+     */
+    public void setTaskID(String taskID) {
+        this.taskID = taskID;
     }
 }

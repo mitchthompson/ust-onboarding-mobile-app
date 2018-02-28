@@ -48,15 +48,15 @@ public class NewHireListAdapter extends RecyclerView.Adapter<NewHireListAdapter.
     }
 
     @Override
-    public void onBindViewHolder(NewHireListViewHolder holder, final int position) {
+    public void onBindViewHolder(final NewHireListViewHolder holder, int position) {
         holder.newHireBtn.setText(newHireName.get(position).toString());
         holder.newHireBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Toast.makeText(context, newHireID.get(position), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(v.getContext(), TaskListActivity.class);
-                intent.putExtra("userID",  newHireID.get(position));
-                intent.putExtra("name", newHireName.get(position).toString());
+                intent.putExtra("userID",  newHireID.get(holder.getAdapterPosition()));
+                intent.putExtra("name", newHireName.get(holder.getAdapterPosition()));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 v.getContext().startActivity(intent);
             }

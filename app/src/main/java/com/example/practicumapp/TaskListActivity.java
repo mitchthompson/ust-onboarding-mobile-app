@@ -1,7 +1,6 @@
 package com.example.practicumapp;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,24 +24,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * JS - main task activity; this will show all of the tasks that an employee needs to complete
- * dummy data is in an arrayList form - this can be changed depending on how the API team sends over
- * info to us (probably as json?). we can convert this to an arraylist (keeping the rest of the
- * code the same) or we can find some other data structure to use
- *
- * onclick listeners will need to be created to support interacting with the list of data (checking
- * the checkboxes, etc)
- *
- * the current (1/14/18) wireframe details line item descriptions that drop down upon tapping
- * an item. this will probably involve creating a more robust adapter for the recyclerview that
- * displays its contents upon tapping
- *
- *
- * TODO: create onclick listeners for checking the checkboxes and expanding each item's description
- * TODO: update progress bar when checkbox is clicked
+ * This activity will show all tasks that an employee needs to complete
+ * Data is fetched using API calls to get employee info and then workflow info
  */
 
-public class TaskListActivity extends AppCompatActivity {
+public class TaskListActivity extends MainActivity {
     //TAG for logging
     private static final String TAG = TaskListActivity.class.getName(); // Constant for logging data
 
@@ -52,17 +38,22 @@ public class TaskListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RelativeLayout relativeLayout;
 
-    private ProgressBar simpleProgressBar;
+    public static ProgressBar simpleProgressBar;
 
 
-    // variables for...why?
+    // taskList is the list of Tasks from the workflow
     private ArrayList taskList;
-    private String employeeId = "72AD9DBC60AE485782D43A1AE09279A4";
-    private String employeeName;
+
+    public static String employeeId = "72AD9DBC60AE485782D43A1AE09279A4";
+    private String employeeName = "";
+    private String userType = "";
     private String workflowId;
     private ArrayList completedTasks;
 
     private ExpandableGroup<TaskListItem> expandableTaskList;
+
+    private VolleyParser volleyParser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +62,7 @@ public class TaskListActivity extends AppCompatActivity {
 
         // Go and grab all our UI Elements from the layouts
         TextView employeeNameTextView = (TextView)findViewById(R.id.EmployeeName);
-        TextView employeeIdTextView = (TextView)findViewById(R.id.EmployeeID);
+        //TextView employeeIdTextView = (TextView)findViewById(R.id.EmployeeID);
         Toolbar myToolbar = findViewById(R.id.main_toolbar);
         ActionMenuView progressActionMenu = (ActionMenuView) findViewById(R.id.progress_toolbar);
         simpleProgressBar = (ProgressBar) findViewById(R.id.task_progressBar);
@@ -89,15 +80,16 @@ public class TaskListActivity extends AppCompatActivity {
             employeeId = bundle.getString("userID");
             employeeName = bundle.getString("name");
         }
+
         // else tell the user that something got weird in the UI
         else {
-            employeeName = "Not Included in the Bundle";
+            employeeName = "Employee Name Not Included in the Bundle";
         }
 
         employeeNameTextView.setText(employeeName);
-        employeeIdTextView.setText(employeeId);
+        //employeeIdTextView.setText(employeeId);
 
-        VolleyParser volleyParser = new VolleyParser(this.getApplicationContext());
+        volleyParser = new VolleyParser(this.getApplicationContext());
 
         //Get the data we need from the User
         volleyParser.getUser(employeeId, new VolleyUserResponseListener() {
@@ -107,53 +99,71 @@ public class TaskListActivity extends AppCompatActivity {
                 workflowId = user.getWorkflow();
 
                 // confirm receipt of something...
-                Log.d(TAG, "VolleyParser User First Name : " + user.getFirstName());
+                Log.d(TAG, "TaskListActivity: User First Name : " + user.getFirstName());
+                Log.d(TAG, "TaskListActivity: User Type Returns : " + user.getType());
+
+                // need the user type to know what task descriptions to show.
+                userType = user.getType();
 
                 // Get the tasks that the user has completed!
                 completedTasks = user.getTasks();
-            }
-        });
 
-        //Get the data we need from the workflow.
-        volleyParser.getWorkflow(workflowId, new VolleyWorkflowResponseListener() {
-            @Override
-            public void onSuccess(Workflow workflow) {
-                // confirm receipt of something
-                Log.d(TAG, "VolleyParser Workflow Task Name : " + workflow.getTasks().get(0).getName());
+                //TODO: Removefollowing, for testing only
+                //adding a completed task, "Setup employee Id"
+                completedTasks.add("LKJLKLIOC54D2DA2389CVBV98XCCVV");
 
-                // ArrayList of Tasks
-                taskList = workflow.getTasks();
+                //Get the data we need from the workflow.
+                volleyParser.getWorkflow(workflowId, new VolleyWorkflowResponseListener() {
+                    @Override
+                    public void onSuccess(Workflow workflow) {
 
-                // taskListItems ArrayList is needed to feed to the RecyclerView
-                ArrayList<TaskListItem> taskListItems = new ArrayList<>();
+                        // confirm receipt of something
+                        Log.d(TAG, "TaskListActivity: Workflow Task Name : " + workflow.getTasks().get(0).getName());
 
-                // iterate through taskList and populate taskListItems
-                for(int i = 0; i < taskList.size(); i++) {
-                    Task task = (Task) taskList.get(i);
-                    String taskName = task.getName();
-                    HashMap<String, String> taskDescriptionMap = task.getDescriptions();
-                    ArrayList<TaskDescriptionListItem> taskDescriptionListItems = new ArrayList<>();
-                    if(taskDescriptionMap.containsKey("manager")) {
-                        taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("manager")));
+                        // ArrayList of Tasks
+                        taskList = workflow.getTasks();
+
+                        // progress bar size depends on the size of the tasklist.
+                        simpleProgressBar.setMax(taskList.size());
+                        // set progress to 0 initially
+                        simpleProgressBar.setProgress(0);
+
+                        // taskListItems ArrayList is needed to feed to the RecyclerView
+                        ArrayList<TaskListItem> taskListItems = new ArrayList<>();
+
+                        // iterate through taskList and populate taskListItems
+                        for(int i = 0; i < taskList.size(); i++) {
+                            Task task = (Task) taskList.get(i);
+                            String taskId = task.getId();
+                            String taskName = task.getName();
+                            HashMap<String, String> taskDescriptionMap = task.getDescriptions();
+                            ArrayList<TaskDescriptionListItem> taskDescriptionListItems = new ArrayList<>();
+                            if(userType.equals("manager")) {
+                                taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("manager")));
+                            }
+                            if(userType.equals("employee")) {
+                                taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("employee")));
+                            }
+                            TaskListItem taskListItemToAdd = new TaskListItem(taskName,taskDescriptionListItems);
+                            taskListItemToAdd.setTaskID(taskId);
+
+                            // Check if this taskItem has been completed.
+                            if(completedTasks.contains(taskId)) {
+                                taskListItemToAdd.setChecked(true);
+                                ProgressBarIncrement(1);
+                            }
+                            taskListItems.add(taskListItemToAdd);
+                        }
+
+                        // recyclerView gets kicked off in here, because we know we have data to display.
+                        relativeLayout = (RelativeLayout) findViewById(R.id.activity_task_list);
+                        adapter = new TaskListAdapter(taskListItems);
+                        recyclerView.setLayoutManager(layoutManager);
+                        recyclerView.setAdapter(adapter);
+
+
                     }
-                    if(taskDescriptionMap.containsKey("employee")) {
-                        taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("employee")));
-                    }
-                    taskListItems.add(new TaskListItem(taskName,taskDescriptionListItems));
-                }
-
-                // TODO: Logic to determine whether User has completed a task or not
-
-                // recyclerView gets kicked off in here, because we know we have data to display.
-                relativeLayout = (RelativeLayout) findViewById(R.id.activity_task_list);
-                adapter = new TaskListAdapter(taskListItems);
-                recyclerView.setLayoutManager(layoutManager);
-                recyclerView.setAdapter(adapter);
-
-                // progress bar size depends on the size of the tasklist.
-                simpleProgressBar.setMax(taskList.size());
-
-                // TODO: OnClick Listener for the Checkbox
+                });
             }
         });
     }
@@ -161,7 +171,7 @@ public class TaskListActivity extends AppCompatActivity {
     /**
      * Helper method to calculate and redraw the progress bar whenever a checkbox is checked
      */
-    public void ProgressBarIncrement(int increment) {
+    public static void ProgressBarIncrement(int increment) {
 
         /* I might need this code later
         //int maxValue=simpleProgressBar.getMax(); // get maximum value of the progress bar
@@ -171,5 +181,9 @@ public class TaskListActivity extends AppCompatActivity {
 
         // let the built in increment method do the work. Also works on a negative increment.
         simpleProgressBar.incrementProgressBy(increment);
+    }
+
+    public static String SendUserId() {
+        return employeeId;
     }
 }
