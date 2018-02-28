@@ -34,17 +34,18 @@ TODO work on preventing user from returning to login screen using back button, a
  */
 
 public class MainActivity extends AppCompatActivity {
-    /*
-    * Allows login data to be accessed by other activities by using mResult.getAccessToken or any
-    * other method associated with AuthenticationResult
-    */
-    protected static AuthenticationResult mResult;
+
     private final String TAG = MainActivity.class.getName();
-    protected AuthenticationContext mContext;
+    private AuthenticationContext mContext;
     private AuthenticationCallback<AuthenticationResult> callback;
     private Button login_button;
     private final static String EMPLOYEE = "employee@tkarp87live.onmicrosoft.com";
     private final static String MANAGER = "manager@tkarp87live.onmicrosoft.com";
+    /**
+     * Allows login data to be accessed by other activities by using mResult.getAccessToken or any
+     * other method associated with AuthenticationResult.
+     */
+    protected static AuthenticationResult mResult;
 
     /**
      * AuthContext and AuthCallback are created upon activity creation.
@@ -192,6 +193,9 @@ public class MainActivity extends AppCompatActivity {
                 "\nAuth Header:  " + mResult.createAuthorizationHeader());
     }
 
+    /**
+     * Clears stored cookies of login data
+     */
     public void clearLogin(){
         CookieSyncManager.createInstance(getApplicationContext());
         CookieManager cookieManager = CookieManager.getInstance();
@@ -200,10 +204,10 @@ public class MainActivity extends AppCompatActivity {
         mContext.getCache().removeAll();
         mResult = null;
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
         clearLogin();
         finish();
     }
@@ -211,7 +215,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy(){
         super.onDestroy();
-
         clearLogin();
     }
 }
