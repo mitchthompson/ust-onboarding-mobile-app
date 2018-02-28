@@ -30,8 +30,8 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.text.TextUtils;
 
-import com.example.practicumapp.Interfaces.VolleyUserResponseListener;
-import com.example.practicumapp.models.User;
+import com.example.practicumapp.Interfaces.VolleyWorkflowsListResponseListener;
+
 
 /**
  * Add New Hire Activity. A form that lets a manager user add a new employee. After user submission,
@@ -52,7 +52,7 @@ public class AddNewHireActivity extends AppCompatActivity {
     private Button btnCancel, btnDone;
     private DatePickerDialog.OnDateSetListener onDateSetListener;
     private EditText firstName, lastName, email, phone, date;
-    private Map<String,String> newUser;
+    private HashMap<String,String> newUser, workflowMap;
 
 
     @Override
@@ -68,13 +68,24 @@ public class AddNewHireActivity extends AppCompatActivity {
         myToolbar.setTitle("Add New Hire");
         setSupportActionBar(myToolbar);
 
+
+        //API call to get all workflows for spinner
+        workflowMap = new HashMap<>();
+        VolleyParser volleyParser = new VolleyParser(this.getApplicationContext());
+        volleyParser.getWorkflows(new VolleyWorkflowsListResponseListener() {
+            @Override
+            public void onSuccess(HashMap<String,String> map) {
+                workflowMap = map;
+                addItemsOnWorkflowSpinner();
+            }
+        } );
+
         // Views
         firstName = findViewById(R.id.first_name);
         lastName = findViewById(R.id.last_name);
         email = findViewById(R.id.email);
         phone = findViewById(R.id.phone);
         date = findViewById(R.id.date);
-        addItemsOnWorkflowSpinner();
 
 
         // Add calendar settings for date picker
@@ -133,8 +144,7 @@ public class AddNewHireActivity extends AppCompatActivity {
         btnDone = findViewById(R.id.btnDone);
         btnCancel = findViewById(R.id.btnCancel);
 
-        // Perform activity when "Done" is selected -- for now just displays toast confirming drop
-        // down selection
+        // Perform activity when "Done" is selected
         btnDone.setOnClickListener(new OnClickListener() {
             //add toast to display selection
             @Override
@@ -156,17 +166,17 @@ public class AddNewHireActivity extends AppCompatActivity {
      */
     public void addItemsOnWorkflowSpinner() {
         //TODO: get workflow list from api call
+        List<String> spinnerList = new ArrayList<>();
+        spinnerList.add("Select Workflow");
         workflow = findViewById(R.id.workflow_ID);
-        List<String> list = new ArrayList<>();
-        list.add("Select Workflow");
-        list.add("Workflow 1");
-        list.add("Workflow 2");
-        list.add("Workflow 3");
-        list.add("Workflow 4");
-        list.add("Workflow 5");
+        for(Map.Entry<String, String> entry : workflowMap.entrySet()){
+            Log.d(TAG, "Key: " + entry.getKey() + "Value: " + entry.getValue());
+            spinnerList.add(entry.getValue());
+        }
+
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, list);
+                android.R.layout.simple_spinner_item, spinnerList);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         workflow.setAdapter(dataAdapter);
     }
@@ -245,13 +255,6 @@ public class AddNewHireActivity extends AppCompatActivity {
         Log.d(TAG, "User: " + newUser.toString());
 
         //TODO: make API call to add new user
-//        VolleyParser volleyParser = new VolleyParser(this.getApplicationContext());
-//        volleyParser.addNewUser((User) newUser,  new VolleyUserResponseListener(){
-//                    @Override
-//                    public void onSuccess(User user) {
-//                        startActivity(new Intent(AddNewHireActivity.this, NewHireListActivity.class));
-//                    }
-//        });
 
         }
 
