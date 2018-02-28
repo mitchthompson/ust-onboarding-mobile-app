@@ -33,16 +33,16 @@ TODO work on preventing user from returning to login screen using back button, a
 
 public class MainActivity extends AppCompatActivity {
 
-    private String TAG = "Main Activity";
+    private final String TAG = MainActivity.class.getName();
     protected AuthenticationContext mContext;
-    protected AuthenticationResult mResult;
+    protected static AuthenticationResult mResult;
     private AuthenticationCallback<AuthenticationResult> callback;
     private Button login_button;
     private final static String EMPLOYEE = "employee@tkarp87live.onmicrosoft.com";
     private final static String MANAGER = "manager@tkarp87live.onmicrosoft.com";
 
     /**
-     * AuthContext and AuthCalback are created upon activity creation.
+     * AuthContext and AuthCallback are created upon activity creation.
      *
      * AuthenticationContext is required to set up the 'context' of the authentication - it
      * provides URL and other necessary info to start the login process.
@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar myToolbar = findViewById(R.id.myToolbar);
         setSupportActionBar(myToolbar);
+
         mContext = new AuthenticationContext(MainActivity.this, Constants.AUTHORITY_URL, true);
         callback = new AuthenticationCallback<AuthenticationResult>() {
             @Override
@@ -189,5 +190,24 @@ public class MainActivity extends AppCompatActivity {
                 "\nToken ID:            " + mResult.getIdToken() +
                 "\nAccess Token:        " + mResult.getAccessToken() +
                 "\nAuth Header:  " + mResult.createAuthorizationHeader());
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+
+        CookieSyncManager.createInstance(getApplicationContext());
+        CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.removeSessionCookie();
+        CookieSyncManager.getInstance().sync();
+        mContext.getCache().removeAll();
+        mResult = null;
     }
 }

@@ -1,13 +1,17 @@
 package com.example.practicumapp;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -18,6 +22,7 @@ import java.util.Calendar;
 
 public class AddNewHireActivity extends MainActivity {
 
+    private static final String TAG = AddNewHireActivity.class.getName();
     private Spinner spinner1;
     private Button btnCancel, btnDone;
     private DatePickerDialog.OnDateSetListener onDateSetListener;
@@ -184,4 +189,22 @@ public class AddNewHireActivity extends MainActivity {
 
         }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+
+        CookieSyncManager.createInstance(getApplicationContext());
+        CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.removeSessionCookie();
+        CookieSyncManager.getInstance().sync();
+        mContext.getCache().removeAll();
+        mResult = null;
+    }
     }

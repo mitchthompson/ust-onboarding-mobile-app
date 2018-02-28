@@ -1,11 +1,14 @@
 package com.example.practicumapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -185,5 +188,24 @@ public class TaskListActivity extends MainActivity {
 
     public static String SendUserId() {
         return employeeId;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+
+        CookieSyncManager.createInstance(getApplicationContext());
+        CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.removeSessionCookie();
+        CookieSyncManager.getInstance().sync();
+        mContext.getCache().removeAll();
+        mResult = null;
     }
 }
