@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public interface VolleyListResponseListener {
 
-    void onSuccess(HashMap<String, String> workflows); // Called after workflows list json response is received successfully
+    void onSuccess(HashMap<String, String> list); // Called after list list json response is received successfully
 
     //    TODO Handle onError as well (if needed)
 
