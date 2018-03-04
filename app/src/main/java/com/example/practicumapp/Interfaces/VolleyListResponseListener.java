@@ -7,7 +7,7 @@ import java.util.HashMap;
  * This interface enable callbacks to any activity after workflows list response is received using volley
  */
 
-public interface VolleyWorkflowsListResponseListener {
+public interface VolleyListResponseListener {
 
     void onSuccess(HashMap<String, String> workflows); // Called after workflows list json response is received successfully
 
