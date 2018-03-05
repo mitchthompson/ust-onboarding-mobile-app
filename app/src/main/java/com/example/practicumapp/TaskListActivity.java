@@ -76,6 +76,7 @@ public class TaskListActivity extends MainActivity {
 
         myToolbar.setTitle("Task List");
         setSupportActionBar(myToolbar);
+        // enables back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //check for a passed in bundle of userID/name and set it if it exists

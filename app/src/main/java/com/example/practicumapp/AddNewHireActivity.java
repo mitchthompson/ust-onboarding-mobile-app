@@ -75,7 +75,7 @@ public class AddNewHireActivity extends AppCompatActivity {
         Toolbar myToolbar = findViewById(R.id.myToolbar);
         myToolbar.setTitle("Add New Hire");
         setSupportActionBar(myToolbar);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //API call to get all workflows for spinner
         workflowMap = new HashMap<>();

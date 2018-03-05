@@ -59,7 +59,7 @@ public class NewHireListActivity extends MainActivity {
 
         searchView = (SearchView) findViewById(R.id.searchView);
 
-        //Enables tool bar & sets title displayed
+        //Enables tool bar, back button, & sets title displayed
         Toolbar myToolbar = findViewById(R.id.myToolbar);
         myToolbar.setTitle("Employees");
         setSupportActionBar(myToolbar);
@@ -119,5 +119,13 @@ public class NewHireListActivity extends MainActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent mainActivity = new Intent(Intent.ACTION_MAIN);
+        mainActivity.addCategory(Intent.CATEGORY_HOME);
+        mainActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(mainActivity);
     }
 }
