@@ -76,6 +76,7 @@ public class TaskListActivity extends MainActivity {
 
         myToolbar.setTitle("Task List");
         setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //check for a passed in bundle of userID/name and set it if it exists
         if(getIntent().hasExtra("userID")) {
@@ -188,6 +189,14 @@ public class TaskListActivity extends MainActivity {
 
     public static String SendUserId() {
         return employeeId;
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent mainActivity = new Intent(Intent.ACTION_MAIN);
+        mainActivity.addCategory(Intent.CATEGORY_HOME);
+        mainActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(mainActivity);
     }
 
 }

@@ -205,13 +205,40 @@ public class MainActivity extends AppCompatActivity {
         mResult = null;
     }
 
+    /**
+     * When 'Back' button is pressed, this method with clear the login info and close the app.
+     */
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        clearLogin();
-        finish();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Logout")
+                .setMessage("You are about to exit the app.");
+
+        builder.setPositiveButton(
+                "Logout",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        clearLogin();
+                        finish();
+                    }
+                });
+
+        builder.setNegativeButton(
+                "Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
+    /**
+     * When the app is destroyed, the user's login data is cleared.
+     */
     @Override
     protected void onDestroy(){
         super.onDestroy();

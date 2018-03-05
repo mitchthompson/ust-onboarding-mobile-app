@@ -63,6 +63,7 @@ public class NewHireListActivity extends MainActivity {
         Toolbar myToolbar = findViewById(R.id.myToolbar);
         myToolbar.setTitle("Employees");
         setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //TODO Add functionality for user to search through list using searchview
 
