@@ -3,6 +3,7 @@ package com.example.practicumapp;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -124,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
         clearLogin();
         startActivity(new Intent(MainActivity.this, MainActivity.class));
         Log.d(TAG,"User Logout");
+        finish();
     }
 
     /**
@@ -210,30 +212,35 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
+        if (this.getClass().getSimpleName().equals(MainActivity.class.getSimpleName())){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Logout")
+                    .setMessage("You are about to exit the app.");
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Logout")
-                .setMessage("You are about to exit the app.");
+            builder.setPositiveButton(
+                    "Logout",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            clearLogin();
+                            finish();
+                        }
+                    });
 
-        builder.setPositiveButton(
-                "Logout",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        clearLogin();
-                        finish();
-                    }
-                });
+            builder.setNegativeButton(
+                    "Cancel",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
 
-        builder.setNegativeButton(
-                "Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }else {
+            // finishes the activity and navigates to the parent
+            finish();
+            NavUtils.navigateUpFromSameTask(this);
+        }
     }
 
     /**
@@ -243,5 +250,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy(){
         super.onDestroy();
         clearLogin();
+        finish();
     }
 }
