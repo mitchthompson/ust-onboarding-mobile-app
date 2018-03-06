@@ -130,7 +130,7 @@ public class MyVolleySingleton {
             public void onResponse(JSONArray response) {
                 JSONObject jsonObject = new JSONObject();
                 try {
-                    jsonObject.put("workflows", response);
+                    jsonObject.put("list", response);
                     callback.onSuccess(jsonObject);
                 } catch (JSONException e) {
                     e.printStackTrace();

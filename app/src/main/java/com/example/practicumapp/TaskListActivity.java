@@ -203,4 +203,10 @@ public class TaskListActivity extends MainActivity {
         return employeeId;
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(TaskListActivity.this, MainActivity.class));
+    }
+
 }

@@ -4,19 +4,10 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.Menu;
@@ -25,20 +16,18 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-import android.widget.DatePicker;
 
+import com.example.practicumapp.Interfaces.VolleyListResponseListener;
+
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.text.TextUtils;
-
-import com.example.practicumapp.Interfaces.VolleyWorkflowsListResponseListener;
 
 
 
@@ -80,7 +69,7 @@ public class AddNewHireActivity extends AppCompatActivity {
         //API call to get all workflows for spinner
         workflowMap = new HashMap<>();
         VolleyParser volleyParser = new VolleyParser(this.getApplicationContext());
-        volleyParser.getWorkflows(new VolleyWorkflowsListResponseListener() {
+        volleyParser.getWorkflows(new VolleyListResponseListener() {
             @Override
             public void onSuccess(HashMap<String,String> map) {
                 workflowMap = map;
@@ -274,6 +263,11 @@ public class AddNewHireActivity extends AppCompatActivity {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(AddNewHireActivity.this, NewHireListActivity.class));
     }
 }
 
