@@ -74,6 +74,8 @@ public class TaskListActivity extends MainActivity {
 
         myToolbar.setTitle("Task List");
         setSupportActionBar(myToolbar);
+        // enables back button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //check for a passed in bundle of userID/name and set it if it exists
         if(getIntent().hasExtra("userID")) {
@@ -186,12 +188,6 @@ public class TaskListActivity extends MainActivity {
 
     public static String SendUserId() {
         return employeeId;
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        startActivity(new Intent(TaskListActivity.this, MainActivity.class));
     }
 
 }
