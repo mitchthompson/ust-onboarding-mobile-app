@@ -21,7 +21,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.practicumapp.Interfaces.VolleyWorkflowsListResponseListener;
+import com.example.practicumapp.Interfaces.VolleyListResponseListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -69,7 +69,7 @@ public class AddNewHireActivity extends AppCompatActivity {
         //API call to get all workflows for spinner
         workflowMap = new HashMap<>();
         VolleyParser volleyParser = new VolleyParser(this.getApplicationContext());
-        volleyParser.getWorkflows(new VolleyWorkflowsListResponseListener() {
+        volleyParser.getWorkflows(new VolleyListResponseListener() {
             @Override
             public void onSuccess(HashMap<String,String> map) {
                 workflowMap = map;

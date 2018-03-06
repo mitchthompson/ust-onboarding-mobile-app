@@ -2,13 +2,12 @@ package com.example.practicumapp;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.example.practicumapp.Interfaces.VolleyResponseListener;
 import com.example.practicumapp.Interfaces.VolleyUserResponseListener;
 import com.example.practicumapp.Interfaces.VolleyWorkflowResponseListener;
-import com.example.practicumapp.Interfaces.VolleyWorkflowsListResponseListener;
+import com.example.practicumapp.Interfaces.VolleyListResponseListener;
 import com.example.practicumapp.models.Task;
 import com.example.practicumapp.models.User;
 import com.example.practicumapp.models.Workflow;
@@ -93,13 +92,65 @@ public class VolleyParser {
 //  Read (GET) functions
 
     /**
+     * Get all users from the API and callback on success
+     * @param volleyUsersListResponseListener Interface definition for a callback to be invoked when a response is received
+     * @exception JSONException JSON parsing error exception
+     */
+    public void getAllUsers(final VolleyListResponseListener volleyUsersListResponseListener) {
+        String urlWithParams = API_ADDRESS + "/users/";
+        MyVolleySingleton.getInstance(context).sendVolleyRequest(urlWithParams, new VolleyResponseListener() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                HashMap<String, String> users = new HashMap<String, String>();
+                try {
+                    JSONArray usersList = response.getJSONArray("list");
+                    for (int j = 0; j < usersList.length(); j++) {
+                        JSONObject singleUser = usersList.getJSONObject(j);
+                        users.put(singleUser.getString("id"),
+                                singleUser.getString("name"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                volleyUsersListResponseListener.onSuccess(users);
+            }
+        });
+    }
+
+    /**
+     * Get workflows list from the API and callback on success
+     * @param volleyListResponseListener Interface definition for a callback to be invoked when a response is received
+     * @exception JSONException JSON parsing error exception
+     */
+    public void getWorkflows(final VolleyListResponseListener volleyListResponseListener) {
+        String urlWithParams = API_ADDRESS + "/workflows/";
+        MyVolleySingleton.getInstance(context).sendVolleyRequest(urlWithParams, new VolleyResponseListener() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                HashMap<String, String> workflows = new HashMap<String, String>();
+                try {
+                    JSONArray workflowsList = response.getJSONArray("list");
+                    for (int j = 0; j < workflowsList.length(); j++) {
+                        JSONObject singleWorkflow = workflowsList.getJSONObject(j);
+                        workflows.put(singleWorkflow.getString("id"),
+                                singleWorkflow.getString("name"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                volleyListResponseListener.onSuccess(workflows);
+            }
+        });
+    }
+
+    /**
      * Get the user info from the API and callback on success
      * @param userID User id
      * @param volleyUserResponseListener Interface definition for a callback to be invoked when a response is received
      * @exception JSONException JSON parsing error exception
      */
     public void getUser(String userID, final VolleyUserResponseListener volleyUserResponseListener) {
-        String urlWithParams = API_ADDRESS + "/user/" + userID;
+        String urlWithParams = API_ADDRESS + "/users/" + userID;
         MyVolleySingleton.getInstance(context)
                 .sendGETRequest(Request.Method.GET, urlWithParams, null, new HashMap<String, String>(), new VolleyResponseListener() {
                     @Override
@@ -190,33 +241,6 @@ public class VolleyParser {
                         }
                     }
                 });
-    }
-
-
-    /**
-     * Get workflows list from the API and callback on success
-     * @param volleyWorkflowsListResponseListener Interface definition for a callback to be invoked when a response is received
-     * @exception JSONException JSON parsing error exception
-     */
-    public void getWorkflows(final VolleyWorkflowsListResponseListener volleyWorkflowsListResponseListener) {
-        String urlWithParams = API_ADDRESS + "/workflows/";
-        MyVolleySingleton.getInstance(context).sendVolleyRequest(urlWithParams, new VolleyResponseListener() {
-            @Override
-            public void onSuccess(JSONObject response) {
-                HashMap<String, String> workflows = new HashMap<String, String>();
-                try {
-                    JSONArray workflowsList = response.getJSONArray("workflows");
-                    for (int j = 0; j < workflowsList.length(); j++) {
-                        JSONObject singleWorkflow = workflowsList.getJSONObject(j);
-                        workflows.put(singleWorkflow.getString("id"),
-                                singleWorkflow.getString("name"));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                volleyWorkflowsListResponseListener.onSuccess(workflows);
-            }
-            });
     }
 
 //  Update (UPDATE) functions
