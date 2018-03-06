@@ -1,5 +1,6 @@
 package com.example.practicumapp;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -70,6 +71,10 @@ public class TaskListActivity extends MainActivity {
         Toolbar myToolbar = findViewById(R.id.main_toolbar);
         ActionMenuView progressActionMenu = (ActionMenuView) findViewById(R.id.progress_toolbar);
         simpleProgressBar = (ProgressBar) findViewById(R.id.task_progressBar);
+
+        simpleProgressBar.getProgressDrawable().setColorFilter(
+                Color.RED, android.graphics.PorterDuff.Mode.SRC_IN);
+
         recyclerView = (RecyclerView) findViewById(R.id.task_list_recycler);
 
         // set layout manager for Recycler View
