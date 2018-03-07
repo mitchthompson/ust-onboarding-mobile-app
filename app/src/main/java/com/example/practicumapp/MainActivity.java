@@ -156,8 +156,11 @@ public class MainActivity extends AppCompatActivity {
                 adalLogout();
                 break;
             case android.R.id.home:
-                super.onBackPressed();
-                return true;
+                if (this.getClass().getSimpleName().equals(TaskListActivity.class.getSimpleName())){
+                    super.onBackPressed();
+                    return true;
+                }
+
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
