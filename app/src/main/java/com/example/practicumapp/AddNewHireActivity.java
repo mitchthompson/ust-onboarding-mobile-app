@@ -22,6 +22,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.practicumapp.Interfaces.VolleyListResponseListener;
+import com.example.practicumapp.models.Workflow;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,7 +50,8 @@ public class AddNewHireActivity extends AppCompatActivity {
     private Button btnCancel, btnDone;
     private DatePickerDialog.OnDateSetListener onDateSetListener;
     private EditText firstName, lastName, email, phone, date;
-    private HashMap<String,String> newUser, workflowMap;
+    private HashMap<String,String> newUser;
+    private ArrayList workflowMap;
 
 
     @Override
@@ -67,11 +69,11 @@ public class AddNewHireActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //API call to get all workflows for spinner
-        workflowMap = new HashMap<>();
+        workflowMap = new ArrayList<>();
         VolleyParser volleyParser = new VolleyParser(this.getApplicationContext());
         volleyParser.getWorkflows(new VolleyListResponseListener() {
             @Override
-            public void onSuccess(HashMap<String,String> map) {
+            public void onSuccess(ArrayList map) {
                 workflowMap = map;
                 addItemsOnWorkflowSpinner();
             }
@@ -166,9 +168,10 @@ public class AddNewHireActivity extends AppCompatActivity {
         List<String> spinnerList = new ArrayList<>();
         spinnerList.add("Select Workflow");
         workflow = findViewById(R.id.workflow_ID);
-        for(Map.Entry<String, String> entry : workflowMap.entrySet()){
-            Log.d(TAG, "Key: " + entry.getKey() + "Value: " + entry.getValue());
-            spinnerList.add(entry.getValue());
+        for(int i = 0; i < workflowMap.size(); i++){
+            Workflow workflow = (Workflow) workflowMap.get(i);
+            Log.d(TAG, "Key: " + workflow.getId() + "Value: " + workflow.getName());
+            spinnerList.add(workflow.getName());
         }
 
 

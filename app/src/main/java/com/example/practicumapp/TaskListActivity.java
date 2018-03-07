@@ -45,7 +45,7 @@ public class TaskListActivity extends MainActivity {
     // taskList is the list of Tasks from the workflow
     private ArrayList taskList;
 
-    public static String employeeId = "72AD9DBC60AE485782D43A1AE09279A4";
+    public static String employeeId = "test-id-1234";
     private String employeeName = "";
     private String userType = "";
     private String workflowId;
@@ -99,7 +99,9 @@ public class TaskListActivity extends MainActivity {
             @Override
             public void onSuccess(User user) {
                 // Get the workflow ID specific to the User!
-                workflowId = user.getWorkflow();
+//              TODO Remove sample workflow id and uncomment the worklfowId variable below it after API data is updated
+                workflowId = "CloudOffshoreExternal";
+//              workflowId = user.getWorkflow();
 
                 // confirm receipt of something...
                 Log.d(TAG, "TaskListActivity: User First Name : " + user.getFirstName());
@@ -141,12 +143,19 @@ public class TaskListActivity extends MainActivity {
                             String taskName = task.getName();
                             HashMap<String, String> taskDescriptionMap = task.getDescriptions();
                             ArrayList<TaskDescriptionListItem> taskDescriptionListItems = new ArrayList<>();
-                            if(userType.equals("manager")) {
-                                taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("manager")));
-                            }
-                            if(userType.equals("employee")) {
+//                          TODO Remove sample if code and uncomment if code below it
+                            if (taskDescriptionMap.get("employee") != null) {
                                 taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("employee")));
                             }
+                            if (taskDescriptionMap.get("manager") != null) {
+                                taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("manager")));
+                            }
+//                            if(userType.equals("manager")) {
+//                                taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("manager")));
+//                            }
+//                            if(userType.equals("employee")) {
+//                                taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("employee")));
+//                            }
                             TaskListItem taskListItemToAdd = new TaskListItem(taskName,taskDescriptionListItems);
                             taskListItemToAdd.setTaskID(taskId);
 

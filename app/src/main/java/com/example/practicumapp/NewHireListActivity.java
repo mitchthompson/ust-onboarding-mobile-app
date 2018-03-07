@@ -78,7 +78,7 @@ public class NewHireListActivity extends MainActivity {
         newHireList = new ArrayList<>();
         newHireIDs = new ArrayList<>();
         VolleyParser volleyParser = new VolleyParser(this.getApplicationContext());
-        volleyParser.getUser("72AD9DBC60AE485782D43A1AE09279A4", new VolleyUserResponseListener() {
+        volleyParser.getUser("test-id-1234", new VolleyUserResponseListener() {
 
             //if successful response assign employees & IDs to ArrayList then pass to NewHireListAdapter
             @Override
@@ -115,7 +115,6 @@ public class NewHireListActivity extends MainActivity {
 
             }
         });
-
     }
 
 
