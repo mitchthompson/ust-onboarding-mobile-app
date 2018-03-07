@@ -155,6 +155,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_logout:
                 adalLogout();
                 break;
+            case android.R.id.home:
+                super.onBackPressed();
+                return true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
@@ -236,9 +239,11 @@ public class MainActivity extends AppCompatActivity {
 
             AlertDialog dialog = builder.create();
             dialog.show();
+        }else if(this.getClass().getSimpleName().equals(TaskListActivity.class.getSimpleName()) && mResult.getUserInfo().getDisplayableId().equals(MANAGER)){
+            super.onBackPressed();
         }else {
             // finishes the activity and navigates to the parent
-            finish();
+            //finish();
             NavUtils.navigateUpFromSameTask(this);
         }
     }
