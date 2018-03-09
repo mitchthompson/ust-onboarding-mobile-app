@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar myToolbar = findViewById(R.id.myToolbar);
         setSupportActionBar(myToolbar);
+        getSupportActionBar().setTitle("UST Global Onboarding Tool");
 
         mContext = new AuthenticationContext(MainActivity.this, Constants.AUTHORITY_URL, true);
         callback = new AuthenticationCallback<AuthenticationResult>() {

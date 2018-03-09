@@ -67,6 +67,9 @@ public class TaskListActivity extends MainActivity {
         Toolbar myToolbar = findViewById(R.id.main_toolbar);
         ActionMenuView progressActionMenu = (ActionMenuView) findViewById(R.id.progress_toolbar);
         simpleProgressBar = (ProgressBar) findViewById(R.id.task_progressBar);
+
+        //set height for progress bar
+        simpleProgressBar.setScaleY(3f);
         recyclerView = (RecyclerView) findViewById(R.id.task_list_recycler);
 
         // set layout manager for Recycler View
