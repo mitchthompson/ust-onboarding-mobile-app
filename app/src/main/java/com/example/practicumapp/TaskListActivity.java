@@ -1,5 +1,6 @@
 package com.example.practicumapp;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.ActionMenuView;
@@ -72,8 +73,9 @@ public class TaskListActivity extends MainActivity {
         ActionMenuView progressActionMenu = (ActionMenuView) findViewById(R.id.progress_toolbar);
         simpleProgressBar = (ProgressBar) findViewById(R.id.task_progressBar);
 
+        // set color programmatically
         simpleProgressBar.getProgressDrawable().setColorFilter(
-                Color.RED, android.graphics.PorterDuff.Mode.SRC_IN);
+                Color.BLUE, android.graphics.PorterDuff.Mode.SRC_IN);
 
         recyclerView = (RecyclerView) findViewById(R.id.task_list_recycler);
 
@@ -138,7 +140,7 @@ public class TaskListActivity extends MainActivity {
                         // set progress to 0 initially
                         simpleProgressBar.setProgress(0);
                         countComplete = 0;
-                        completedPercentageTextView.setText( (int) (countComplete / countTotal) * 100);
+                        // completedPercentageTextView.setText( (int) (countComplete / countTotal) * 100);
 
                         // taskListItems ArrayList is needed to feed to the RecyclerView
                         ArrayList<TaskListItem> taskListItems = new ArrayList<>();
@@ -164,7 +166,7 @@ public class TaskListActivity extends MainActivity {
                                 taskListItemToAdd.setChecked(true);
                                 ProgressBarIncrement(1);
                                 countComplete++;
-                                completedPercentageTextView.setText( (int) (countComplete / countTotal) * 100);
+                                // completedPercentageTextView.setText( (int) (countComplete / countTotal) * 100);
 
                             }
                             taskListItems.add(taskListItemToAdd);
