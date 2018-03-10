@@ -91,10 +91,11 @@ public class TaskListAdapter extends ExpandableRecyclerViewAdapter<TaskListItemV
         holder.checkBox.setOnCheckedChangeListener(null);
 
         //if true, checkbox will be selected, else unselected
-        holder.checkBox.setChecked(taskCheckedMap.containsKey(myItem.getTaskName()));
+        if( myItem.isChecked()) {
+            holder.checkBox.setChecked(true);
+        }
 
         adapterVolleyParser = new VolleyParser(context);
-
 
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
