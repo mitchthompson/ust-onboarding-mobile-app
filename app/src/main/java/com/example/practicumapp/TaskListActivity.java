@@ -73,6 +73,9 @@ public class TaskListActivity extends MainActivity {
         ActionMenuView progressActionMenu = (ActionMenuView) findViewById(R.id.progress_toolbar);
         simpleProgressBar = (ProgressBar) findViewById(R.id.task_progressBar);
 
+        //set height for progress bar
+        simpleProgressBar.setScaleY(3f);
+
         // set color programmatically
         simpleProgressBar.getProgressDrawable().setColorFilter(
                 Color.BLUE, android.graphics.PorterDuff.Mode.SRC_IN);
@@ -84,6 +87,8 @@ public class TaskListActivity extends MainActivity {
 
         myToolbar.setTitle("Task List");
         setSupportActionBar(myToolbar);
+        // enables back button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //check for a passed in bundle of userID/name and set it if it exists
         if(getIntent().hasExtra("userID")) {
@@ -203,12 +208,6 @@ public class TaskListActivity extends MainActivity {
 
     public static String SendUserId() {
         return employeeId;
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        startActivity(new Intent(TaskListActivity.this, MainActivity.class));
     }
 
 }

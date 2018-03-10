@@ -56,10 +56,11 @@ public class NewHireListActivity extends MainActivity {
 
         searchView = (SearchView) findViewById(R.id.searchView);
 
-        //Enables tool bar & sets title displayed
+        //Enables tool bar, back button, & sets title displayed
         Toolbar myToolbar = findViewById(R.id.myToolbar);
         myToolbar.setTitle("Employees");
         setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //TODO Add functionality for user to search through list using searchview
 
@@ -117,9 +118,5 @@ public class NewHireListActivity extends MainActivity {
 
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        startActivity(new Intent(NewHireListActivity.this, MainActivity.class));
-    }
+
 }
