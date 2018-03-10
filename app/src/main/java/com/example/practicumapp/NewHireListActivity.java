@@ -2,6 +2,7 @@ package com.example.practicumapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -62,6 +63,11 @@ public class NewHireListActivity extends MainActivity {
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //Retrieve access token from shared preferences
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", MODE_PRIVATE);
+        String accessToken = sharedPreferences.getString("AccessToken", "");
+        Log.d(TAG, accessToken);
+
         //TODO Add functionality for user to search through list using searchview
 
         //sets click listener for add_new_hire_btn to launch AddNewHireActivity
@@ -77,7 +83,7 @@ public class NewHireListActivity extends MainActivity {
         employees = new HashMap<>();
         newHireList = new ArrayList<>();
         newHireIDs = new ArrayList<>();
-        VolleyParser volleyParser = new VolleyParser(this.getApplicationContext());
+        VolleyParser volleyParser = new VolleyParser(this.getApplicationContext(), accessToken);
         volleyParser.getUser("test-id-1234", new VolleyUserResponseListener() {
 
             //if successful response assign employees & IDs to ArrayList then pass to NewHireListAdapter

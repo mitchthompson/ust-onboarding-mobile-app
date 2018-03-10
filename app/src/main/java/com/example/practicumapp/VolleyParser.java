@@ -27,14 +27,17 @@ import java.util.HashMap;
 public class VolleyParser {
 
     private Context context; // Application Context
+    private String accessToken;
     private static final String API_ADDRESS = "http://nsc420winter2018practicum.azure-api.net/dev/"; // URL to retrieve JSON data
 
     /**
      * Constructor
      * @param context Context of current state of application/object
      */
-    public VolleyParser(Context context) {
+    public VolleyParser(Context context, String accessToken) {
         this.context = context;
+        this.accessToken = accessToken;
+        Log.d("VolleyParser", "Access token : " + accessToken);
     }
 
     /**
@@ -52,7 +55,7 @@ public class VolleyParser {
         parameters.put("Workflow", user.getWorkflow());
 
         MyVolleySingleton.getInstance(context)
-                .sendObjectRequest(Request.Method.POST, urlWithParams, null, parameters, new VolleyResponseListener() {
+                .sendObjectRequest(accessToken, Request.Method.POST, urlWithParams, null, parameters, new VolleyResponseListener() {
                     @Override
                     public void onSuccess(JSONObject response) {
 //                      TODO Return newly created user id
@@ -71,7 +74,7 @@ public class VolleyParser {
     public void getUser(String userID, final VolleyUserResponseListener volleyUserResponseListener) {
         String urlWithParams = API_ADDRESS + "api/user/" + userID;
         MyVolleySingleton.getInstance(context)
-                .sendObjectRequest(Request.Method.GET, urlWithParams, null, new HashMap<String, String>(), new VolleyResponseListener() {
+                .sendObjectRequest(accessToken, Request.Method.GET, urlWithParams, null, new HashMap<String, String>(), new VolleyResponseListener() {
                     @Override
                     public void onSuccess(JSONObject response) {
                         volleyUserResponseListener.onSuccess(getUserObject(response));
@@ -86,7 +89,7 @@ public class VolleyParser {
      */
     public void getUsers(final VolleyListResponseListener volleyListResponseListener) {
         String urlWithParams = API_ADDRESS + "api/user/";
-        MyVolleySingleton.getInstance(context).sendArrayRequest(urlWithParams, new VolleyResponseListener() {
+        MyVolleySingleton.getInstance(context).sendArrayRequest(accessToken, urlWithParams, new VolleyResponseListener() {
             @Override
             public void onSuccess(JSONObject response) {
                 ArrayList<User> users = new ArrayList<>();
@@ -135,7 +138,7 @@ public class VolleyParser {
         parameters.put("tasks", workflow.getTasks().toString());
 
         MyVolleySingleton.getInstance(context)
-                .sendObjectRequest(Request.Method.POST, urlWithParams, null, parameters, new VolleyResponseListener() {
+                .sendObjectRequest(accessToken, Request.Method.POST, urlWithParams, null, parameters, new VolleyResponseListener() {
                     @Override
                     public void onSuccess(JSONObject response) {
 //                      TODO Return newly created workflow id
@@ -155,7 +158,7 @@ public class VolleyParser {
     public void getWorkflow(String workflowID, final VolleyWorkflowResponseListener volleyWorkflowResponseListener) {
         String urlWithParams = API_ADDRESS + "workflows/" + workflowID;
         MyVolleySingleton.getInstance(context).
-                sendObjectRequest(Request.Method.GET, urlWithParams, null, new HashMap<String, String>(), new VolleyResponseListener() {
+                sendObjectRequest(accessToken, Request.Method.GET, urlWithParams, null, new HashMap<String, String>(), new VolleyResponseListener() {
                     @Override
                     public void onSuccess(JSONObject response) {
                         try {
@@ -199,7 +202,7 @@ public class VolleyParser {
      */
     public void getWorkflows(final VolleyListResponseListener volleyListResponseListener) {
         String urlWithParams = API_ADDRESS + "workflows/";
-        MyVolleySingleton.getInstance(context).sendArrayRequest(urlWithParams, new VolleyResponseListener() {
+        MyVolleySingleton.getInstance(context).sendArrayRequest(accessToken, urlWithParams, new VolleyResponseListener() {
             @Override
             public void onSuccess(JSONObject response) {
                 ArrayList<Workflow> workflows = new ArrayList<>();

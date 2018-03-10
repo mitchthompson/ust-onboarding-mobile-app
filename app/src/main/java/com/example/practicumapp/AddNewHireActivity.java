@@ -2,6 +2,7 @@ package com.example.practicumapp;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -68,9 +69,14 @@ public class AddNewHireActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //Retrieve access token from shared preferences
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", MODE_PRIVATE);
+        String accessToken = sharedPreferences.getString("AccessToken", "");
+        Log.d(TAG, accessToken);
+
         //API call to get all workflows for spinner
         workflowMap = new ArrayList<>();
-        VolleyParser volleyParser = new VolleyParser(this.getApplicationContext());
+        VolleyParser volleyParser = new VolleyParser(this.getApplicationContext(), accessToken);
         volleyParser.getWorkflows(new VolleyListResponseListener() {
             @Override
             public void onSuccess(ArrayList map) {
