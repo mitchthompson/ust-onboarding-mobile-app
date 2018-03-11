@@ -66,7 +66,6 @@ public class NewHireListActivity extends MainActivity {
         //Retrieve access token from shared preferences
         SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", MODE_PRIVATE);
         String accessToken = sharedPreferences.getString("AccessToken", "");
-        Log.d(TAG, accessToken);
 
         //TODO Add functionality for user to search through list using searchview
 

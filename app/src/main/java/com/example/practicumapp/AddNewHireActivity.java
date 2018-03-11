@@ -72,7 +72,6 @@ public class AddNewHireActivity extends AppCompatActivity {
         //Retrieve access token from shared preferences
         SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", MODE_PRIVATE);
         String accessToken = sharedPreferences.getString("AccessToken", "");
-        Log.d(TAG, accessToken);
 
         //API call to get all workflows for spinner
         workflowMap = new ArrayList<>();

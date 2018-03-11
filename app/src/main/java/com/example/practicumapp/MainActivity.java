@@ -198,8 +198,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void saveLoginData() {
-        Log.d(TAG, "Access Token : " + mResult.getAccessToken());
-
         SharedPreferences preferences = getSharedPreferences("LoginInfo", MODE_PRIVATE);
         preferences.edit().putString("AccessToken", mResult.getAccessToken()).apply();
     }

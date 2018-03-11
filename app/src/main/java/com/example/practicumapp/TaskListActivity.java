@@ -81,7 +81,6 @@ public class TaskListActivity extends MainActivity {
         //Retrieve access token from shared preferences
         SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", MODE_PRIVATE);
         final String accessToken = sharedPreferences.getString("AccessToken", "");
-        Log.d(TAG, accessToken);
 
         //check for a passed in bundle of userID/name and set it if it exists
         if(getIntent().hasExtra("userID")) {
