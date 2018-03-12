@@ -1,5 +1,6 @@
 package com.example.practicumapp;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -44,7 +45,7 @@ public class TaskListActivity extends MainActivity {
     // taskList is the list of Tasks from the workflow
     private ArrayList taskList;
 
-    public static String employeeId = "72AD9DBC60AE485782D43A1AE09279A4";
+    public static String employeeId = "test-id-demo4";
     private String employeeName = "";
     private String userType = "";
     private String workflowId;
@@ -77,14 +78,20 @@ public class TaskListActivity extends MainActivity {
         // enables back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        volleyParser = new VolleyParser(this.getApplicationContext());
+        //Retrieve access token from shared preferences
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", MODE_PRIVATE);
+        final String accessToken = sharedPreferences.getString("AccessToken", "");
+
+        volleyParser = new VolleyParser(this.getApplicationContext(), accessToken);
 
         //Get the data we need from the User
         volleyParser.getUser(employeeId, new VolleyUserResponseListener() {
             @Override
             public void onSuccess(User user) {
                 // Get the workflow ID specific to the User!
-                workflowId = user.getWorkflow();
+//              TODO Remove hardcoded workflowid
+                workflowId = "CloudOffshoreExternal";
+//              workflowId = user.getWorkflow();
                 TextView employeeNameTextView = (TextView)findViewById(R.id.EmployeeName);
                 employeeName = getUserName(user);
                 employeeNameTextView.setText(employeeName);
@@ -148,7 +155,7 @@ public class TaskListActivity extends MainActivity {
 
                         // recyclerView gets kicked off in here, because we know we have data to display.
                         relativeLayout = (RelativeLayout) findViewById(R.id.activity_task_list);
-                        adapter = new TaskListAdapter(taskListItems);
+                        adapter = new TaskListAdapter(taskListItems, accessToken);
                         recyclerView.setLayoutManager(layoutManager);
                         recyclerView.setAdapter(adapter);
 
