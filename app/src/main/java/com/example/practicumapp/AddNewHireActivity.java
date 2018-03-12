@@ -23,13 +23,15 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.practicumapp.Interfaces.VolleyListResponseListener;
+import com.example.practicumapp.Interfaces.VolleyUserResponseListener;
+import com.example.practicumapp.models.User;
 import com.example.practicumapp.models.Workflow;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 
 
@@ -47,11 +49,10 @@ import java.util.Map;
 
 public class AddNewHireActivity extends AppCompatActivity {
     private static final String TAG = AddNewHireActivity.class.getName();
-    private Spinner workflow;
+    private Spinner workflow, employeeType;
     private Button btnCancel, btnDone;
     private DatePickerDialog.OnDateSetListener onDateSetListener;
     private EditText firstName, lastName, email, phone, date;
-    private HashMap<String,String> newUser;
     private ArrayList workflowMap;
 
 
@@ -90,6 +91,7 @@ public class AddNewHireActivity extends AppCompatActivity {
         email = findViewById(R.id.email);
         phone = findViewById(R.id.phone);
         date = findViewById(R.id.date);
+        addItemsOnTypeSpinner();
 
 
         // Add calendar settings for date picker
@@ -166,10 +168,9 @@ public class AddNewHireActivity extends AppCompatActivity {
     }
 
     /**
-     * Add items into spinner dynamically
+     * Add items into workflow spinner dynamically
      */
     public void addItemsOnWorkflowSpinner() {
-        //TODO: get workflow list from api call
         List<String> spinnerList = new ArrayList<>();
         spinnerList.add("Select Workflow");
         workflow = findViewById(R.id.workflow_ID);
@@ -187,6 +188,22 @@ public class AddNewHireActivity extends AppCompatActivity {
     }
 
     /**
+     * Add items into employee type spinner
+     */
+    public void addItemsOnTypeSpinner() {
+        List<String> spinnerTypeList = new ArrayList<>();
+        spinnerTypeList.add("Select Type");
+        spinnerTypeList.add("Employee");
+        spinnerTypeList.add("Manager");
+        employeeType = findViewById(R.id.type_spinner);
+
+        ArrayAdapter<String> typeDataAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, spinnerTypeList);
+        typeDataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        employeeType.setAdapter(typeDataAdapter);
+    }
+
+    /**
      * Will be called when user clicks "Done" button on form. Validates form inputs and adds employee via
      * the API. Errors generate a message and stop the execution.
      */
@@ -199,6 +216,7 @@ public class AddNewHireActivity extends AppCompatActivity {
         //TODO: see if date picker EditText view can be cast to string in this way
         String inputDate = date.getText().toString().trim();
         String inputWorkflow = String.valueOf(workflow.getSelectedItem());
+        String inputType = String.valueOf(employeeType.getSelectedItem());
 
         // Form validation for all fields
         if(TextUtils.isEmpty(inputFirstName)){
@@ -249,17 +267,30 @@ public class AddNewHireActivity extends AppCompatActivity {
             return;
         }
 
-        newUser = new HashMap<>();
-        newUser.put("firstName", inputFirstName);
-        newUser.put("lastName", inputLastName);
-        newUser.put("email", inputEmail);
-        newUser.put("phone", inputPhone);
-        newUser.put("startDate", inputDate);
-        newUser.put("workflow", inputWorkflow);
+        if(String.valueOf(employeeType.getSelectedItem()) == "Select Type"){
+            // Show message
+            Toast.makeText(this, "Please select type", Toast.LENGTH_SHORT).show();
 
-        Log.d(TAG, "User: " + newUser.toString());
+            // Stops function from executing
+            return;
+        }
 
-        //TODO: make API call to add new user
+        //create User object
+        User newUser = new User(inputFirstName, inputLastName, inputEmail, inputPhone, inputType, inputDate, inputWorkflow);
+
+        //Retrieve access token from shared preferences
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", MODE_PRIVATE);
+        String accessToken = sharedPreferences.getString("AccessToken", "");
+
+        //API call to add the new user
+        VolleyParser volleyParser = new VolleyParser(this.getApplicationContext(), accessToken);
+        volleyParser.addUser(newUser, new VolleyUserResponseListener(){
+            @Override
+            public void onSuccess(User user) {
+                Log.d("Add New Hire", "User ID : " + user.getId());
+                startActivity(new Intent(AddNewHireActivity.this, NewHireListActivity.class));
+            }
+        });
     }
 
     /**
