@@ -31,13 +31,15 @@ public class TaskListAdapter extends ExpandableRecyclerViewAdapter<TaskListItemV
     Context context;
     private ArrayList<TaskListItem> taskListItems = new ArrayList<>();
     private VolleyParser adapterVolleyParser;
+    private String accessToken;
 
 
-    public TaskListAdapter(List<? extends ExpandableGroup> groups) {
+    public TaskListAdapter(List<? extends ExpandableGroup> groups, String accessToken) {
         super(groups);
         for(int i = 0; i < groups.size(); i++) {
             taskListItems.add((TaskListItem) groups.get(i));
         }
+        this.accessToken = accessToken;
     }
 
     @Override
@@ -70,7 +72,7 @@ public class TaskListAdapter extends ExpandableRecyclerViewAdapter<TaskListItemV
 
         //if true, checkbox will be selected, else unselected
         holder.checkBox.setChecked(myItem.isChecked());
-        adapterVolleyParser = new VolleyParser(context);
+        adapterVolleyParser = new VolleyParser(context, accessToken);
 
 
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
