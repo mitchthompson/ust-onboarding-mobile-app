@@ -136,12 +136,19 @@ public class TaskListActivity extends MainActivity {
                             String taskName = task.getName();
                             HashMap<String, String> taskDescriptionMap = task.getDescriptions();
                             ArrayList<TaskDescriptionListItem> taskDescriptionListItems = new ArrayList<>();
-                            if(userType.equals("manager")) {
-                                taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("manager")));
-                            }
-                            if(userType.equals("employee")) {
+//                          TODO Remove sample if codes and uncomment if code below it
+                            if (taskDescriptionMap.get("employee") != null) {
                                 taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("employee")));
                             }
+                            if (taskDescriptionMap.get("manager") != null) {
+                                taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("manager")));
+                            }
+//                            if(userType.equals("manager")) {
+//                                taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("manager")));
+//                            }
+//                            if(userType.equals("employee")) {
+//                                taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("employee")));
+//                            }
                             TaskListItem taskListItemToAdd = new TaskListItem(taskName,taskDescriptionListItems);
                             taskListItemToAdd.setTaskID(taskId);
 
