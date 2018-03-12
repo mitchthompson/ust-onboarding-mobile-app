@@ -2,7 +2,6 @@ package com.example.practicumapp;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
@@ -88,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, "Status:" + result.getStatus() + " Expired:"
                             + result.getExpiresOn().toString());
                     tokenLogData();
-                    saveLoginData();
                     loginRouter();
                 }
             }
@@ -195,11 +193,6 @@ public class MainActivity extends AppCompatActivity {
                 "\nToken ID:            " + mResult.getIdToken() +
                 "\nAccess Token:        " + mResult.getAccessToken() +
                 "\nAuth Header:  " + mResult.createAuthorizationHeader());
-    }
-
-    private void saveLoginData() {
-        SharedPreferences preferences = getSharedPreferences("LoginInfo", MODE_PRIVATE);
-        preferences.edit().putString("AccessToken", mResult.getAccessToken()).apply();
     }
 
     /**
