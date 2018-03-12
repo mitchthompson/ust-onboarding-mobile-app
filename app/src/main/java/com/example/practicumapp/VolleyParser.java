@@ -45,7 +45,7 @@ public class VolleyParser {
      * @param user user object of the new user
      */
     public void addUser(final User user, final VolleyUserResponseListener volleyUserResponseListener) {
-        String urlWithParams = API_ADDRESS + "api/user/";
+        String urlWithParams = API_ADDRESS + "user/";
         HashMap<String, String> parameters = new HashMap<>();
         parameters.put("FirstName", user.getFirstName());
         parameters.put("LastName", user.getLastName());
@@ -72,7 +72,7 @@ public class VolleyParser {
      * @exception JSONException JSON parsing error exception
      */
     public void getUser(String userID, final VolleyUserResponseListener volleyUserResponseListener) {
-        String urlWithParams = API_ADDRESS + "api/user/" + userID;
+        String urlWithParams = API_ADDRESS + "user/" + userID;
         MyVolleySingleton.getInstance(context)
                 .sendObjectRequest(accessToken, Request.Method.GET, urlWithParams, null, new HashMap<String, String>(), new VolleyResponseListener() {
                     @Override
@@ -88,7 +88,7 @@ public class VolleyParser {
      * @exception JSONException JSON parsing error exception
      */
     public void getUsers(final VolleyListResponseListener volleyListResponseListener) {
-        String urlWithParams = API_ADDRESS + "api/user/";
+        String urlWithParams = API_ADDRESS + "user/";
         MyVolleySingleton.getInstance(context).sendArrayRequest(accessToken, urlWithParams, new VolleyResponseListener() {
             @Override
             public void onSuccess(JSONObject response) {
@@ -163,10 +163,10 @@ public class VolleyParser {
                     public void onSuccess(JSONObject response) {
                         try {
                             ArrayList<Task> tasks = new ArrayList<>();
-                            String id = response.getString("Id");
-                            String name = response.getString("Name");
-                            String description = response.getString("Description");
-                            JSONArray jsonArray = response.getJSONArray("Tasks");
+                            String id = response.getString("id");
+                            String name = response.getString("name");
+                            String description = response.getString("description");
+                            JSONArray jsonArray = response.getJSONArray("tasks");
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 String taskID = jsonObject.getString("Id");
@@ -181,7 +181,6 @@ public class VolleyParser {
                                 }
 
                                 String viewers = jsonObject.getString("Viewers");
-                                Log.d("VolleyParser", taskDescriptions.toString());
                                 Task singleTask = new Task(taskID, taskName, taskDescriptions, viewers);
                                 tasks.add(singleTask);
                             }
@@ -277,17 +276,16 @@ public class VolleyParser {
      */
     public User getUserObject(JSONObject object) {
         try {
-            String id = object.getString("Id");
+            String id = object.getString("id");
             String activeDirectoryID = object.getString("ActiveDirectoryId");
-            String firstName = object.getString("FirstName");
-            String lastName = object.getString("LastName");
-            String email = object.getString("Email");
-            String phone = object.getString("Phone");
-            String type = object.getString("Type");
-            String startDate = "";
-//          String startDate = object.getString("StartDate");
+            String firstName = object.getString("firstName");
+            String lastName = object.getString("lastName");
+            String email = object.getString("email");
+            String phone = object.getString("phone");
+            String type = object.getString("type");
+            String startDate = object.getString("StartDate");
             String workflow = object.getString("Workflow");
-            JSONObject employeesObject = object.getJSONObject("Employees");
+            JSONObject employeesObject = object.getJSONObject("employees");
             JSONArray tasksObject = object.getJSONArray("Tasks");
             HashMap<String, String> employees = new HashMap<String, String>();
             ArrayList<String> tasks = new ArrayList<>();
