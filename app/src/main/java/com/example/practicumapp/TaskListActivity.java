@@ -1,7 +1,5 @@
 package com.example.practicumapp;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,7 +30,7 @@ import java.util.HashMap;
 
 public class TaskListActivity extends MainActivity {
     //TAG for logging
-    private static final String TAG = TaskListActivity.class.getName(); // Constant for logging data
+    private static final String TAG = "TaskListActivity"; // Constant for logging data
 
     //Adapter is the only one that the expanding recycler folks declared outside of their OnCreate
     private TaskListAdapter adapter;
@@ -46,7 +44,7 @@ public class TaskListActivity extends MainActivity {
     // taskList is the list of Tasks from the workflow
     private ArrayList taskList;
 
-    public static String employeeId = "test-id-demo4";
+    public static String employeeId = "72AD9DBC60AE485782D43A1AE09279A4";
     private String employeeName = "";
     private String userType = "";
     private String workflowId;
@@ -63,11 +61,12 @@ public class TaskListActivity extends MainActivity {
         setContentView(R.layout.activity_task_list);
 
         // Go and grab all our UI Elements from the layouts
-        TextView employeeNameTextView = (TextView)findViewById(R.id.EmployeeName);
-        //TextView employeeIdTextView = (TextView)findViewById(R.id.EmployeeID);
         Toolbar myToolbar = findViewById(R.id.main_toolbar);
         ActionMenuView progressActionMenu = (ActionMenuView) findViewById(R.id.progress_toolbar);
         simpleProgressBar = (ProgressBar) findViewById(R.id.task_progressBar);
+
+        //set height for progress bar
+        simpleProgressBar.setScaleY(3f);
         recyclerView = (RecyclerView) findViewById(R.id.task_list_recycler);
 
         // set layout manager for Recycler View
@@ -78,38 +77,19 @@ public class TaskListActivity extends MainActivity {
         // enables back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //Retrieve access token from shared preferences
-        SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", MODE_PRIVATE);
-        final String accessToken = sharedPreferences.getString("AccessToken", "");
-
-        //check for a passed in bundle of userID/name and set it if it exists
-        if(getIntent().hasExtra("userID")) {
-            Bundle bundle = getIntent().getExtras();
-            employeeId = bundle.getString("userID");
-            employeeName = bundle.getString("name");
-        }
-
-        // else tell the user that something got weird in the UI
-        else {
-            employeeName = "Employee Name Not Included in the Bundle";
-        }
-
-        employeeNameTextView.setText(employeeName);
-        //employeeIdTextView.setText(employeeId);
-
-        volleyParser = new VolleyParser(this.getApplicationContext(), accessToken);
+        volleyParser = new VolleyParser(this.getApplicationContext());
 
         //Get the data we need from the User
         volleyParser.getUser(employeeId, new VolleyUserResponseListener() {
             @Override
             public void onSuccess(User user) {
                 // Get the workflow ID specific to the User!
-//              TODO Remove sample workflow id and uncomment the worklfowId variable below it after API data is updated
-                workflowId = "CloudOffshoreExternal";
-                workflowId = "CloudOffshoreExternal";
-//              workflowId = user.getWorkflow();
+                workflowId = user.getWorkflow();
+                TextView employeeNameTextView = (TextView)findViewById(R.id.EmployeeName);
+                employeeName = getUserName(user);
+                employeeNameTextView.setText(employeeName);
 
-                // confirm receipt of something...
+                /* confirm receipt of something... */
                 Log.d(TAG, "TaskListActivity: User First Name : " + user.getFirstName());
                 Log.d(TAG, "TaskListActivity: User Type Returns : " + user.getType());
 
@@ -149,19 +129,12 @@ public class TaskListActivity extends MainActivity {
                             String taskName = task.getName();
                             HashMap<String, String> taskDescriptionMap = task.getDescriptions();
                             ArrayList<TaskDescriptionListItem> taskDescriptionListItems = new ArrayList<>();
-//                          TODO Remove sample if code and uncomment if code below it
-                            if (taskDescriptionMap.get("employee") != null) {
-                                taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("employee")));
-                            }
-                            if (taskDescriptionMap.get("manager") != null) {
+                            if(userType.equals("manager")) {
                                 taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("manager")));
                             }
-//                            if(userType.equals("manager")) {
-//                                taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("manager")));
-//                            }
-//                            if(userType.equals("employee")) {
-//                                taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("employee")));
-//                            }
+                            if(userType.equals("employee")) {
+                                taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("employee")));
+                            }
                             TaskListItem taskListItemToAdd = new TaskListItem(taskName,taskDescriptionListItems);
                             taskListItemToAdd.setTaskID(taskId);
 
@@ -175,7 +148,7 @@ public class TaskListActivity extends MainActivity {
 
                         // recyclerView gets kicked off in here, because we know we have data to display.
                         relativeLayout = (RelativeLayout) findViewById(R.id.activity_task_list);
-                        adapter = new TaskListAdapter(taskListItems, accessToken);
+                        adapter = new TaskListAdapter(taskListItems);
                         recyclerView.setLayoutManager(layoutManager);
                         recyclerView.setAdapter(adapter);
 
@@ -203,6 +176,34 @@ public class TaskListActivity extends MainActivity {
 
     public static String SendUserId() {
         return employeeId;
+    }
+
+    /**
+     * Obtains the name of the task list user either from info passed by the NewHireListActivity
+     * or from the User object itself. Depending on the user's type, the name displayed is either
+     * their own (if user is employee) or the employee from the new hire list (if user is manager)
+     * @author Joseph Sayler
+     * @param user object containing JSON info about a user
+     * @return string containing first and last name from user object
+     */
+    private String getUserName(User user) {
+        String usrName = "";
+        // check if current user type is manager
+        if (user.getType().equals("manager")) {
+            //check for a passed in bundle of userID/name and set it if it exists
+            if (getIntent().hasExtra("userID")) {
+                Bundle bundle = getIntent().getExtras();
+                usrName = bundle.getString("name");
+            }
+            // else tell the user that something got weird in the UI
+            else {
+                usrName = "Employee Name Not Included in the Bundle";
+            }
+            // if not manager, use the first/last name from user object
+        } else if (user.getType().equals("employee")) {
+            usrName = user.getFirstName() + " " + user.getLastName();
+        }
+        return usrName;
     }
 
 }
