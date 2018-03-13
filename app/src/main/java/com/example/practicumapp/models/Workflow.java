@@ -11,6 +11,16 @@ public class Workflow {
      * Constructor
      * @param id Unique id of the workflow
      * @param name Display name of the workflow
+     */
+    public Workflow (String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    /**
+     * Constructor
+     * @param id Unique id of the workflow
+     * @param name Display name of the workflow
      * @param description Description of the workflow
      * @param tasks ArrayList of task objects for the workflow
      */

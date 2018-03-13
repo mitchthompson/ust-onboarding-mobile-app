@@ -81,7 +81,7 @@ public class MyVolleySingleton {
      * @param callback Interface callback
      * @exception VolleyError on volley error
      */
-    public void sendGETRequest(int requestMethod, String url, JSONObject jsonObject, final HashMap<String, String> parameters, final VolleyResponseListener callback) {
+    public void sendObjectRequest(final String accessToken, int requestMethod, String url, JSONObject jsonObject, final HashMap<String, String> parameters, final VolleyResponseListener callback) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (requestMethod, url, jsonObject, new Response.Listener<JSONObject>() {
                         @Override
@@ -92,7 +92,7 @@ public class MyVolleySingleton {
                         @Override
                         public void onErrorResponse(VolleyError error) {
     //                        TODO Handle volley error
-                            Log.d("MyVolleySingleton", "Error : " + error.toString());
+                            Log.d("MyVolleySingleton", "Object Error : " + error.toString());
                         }
                 })
                 {
@@ -110,9 +110,10 @@ public class MyVolleySingleton {
                     @Override
                     public Map<String, String> getHeaders() throws AuthFailureError {
 //                      TODO Add headers
-//                        HashMap<String, String> headers = new HashMap<String, String>();
-//                        headers.put("TOKEN", "99KI9Gj68CgCf70deM22Ka64chef2C40Gm2lFJ2J0G9JkDaaDAcbFfd19MfacGf3FFm8CM1hG0eDiIk8");
-                        return super.getHeaders();
+                        HashMap<String, String> headers = new HashMap<String, String>();
+                        headers.put("Ocp-Apim-Subscription-Key", "725634f731424f9faf8efe31aab443ed");
+                        headers.put("Authorization", accessToken);
+                        return headers;
                     }
                 };
         this.addToRequestQueue(jsonObjectRequest);
@@ -124,7 +125,7 @@ public class MyVolleySingleton {
      * @param callback Interface callback
      * @exception JSONException on volley error
      */
-    public void sendVolleyRequest(String url, final VolleyResponseListener callback) {
+    public void sendArrayRequest(final String accessToken, String url, final VolleyResponseListener callback) {
         JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -140,9 +141,18 @@ public class MyVolleySingleton {
             @Override
             public void onErrorResponse(VolleyError error) {
 //              TODO Handle volley error
-                Log.d("MyVolleySingleton", "Error : " + error.toString());
+                Log.d("MyVolleySingleton", "Array Error : " + error.toString());
             }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+//                      TODO Add headers
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Ocp-Apim-Subscription-Key", "725634f731424f9faf8efe31aab443ed");
+                headers.put("Authorization", accessToken);
+                return headers;
+            }
+        };
         this.addToRequestQueue(jsonObjectRequest);
     }
 

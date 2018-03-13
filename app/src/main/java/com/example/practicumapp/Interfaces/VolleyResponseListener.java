@@ -2,7 +2,7 @@ package com.example.practicumapp.Interfaces;
 
 import org.json.JSONObject;
 
-/*
+/**
  * Generic Volley callback interface
  * This interface allows callback after any volley request is successful
  */

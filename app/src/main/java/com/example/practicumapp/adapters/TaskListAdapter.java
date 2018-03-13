@@ -37,9 +37,10 @@ public class TaskListAdapter extends ExpandableRecyclerViewAdapter<TaskListItemV
     private ArrayList<TaskListItem> taskListItems = new ArrayList<>();
     private HashMap<String, TaskListItem> taskCheckedMap;
     private VolleyParser adapterVolleyParser;
+    private String accessToken;
 
 
-    public TaskListAdapter(List<? extends ExpandableGroup> groups) {
+    public TaskListAdapter(List<? extends ExpandableGroup> groups, String accessToken) {
         super(groups);
 
         // assign the HashMap
@@ -54,6 +55,7 @@ public class TaskListAdapter extends ExpandableRecyclerViewAdapter<TaskListItemV
             //}
 
         }
+        this.accessToken = accessToken;
     }
 
     @Override
@@ -95,7 +97,8 @@ public class TaskListAdapter extends ExpandableRecyclerViewAdapter<TaskListItemV
             holder.checkBox.setChecked(true);
         }
 
-        adapterVolleyParser = new VolleyParser(context);
+        holder.checkBox.setChecked(myItem.isChecked());
+        adapterVolleyParser = new VolleyParser(context, accessToken);
 
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

@@ -1,6 +1,6 @@
 package com.example.practicumapp.Interfaces;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 /**
  * Workflows list Volley Response callback interface
@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public interface VolleyListResponseListener {
 
-    void onSuccess(HashMap<String, String> list); // Called after list list json response is received successfully
+    void onSuccess(ArrayList list); // Called after list list json response is received successfully
 
     //    TODO Handle onError as well (if needed)
 

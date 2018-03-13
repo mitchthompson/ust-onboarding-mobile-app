@@ -5,13 +5,14 @@ import java.util.HashMap;
 
 public class User {
 
-    private String id, firstName, lastName, email, phone, type, startDate, workflow;
+    private String id, activeDirectoryID, firstName, lastName, email, phone, type, startDate, workflow;
     private ArrayList tasks;
     private HashMap employees;
 
     /**
      * Constructor
      * @param id User id
+     * @param activeDirectoryID User's Active Directory id
      * @param firstName User's first name
      * @param lastName User's last name
      * @param email User's email
@@ -22,8 +23,9 @@ public class User {
      * @param workflow Workflow id assigned to the user
      * @param tasks An array of task IDs user has completed
      */
-    public User(String id, String firstName, String lastName, String email, String phone, String type, String startDate, HashMap employees, String workflow, ArrayList tasks) {
+    public User(String id, String activeDirectoryID, String firstName, String lastName, String email, String phone, String type, String startDate, HashMap employees, String workflow, ArrayList tasks) {
         this.id = id;
+        this.activeDirectoryID = activeDirectoryID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -81,6 +83,13 @@ public class User {
      */
     public String getId() {
         return id;
+    }
+
+    /**
+     * @return User's id
+     */
+    public String getActiveDirectoryID() {
+        return activeDirectoryID;
     }
 
     /**
