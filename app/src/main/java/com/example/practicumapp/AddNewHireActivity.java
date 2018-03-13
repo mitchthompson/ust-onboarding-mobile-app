@@ -275,11 +275,16 @@ public class AddNewHireActivity extends AppCompatActivity {
             return;
         }
 
+        //test Active directory ID data
+        //TODO: remove test AD data when API implements solution
+        String adEmployeeID = "test-id-demo201";
+        String adManagerID = "test-id-demo4";
+
         Log.d(TAG, "Name : " + inputFirstName + inputLastName + " , email: " +inputEmail + " , phone: " + inputPhone
                 + " , type: " +inputType + " , hire date: " + inputDate + " , workflow: " +inputWorkflow);
 
         //create User object
-        newUser = new User(inputFirstName, inputLastName, inputEmail, inputPhone, inputType, inputDate, inputWorkflow);
+        newUser = new User(adEmployeeID, inputFirstName, inputLastName, inputEmail, inputPhone, inputType, adManagerID, inputDate, inputWorkflow);
 
         //Retrieve access token from shared preferences
         SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", MODE_PRIVATE);
