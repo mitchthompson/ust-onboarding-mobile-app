@@ -5,12 +5,12 @@ import java.util.HashMap;
 
 public class User {
 
-    private String id, activeDirectoryID, firstName, lastName, email, phone, type, startDate, workflow;
+    private String id, activeDirectoryID, firstName, lastName, email, phone, type, startDate, workflow, manager;
     private ArrayList tasks;
     private HashMap employees;
 
     /**
-     * Constructor
+     * Constructor for a manager
      * @param id User id
      * @param activeDirectoryID User's Active Directory id
      * @param firstName User's first name
@@ -38,21 +38,54 @@ public class User {
     }
 
     /**
-     * Constructor to use when creating a new user object to send to the API
+     * Constructor for an employee
+     * @param id User id
+     * @param activeDirectoryID User's Active Directory id
      * @param firstName User's first name
      * @param lastName User's last name
      * @param email User's email
      * @param phone User's phone number
      * @param type User's type can be one of the following - "employee" or "manager"
+     * @param managerID User's manager AD id
      * @param startDate User's date of employment
      * @param workflow Workflow id assigned to the user
+     * @param tasks An array of task IDs user has completed
      */
-    public User(String firstName, String lastName, String email, String phone, String type, String startDate, String workflow) {
+    public User(String id, String activeDirectoryID, String firstName, String lastName, String email, String phone, String type, String managerID, String startDate, String workflow, ArrayList tasks) {
+        this.id = id;
+        this.activeDirectoryID = activeDirectoryID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phone = phone;
         this.type = type;
+        this.startDate = startDate;
+        this.manager = managerID;
+        this.workflow = workflow;
+        this.tasks = tasks;
+    }
+
+    /**
+     * Constructor to use when creating a new user object to send to the API
+     * @param activeDirectoryID User's AD id
+     * @param firstName User's first name
+     * @param lastName User's last name
+     * @param email User's email
+     * @param phone User's phone number
+     * @param type User's type can be one of the following - "employee" or "manager"
+     * @param manager User's manager AD id
+     * @param startDate User's date of employment
+     * @param workflow Workflow id assigned to the user
+     */
+    public User(String activeDirectoryID, String firstName, String lastName, String email, String phone, String type, String manager, String startDate, String workflow) {
+//      TODO Remove AD id after API team implements a solution
+        this.activeDirectoryID = activeDirectoryID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phone = phone;
+        this.type = type;
+        this.manager = manager;
         this.startDate = startDate;
         this.workflow = workflow;
     }
@@ -125,6 +158,13 @@ public class User {
      */
     public String getType() {
         return type;
+    }
+
+    /**
+     * @return User's Manager
+     */
+    public String getManager() {
+        return manager;
     }
 
     /**
