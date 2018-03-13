@@ -52,14 +52,14 @@ public class TaskListActivity extends MainActivity {
     private String workflowId;
     private ArrayList completedTasks;
     private static float countComplete;
-    private float countTotal;
+    private static float countTotal;
     private int percentageComplete;
 
     private ExpandableGroup<TaskListItem> expandableTaskList;
 
     private VolleyParser volleyParser;
 
-    TextView completedPercentageTextView;
+    static TextView completedPercentageTextView;
 
 
     @Override
@@ -142,7 +142,8 @@ public class TaskListActivity extends MainActivity {
                         simpleProgressBar.setProgress(0);
                         countComplete = 0;
                         int completedPercentage = (int) (countComplete / countTotal) * 100;
-                        completedPercentageTextView.setText(completedPercentage);
+                        String completedPercentageText = "Complete: " + completedPercentage + "%" ;
+                        completedPercentageTextView.setText(completedPercentageText);
 
                         // taskListItems ArrayList is needed to feed to the RecyclerView
                         ArrayList<TaskListItem> taskListItems = new ArrayList<>();
@@ -208,6 +209,10 @@ public class TaskListActivity extends MainActivity {
         // let the built in increment method do the work. Also works on a negative increment.
         simpleProgressBar.incrementProgressBy(increment);
         countComplete = countComplete + increment;
+        float completedPercentageDecimal = (countComplete / countTotal) * 100;
+        int completedPercentageInt = (int) completedPercentageDecimal;
+        String completedPercentageText = "Complete: " + completedPercentageInt + "%" ;
+        completedPercentageTextView.setText(completedPercentageText);
 
     }
 
