@@ -1,6 +1,7 @@
 package com.example.practicumapp.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -28,16 +30,30 @@ import java.util.List;
  */
 public class TaskListAdapter extends ExpandableRecyclerViewAdapter<TaskListItemViewHolder, TaskDescriptionListItemViewHolder> {
 
+    // declare local variables
+    private static final String TAG = TaskListAdapter.class.getName(); // Constant for logging data
+
     Context context;
     private ArrayList<TaskListItem> taskListItems = new ArrayList<>();
+    private HashMap<String, TaskListItem> taskCheckedMap;
     private VolleyParser adapterVolleyParser;
     private String accessToken;
 
 
     public TaskListAdapter(List<? extends ExpandableGroup> groups, String accessToken) {
         super(groups);
+
+        // assign the HashMap
+        taskCheckedMap = new HashMap<>();
         for(int i = 0; i < groups.size(); i++) {
-            taskListItems.add((TaskListItem) groups.get(i));
+            //taskListItems.add((TaskListItem) groups.get(i));
+            taskCheckedMap.put(((TaskListItem) groups.get(i)).getTitle(), (TaskListItem) groups.get(i));
+            Log.d(TAG, " assigning this Task item in the TaskListAdapter Constructor, by returning name here: " +  (groups.get(i)).getTitle());
+            Log.d(TAG, " assigning this Task item in the TaskListAdapter Constructor, by returning id here: " +  ((TaskListItem) groups.get(i)).getTaskID());
+            //if(((TaskListItem) groups.get(i)).isChecked()) {
+            //    taskCheckedMap.put(((TaskListItem) groups.get(i)).getTaskName(), (TaskListItem) groups.get(i));
+            //}
+
         }
         this.accessToken = accessToken;
     }
@@ -64,31 +80,40 @@ public class TaskListAdapter extends ExpandableRecyclerViewAdapter<TaskListItemV
 
     @Override
     public void onBindGroupViewHolder(final TaskListItemViewHolder holder, int flatPosition, final ExpandableGroup group) {
-        final TaskListItem myItem = taskListItems.get(flatPosition);
+
+        final String thisTaskTitle = group.getTitle();
+        Log.d(TAG, " assigning this Task title: " + thisTaskTitle);
+
+        final TaskListItem myItem = taskCheckedMap.get("" + thisTaskTitle);
+        Log.d(TAG, " assigning this Task item, by returning id here: " + myItem.getTaskID());
+
         holder.setTaskName(group);
 
         //in some cases, it will prevent unwanted situations
         holder.checkBox.setOnCheckedChangeListener(null);
 
         //if true, checkbox will be selected, else unselected
+        if( myItem.isChecked()) {
+            holder.checkBox.setChecked(true);
+        }
+
         holder.checkBox.setChecked(myItem.isChecked());
         adapterVolleyParser = new VolleyParser(context, accessToken);
-
 
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                //set the state to the changed value
+                // set the state to the changed value
                 myItem.setChecked(b);
 
                 //increment Progress bar and send data to the API
-                if(myItem.isChecked()) {
-                    TaskListActivity.ProgressBarIncrement(1);
-                    //adapterVolleyParser.markTaskAsCompleted(TaskListActivity.SendUserId(), myItem.getTaskID());
+                if(holder.checkBox.isChecked()) {
+                    TaskListActivity.IncrementCompletedTasks(1);
+                    adapterVolleyParser.markTaskAsCompleted(TaskListActivity.SendUserId(), myItem.getTaskID());
                 }
                 else {
-                    TaskListActivity.ProgressBarIncrement(-1);
-                    //adapterVolleyParser.markTaskAsIncomplete(TaskListActivity.SendUserId(), myItem.getTaskID());
+                    TaskListActivity.IncrementCompletedTasks(-1);
+                    adapterVolleyParser.markTaskAsInComplete(TaskListActivity.SendUserId(), myItem.getTaskID());
                 }
             }
         });
