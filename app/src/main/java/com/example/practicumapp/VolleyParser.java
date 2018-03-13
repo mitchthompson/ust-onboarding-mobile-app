@@ -28,6 +28,7 @@ public class VolleyParser {
 
     private Context context; // Application Context
     private String accessToken;
+    private static final String TAG = "VolleyParser";
     private static final String API_ADDRESS = "http://nsc420winter2018practicum.azure-api.net/dev/"; // URL to retrieve JSON data
 
     /**
@@ -37,7 +38,6 @@ public class VolleyParser {
     public VolleyParser(Context context, String accessToken) {
         this.context = context;
         this.accessToken = accessToken;
-        Log.d("VolleyParser", "Access token : " + accessToken);
     }
 
     /**
@@ -47,19 +47,22 @@ public class VolleyParser {
     public void addUser(final User user, final VolleyUserResponseListener volleyUserResponseListener) {
         String urlWithParams = API_ADDRESS + "user/";
         HashMap<String, String> parameters = new HashMap<>();
-        parameters.put("FirstName", user.getFirstName());
-        parameters.put("LastName", user.getLastName());
-        parameters.put("Email", user.getEmail());
-        parameters.put("Phone", user.getPhone());
+        parameters.put("ActiveDirectoryId", user.getActiveDirectoryID());
+        parameters.put("firstName", user.getFirstName());
+        parameters.put("lastName", user.getLastName());
+        parameters.put("email", user.getEmail());
+        parameters.put("phone", user.getPhone());
+        parameters.put("type", user.getType());
+        if (user.getType().equals("employee")) {
+            parameters.put("manager", user.getManager());
+        }
         parameters.put("StartDate", user.getStartDate());
         parameters.put("Workflow", user.getWorkflow());
-
         MyVolleySingleton.getInstance(context)
                 .sendObjectRequest(accessToken, Request.Method.POST, urlWithParams, null, parameters, new VolleyResponseListener() {
                     @Override
                     public void onSuccess(JSONObject response) {
-//                      TODO Return newly created user id
-                        Log.d("VolleyParser", "User ID : " + response.toString());
+                        Log.d(TAG, "User Added Successfully");
                         volleyUserResponseListener.onSuccess(user);
                     }
                 });
@@ -141,10 +144,8 @@ public class VolleyParser {
                 .sendObjectRequest(accessToken, Request.Method.POST, urlWithParams, null, parameters, new VolleyResponseListener() {
                     @Override
                     public void onSuccess(JSONObject response) {
-//                      TODO Return newly created workflow id
-                        workflow.setID("f1f183b8169e11e8b6420ed5f89f718b");
                         volleyWorkflowResponseListener.onSuccess(workflow);
-                        Log.d("VolleyParser", "Workflow ID : " + response.toString());
+                        Log.d(TAG, "Workflow Added Successfully");
                     }
                 });
     }
@@ -184,7 +185,6 @@ public class VolleyParser {
                                 Task singleTask = new Task(taskID, taskName, taskDescriptions, viewers);
                                 tasks.add(singleTask);
                             }
-//                            TODO Remove getSampleTasks method with tasks
                             Workflow workflow = new Workflow(id, name, description, tasks);
                             volleyWorkflowResponseListener.onSuccess(workflow);
                         } catch (JSONException e) {
@@ -247,7 +247,7 @@ public class VolleyParser {
             @Override
             public void onSuccess(User user) {
                 user.markTaskAsCompleted(taskID);
-                Log.d("VolleyParser", "Updated user info : " + user.getTasks().toString());
+                Log.d(TAG, "Updated user info : " + user.getTasks().toString());
                 updateUser(userID, user);
             }
         });
@@ -263,7 +263,7 @@ public class VolleyParser {
             @Override
             public void onSuccess(User user) {
                 user.markTaskAsIncomplete(taskID);
-                Log.d("VolleyParser", "Updated user info : " + user.getTasks().toString());
+                Log.d(TAG, "Updated user info : " + user.getTasks().toString());
                 updateUser(userID, user);
             }
         });
@@ -276,6 +276,9 @@ public class VolleyParser {
      */
     public User getUserObject(JSONObject object) {
         try {
+            JSONObject employeesObject = new JSONObject();
+            JSONArray tasksObject = new JSONArray();
+            String managerID = "";
             String id = object.getString("id");
             String activeDirectoryID = object.getString("ActiveDirectoryId");
             String firstName = object.getString("firstName");
@@ -283,10 +286,17 @@ public class VolleyParser {
             String email = object.getString("email");
             String phone = object.getString("phone");
             String type = object.getString("type");
+            if (type.equals("employee") && !object.isNull("manager")) {
+                managerID = object.getString("manager");
+            }
             String startDate = object.getString("StartDate");
             String workflow = object.getString("Workflow");
-            JSONObject employeesObject = object.getJSONObject("employees");
-            JSONArray tasksObject = object.getJSONArray("Tasks");
+            if (!object.isNull("employees") && type.equals("manager") ) {
+                employeesObject = object.getJSONObject("employees");
+            }
+            if (!object.isNull("Tasks") ) {
+                tasksObject = object.getJSONArray("Tasks");
+            }
             HashMap<String, String> employees = new HashMap<String, String>();
             ArrayList<String> tasks = new ArrayList<>();
             for (int i = 0; i < employeesObject.length(); i++) {
@@ -295,7 +305,11 @@ public class VolleyParser {
             for (int i = 0; i < tasksObject.length(); i++) {
                 tasks.add(tasksObject.get(i).toString());
             }
-            return new User(id, activeDirectoryID, firstName, lastName, email, phone, type, startDate, employees, workflow, tasks);
+            if (type.equals("employee")) {
+                return new User(id, activeDirectoryID, firstName, lastName, email, phone, type, managerID, startDate, workflow, tasks);
+            } else {
+                return new User(id, activeDirectoryID, firstName, lastName, email, phone, type, startDate, employees, workflow, tasks);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
