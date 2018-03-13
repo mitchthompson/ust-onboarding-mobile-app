@@ -29,7 +29,6 @@ import com.example.practicumapp.models.Workflow;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -54,6 +53,7 @@ public class AddNewHireActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener onDateSetListener;
     private EditText firstName, lastName, email, phone, date;
     private ArrayList workflowMap;
+    private User newUser;
 
 
     @Override
@@ -276,7 +276,7 @@ public class AddNewHireActivity extends AppCompatActivity {
         }
 
         //create User object
-        User newUser = new User(inputFirstName, inputLastName, inputEmail, inputPhone, inputType, inputDate, inputWorkflow);
+        newUser = new User(inputFirstName, inputLastName, inputEmail, inputPhone, inputType, inputDate, inputWorkflow);
 
         //Retrieve access token from shared preferences
         SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", MODE_PRIVATE);
