@@ -275,6 +275,9 @@ public class AddNewHireActivity extends AppCompatActivity {
             return;
         }
 
+        Log.d(TAG, "Name : " + inputFirstName + inputLastName + " , email: " +inputEmail + " , phone: " + inputPhone
+                + " , type: " +inputType + " , hire date: " + inputDate + " , workflow: " +inputWorkflow);
+
         //create User object
         newUser = new User(inputFirstName, inputLastName, inputEmail, inputPhone, inputType, inputDate, inputWorkflow);
 
@@ -287,7 +290,7 @@ public class AddNewHireActivity extends AppCompatActivity {
         volleyParser.addUser(newUser, new VolleyUserResponseListener(){
             @Override
             public void onSuccess(User user) {
-                Log.d("Add New Hire", "User ID : " + user.getId());
+                Log.d(TAG, "User ID : " + user.getId());
                 startActivity(new Intent(AddNewHireActivity.this, NewHireListActivity.class));
             }
         });
