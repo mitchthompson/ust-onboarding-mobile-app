@@ -1,6 +1,5 @@
 package com.example.practicumapp;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.ActionMenuView;
@@ -51,13 +50,15 @@ public class TaskListActivity extends MainActivity {
     private String userType = "";
     private String workflowId;
     private ArrayList completedTasks;
-    private float countComplete;
+    private static float countComplete;
     private float countTotal;
     private int percentageComplete;
 
     private ExpandableGroup<TaskListItem> expandableTaskList;
 
     private VolleyParser volleyParser;
+
+    TextView completedPercentageTextView;
 
 
     @Override
@@ -68,7 +69,7 @@ public class TaskListActivity extends MainActivity {
         // Go and grab all our UI Elements from the layouts
         TextView employeeNameTextView = (TextView)findViewById(R.id.EmployeeName);
         //TextView employeeIdTextView = (TextView)findViewById(R.id.EmployeeID);
-        final TextView completedPercentageTextView = (TextView) findViewById(R.id.task_completion_percentage);
+        completedPercentageTextView = (TextView) findViewById(R.id.task_completion_percentage);
         Toolbar myToolbar = findViewById(R.id.main_toolbar);
         ActionMenuView progressActionMenu = (ActionMenuView) findViewById(R.id.progress_toolbar);
         simpleProgressBar = (ProgressBar) findViewById(R.id.task_progressBar);
@@ -145,7 +146,8 @@ public class TaskListActivity extends MainActivity {
                         // set progress to 0 initially
                         simpleProgressBar.setProgress(0);
                         countComplete = 0;
-                        // completedPercentageTextView.setText( (int) (countComplete / countTotal) * 100);
+                        int completedPercentage = (int) (countComplete / countTotal) * 100;
+                        completedPercentageTextView.setText(completedPercentage);
 
                         // taskListItems ArrayList is needed to feed to the RecyclerView
                         ArrayList<TaskListItem> taskListItems = new ArrayList<>();
@@ -169,9 +171,9 @@ public class TaskListActivity extends MainActivity {
                             // Check if this taskItem has been completed.
                             if(completedTasks.contains(taskId)) {
                                 taskListItemToAdd.setChecked(true);
-                                ProgressBarIncrement(1);
+                                IncrementCompletedTasks(1);
                                 countComplete++;
-                                // completedPercentageTextView.setText( (int) (countComplete / countTotal) * 100);
+                                completedPercentageTextView.setText( (int) (countComplete / countTotal) * 100);
 
                             }
                             taskListItems.add(taskListItemToAdd);
@@ -193,7 +195,7 @@ public class TaskListActivity extends MainActivity {
     /**
      * Helper method to calculate and redraw the progress bar whenever a checkbox is checked
      */
-    public static void ProgressBarIncrement(int increment) {
+    public static void IncrementCompletedTasks(int increment) {
 
         /* I might need this code later
         //int maxValue=simpleProgressBar.getMax(); // get maximum value of the progress bar
@@ -203,6 +205,7 @@ public class TaskListActivity extends MainActivity {
 
         // let the built in increment method do the work. Also works on a negative increment.
         simpleProgressBar.incrementProgressBy(increment);
+        countComplete = countComplete + increment;
 
     }
 

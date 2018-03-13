@@ -105,11 +105,11 @@ public class TaskListAdapter extends ExpandableRecyclerViewAdapter<TaskListItemV
 
                 //increment Progress bar and send data to the API
                 if(holder.checkBox.isChecked()) {
-                    TaskListActivity.ProgressBarIncrement(1);
-                     adapterVolleyParser.markTaskAsCompleted(TaskListActivity.SendUserId(), myItem.getTaskID());
+                    TaskListActivity.IncrementCompletedTasks(1);
+                    adapterVolleyParser.markTaskAsCompleted(TaskListActivity.SendUserId(), myItem.getTaskID());
                 }
                 else {
-                    TaskListActivity.ProgressBarIncrement(-1);
+                    TaskListActivity.IncrementCompletedTasks(-1);
                     adapterVolleyParser.markTaskAsInComplete(TaskListActivity.SendUserId(), myItem.getTaskID());
                 }
             }
