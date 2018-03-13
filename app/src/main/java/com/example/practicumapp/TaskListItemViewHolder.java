@@ -2,7 +2,6 @@ package com.example.practicumapp;
 
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
@@ -17,30 +16,23 @@ public class TaskListItemViewHolder extends GroupViewHolder {
     public CheckBox checkBox;
     private TextView taskName;
 
-
     public TaskListItemViewHolder(View itemView) {
         super(itemView);
         checkBox = (CheckBox) itemView.findViewById(R.id.task_checkbox);
         taskName = (TextView) itemView.findViewById(R.id.task_name);
-
-        checkBox.setOnCheckedChangeListener(null);
-
-        checkBox.setChecked(checkBox.isSelected());
-
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(checkBox.isChecked()) {
-                    TaskListActivity.ProgressBarIncrement(1);
-                }
-                else {
-                    TaskListActivity.ProgressBarIncrement(-1);
-                }
-            }
-        });
     }
 
     public void setTaskName(ExpandableGroup taskListItem) {
         taskName.setText(taskListItem.getTitle());
     }
+/* TODO: DO I need these?
+    public TextView getTaskName() {
+        return taskName;
+    }
+
+    public void setCheckBox(CheckBox checkBox) {
+        this.checkBox = checkBox;
+    }
+*/
+
 }

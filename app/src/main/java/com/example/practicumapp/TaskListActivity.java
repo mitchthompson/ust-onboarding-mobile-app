@@ -1,5 +1,6 @@
 package com.example.practicumapp;
 
+import android.graphics.Color;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.ActionMenuView;
@@ -50,10 +51,15 @@ public class TaskListActivity extends MainActivity {
     private String userType = "";
     private String workflowId;
     private ArrayList completedTasks;
+    private static float countComplete;
+    private static float countTotal;
+    private int percentageComplete;
 
     private ExpandableGroup<TaskListItem> expandableTaskList;
 
     private VolleyParser volleyParser;
+
+    static TextView completedPercentageTextView;
 
 
     @Override
@@ -62,12 +68,20 @@ public class TaskListActivity extends MainActivity {
         setContentView(R.layout.activity_task_list);
 
         // Go and grab all our UI Elements from the layouts
+        TextView employeeNameTextView = (TextView)findViewById(R.id.EmployeeName);
+        //TextView employeeIdTextView = (TextView)findViewById(R.id.EmployeeID);
+        completedPercentageTextView = (TextView) findViewById(R.id.task_completion_percentage);
         Toolbar myToolbar = findViewById(R.id.main_toolbar);
         ActionMenuView progressActionMenu = (ActionMenuView) findViewById(R.id.progress_toolbar);
         simpleProgressBar = (ProgressBar) findViewById(R.id.task_progressBar);
 
         //set height for progress bar
         simpleProgressBar.setScaleY(3f);
+
+        // set color programmatically
+        simpleProgressBar.getProgressDrawable().setColorFilter(
+                Color.BLUE, android.graphics.PorterDuff.Mode.SRC_IN);
+
         recyclerView = (RecyclerView) findViewById(R.id.task_list_recycler);
 
         // set layout manager for Recycler View
@@ -123,8 +137,13 @@ public class TaskListActivity extends MainActivity {
 
                         // progress bar size depends on the size of the tasklist.
                         simpleProgressBar.setMax(taskList.size());
+                        countTotal = taskList.size();
                         // set progress to 0 initially
                         simpleProgressBar.setProgress(0);
+                        countComplete = 0;
+                        int completedPercentage = (int) (countComplete / countTotal) * 100;
+                        String completedPercentageText = "Complete: " + completedPercentage + "%" ;
+                        completedPercentageTextView.setText(completedPercentageText);
 
                         // taskListItems ArrayList is needed to feed to the RecyclerView
                         ArrayList<TaskListItem> taskListItems = new ArrayList<>();
@@ -155,7 +174,10 @@ public class TaskListActivity extends MainActivity {
                             // Check if this taskItem has been completed.
                             if(completedTasks.contains(taskId)) {
                                 taskListItemToAdd.setChecked(true);
-                                ProgressBarIncrement(1);
+                                IncrementCompletedTasks(1);
+                                countComplete++;
+                                completedPercentageTextView.setText( (int) (countComplete / countTotal) * 100);
+
                             }
                             taskListItems.add(taskListItemToAdd);
                         }
@@ -176,7 +198,7 @@ public class TaskListActivity extends MainActivity {
     /**
      * Helper method to calculate and redraw the progress bar whenever a checkbox is checked
      */
-    public static void ProgressBarIncrement(int increment) {
+    public static void IncrementCompletedTasks(int increment) {
 
         /* I might need this code later
         //int maxValue=simpleProgressBar.getMax(); // get maximum value of the progress bar
@@ -186,6 +208,12 @@ public class TaskListActivity extends MainActivity {
 
         // let the built in increment method do the work. Also works on a negative increment.
         simpleProgressBar.incrementProgressBy(increment);
+        countComplete = countComplete + increment;
+        float completedPercentageDecimal = (countComplete / countTotal) * 100;
+        int completedPercentageInt = (int) completedPercentageDecimal;
+        String completedPercentageText = "Complete: " + completedPercentageInt + "%" ;
+        completedPercentageTextView.setText(completedPercentageText);
+
     }
 
     public static String SendUserId() {
