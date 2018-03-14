@@ -50,32 +50,44 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_below="@id/employee_toolbar"
-        android:background="?attr/colorPrimary"
+        android:background="@android:color/white"
         android:elevation="4dp">
 
         <ProgressBar
             android:id="@+id/task_progressBar"
             style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
+            android:layout_width="217dp"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_weight="1"
             android:max="100"
-            android:maxHeight="35dip"
+            android:maxHeight="65dip"
             android:maxWidth="200dip"
             android:minHeight="35dip"
             android:minWidth="200dip"
+            android:scaleY="2"
             android:progress="50" />
+
+        <TextView
+            android:id="@+id/task_completion_percentage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="no data created from API" />
+
     </android.support.v7.widget.ActionMenuView>
 
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/task_list_recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/progress_toolbar"
         android:scrollbars="vertical"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         tools:listitem="@layout/task_items" />
 
 

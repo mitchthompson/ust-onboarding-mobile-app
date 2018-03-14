@@ -40,7 +40,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/myToolbar"
-        app:srcCompat="@drawable/ust_logo"
+        app:srcCompat="@drawable/ust_global_logo"
         tools:ignore="HardcodedText" />
 
     <Button

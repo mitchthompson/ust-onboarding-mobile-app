@@ -1,6 +1,7 @@
 package com.example.practicumapp;
 
-import android.content.Intent;
+import android.graphics.Color;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,7 +32,7 @@ import java.util.HashMap;
 
 public class TaskListActivity extends MainActivity {
     //TAG for logging
-    private static final String TAG = TaskListActivity.class.getName(); // Constant for logging data
+    private static final String TAG = "TaskListActivity"; // Constant for logging data
 
     //Adapter is the only one that the expanding recycler folks declared outside of their OnCreate
     private TaskListAdapter adapter;
@@ -45,15 +46,20 @@ public class TaskListActivity extends MainActivity {
     // taskList is the list of Tasks from the workflow
     private ArrayList taskList;
 
-    public static String employeeId = "72AD9DBC60AE485782D43A1AE09279A4";
+    public static String employeeId = "test-id-demo4";
     private String employeeName = "";
     private String userType = "";
     private String workflowId;
     private ArrayList completedTasks;
+    private static float countComplete;
+    private static float countTotal;
+    private int percentageComplete;
 
     private ExpandableGroup<TaskListItem> expandableTaskList;
 
     private VolleyParser volleyParser;
+
+    static TextView completedPercentageTextView;
 
 
     @Override
@@ -64,9 +70,18 @@ public class TaskListActivity extends MainActivity {
         // Go and grab all our UI Elements from the layouts
         TextView employeeNameTextView = (TextView)findViewById(R.id.EmployeeName);
         //TextView employeeIdTextView = (TextView)findViewById(R.id.EmployeeID);
+        completedPercentageTextView = (TextView) findViewById(R.id.task_completion_percentage);
         Toolbar myToolbar = findViewById(R.id.main_toolbar);
         ActionMenuView progressActionMenu = (ActionMenuView) findViewById(R.id.progress_toolbar);
         simpleProgressBar = (ProgressBar) findViewById(R.id.task_progressBar);
+
+        //set height for progress bar
+        simpleProgressBar.setScaleY(3f);
+
+        // set color programmatically
+        simpleProgressBar.getProgressDrawable().setColorFilter(
+                Color.BLUE, android.graphics.PorterDuff.Mode.SRC_IN);
+
         recyclerView = (RecyclerView) findViewById(R.id.task_list_recycler);
 
         // set layout manager for Recycler View
@@ -77,31 +92,25 @@ public class TaskListActivity extends MainActivity {
         // enables back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //check for a passed in bundle of userID/name and set it if it exists
-        if(getIntent().hasExtra("userID")) {
-            Bundle bundle = getIntent().getExtras();
-            employeeId = bundle.getString("userID");
-            employeeName = bundle.getString("name");
-        }
+        //Retrieve access token from shared preferences
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", MODE_PRIVATE);
+        final String accessToken = sharedPreferences.getString("AccessToken", "");
 
-        // else tell the user that something got weird in the UI
-        else {
-            employeeName = "Employee Name Not Included in the Bundle";
-        }
-
-        employeeNameTextView.setText(employeeName);
-        //employeeIdTextView.setText(employeeId);
-
-        volleyParser = new VolleyParser(this.getApplicationContext());
+        volleyParser = new VolleyParser(this.getApplicationContext(), accessToken);
 
         //Get the data we need from the User
         volleyParser.getUser(employeeId, new VolleyUserResponseListener() {
             @Override
             public void onSuccess(User user) {
                 // Get the workflow ID specific to the User!
-                workflowId = user.getWorkflow();
+//              TODO Remove hardcoded workflowid
+                workflowId = "CloudOffshoreExternal";
+//              workflowId = user.getWorkflow();
+                TextView employeeNameTextView = (TextView)findViewById(R.id.EmployeeName);
+                employeeName = getUserName(user);
+                employeeNameTextView.setText(employeeName);
 
-                // confirm receipt of something...
+                /* confirm receipt of something... */
                 Log.d(TAG, "TaskListActivity: User First Name : " + user.getFirstName());
                 Log.d(TAG, "TaskListActivity: User Type Returns : " + user.getType());
 
@@ -128,8 +137,13 @@ public class TaskListActivity extends MainActivity {
 
                         // progress bar size depends on the size of the tasklist.
                         simpleProgressBar.setMax(taskList.size());
+                        countTotal = taskList.size();
                         // set progress to 0 initially
                         simpleProgressBar.setProgress(0);
+                        countComplete = 0;
+                        int completedPercentage = (int) (countComplete / countTotal) * 100;
+                        String completedPercentageText = "Complete: " + completedPercentage + "%" ;
+                        completedPercentageTextView.setText(completedPercentageText);
 
                         // taskListItems ArrayList is needed to feed to the RecyclerView
                         ArrayList<TaskListItem> taskListItems = new ArrayList<>();
@@ -141,26 +155,36 @@ public class TaskListActivity extends MainActivity {
                             String taskName = task.getName();
                             HashMap<String, String> taskDescriptionMap = task.getDescriptions();
                             ArrayList<TaskDescriptionListItem> taskDescriptionListItems = new ArrayList<>();
-                            if(userType.equals("manager")) {
-                                taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("manager")));
-                            }
-                            if(userType.equals("employee")) {
+//                          TODO Remove sample if codes and uncomment if code below it
+                            if (taskDescriptionMap.get("employee") != null) {
                                 taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("employee")));
                             }
+                            if (taskDescriptionMap.get("manager") != null) {
+                                taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("manager")));
+                            }
+//                            if(userType.equals("manager")) {
+//                                taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("manager")));
+//                            }
+//                            if(userType.equals("employee")) {
+//                                taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("employee")));
+//                            }
                             TaskListItem taskListItemToAdd = new TaskListItem(taskName,taskDescriptionListItems);
                             taskListItemToAdd.setTaskID(taskId);
 
                             // Check if this taskItem has been completed.
                             if(completedTasks.contains(taskId)) {
                                 taskListItemToAdd.setChecked(true);
-                                ProgressBarIncrement(1);
+                                IncrementCompletedTasks(1);
+                                countComplete++;
+                                completedPercentageTextView.setText( (int) (countComplete / countTotal) * 100);
+
                             }
                             taskListItems.add(taskListItemToAdd);
                         }
 
                         // recyclerView gets kicked off in here, because we know we have data to display.
                         relativeLayout = (RelativeLayout) findViewById(R.id.activity_task_list);
-                        adapter = new TaskListAdapter(taskListItems);
+                        adapter = new TaskListAdapter(taskListItems, accessToken);
                         recyclerView.setLayoutManager(layoutManager);
                         recyclerView.setAdapter(adapter);
 
@@ -174,7 +198,7 @@ public class TaskListActivity extends MainActivity {
     /**
      * Helper method to calculate and redraw the progress bar whenever a checkbox is checked
      */
-    public static void ProgressBarIncrement(int increment) {
+    public static void IncrementCompletedTasks(int increment) {
 
         /* I might need this code later
         //int maxValue=simpleProgressBar.getMax(); // get maximum value of the progress bar
@@ -184,10 +208,44 @@ public class TaskListActivity extends MainActivity {
 
         // let the built in increment method do the work. Also works on a negative increment.
         simpleProgressBar.incrementProgressBy(increment);
+        countComplete = countComplete + increment;
+        float completedPercentageDecimal = (countComplete / countTotal) * 100;
+        int completedPercentageInt = (int) completedPercentageDecimal;
+        String completedPercentageText = "Complete: " + completedPercentageInt + "%" ;
+        completedPercentageTextView.setText(completedPercentageText);
+
     }
 
     public static String SendUserId() {
         return employeeId;
+    }
+
+    /**
+     * Obtains the name of the task list user either from info passed by the NewHireListActivity
+     * or from the User object itself. Depending on the user's type, the name displayed is either
+     * their own (if user is employee) or the employee from the new hire list (if user is manager)
+     * @author Joseph Sayler
+     * @param user object containing JSON info about a user
+     * @return string containing first and last name from user object
+     */
+    private String getUserName(User user) {
+        String usrName = "";
+        // check if current user type is manager
+        if (user.getType().equals("manager")) {
+            //check for a passed in bundle of userID/name and set it if it exists
+            if (getIntent().hasExtra("userID")) {
+                Bundle bundle = getIntent().getExtras();
+                usrName = bundle.getString("name");
+            }
+            // else tell the user that something got weird in the UI
+            else {
+                usrName = "Employee Name Not Included in the Bundle";
+            }
+            // if not manager, use the first/last name from user object
+        } else if (user.getType().equals("employee")) {
+            usrName = user.getFirstName() + " " + user.getLastName();
+        }
+        return usrName;
     }
 
 }
