@@ -156,11 +156,14 @@ public class MainActivity extends AppCompatActivity {
                 adalLogout();
                 break;
             case android.R.id.home:
-                if (this.getClass().getSimpleName().equals(TaskListActivity.class.getSimpleName())){
+                if (this.getClass().getSimpleName().equals(TaskListActivity.class.getSimpleName())
+                        && mResult.getUserInfo().getDisplayableId().equals(MANAGER)){
                     super.onBackPressed();
                     return true;
+                }else{
+                    NavUtils.navigateUpFromSameTask(this);
                 }
-
+                break;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
@@ -257,7 +260,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy(){
         super.onDestroy();
-        clearLogin();
-        finish();
+        if (this.getClass().getSimpleName().equals(MainActivity.class.getSimpleName())){
+            clearLogin();
+            Log.d(TAG, "Login cleared!");
+        }
     }
 }
