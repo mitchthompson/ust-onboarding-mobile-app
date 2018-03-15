@@ -216,7 +216,7 @@ public class AddNewHireActivity extends AppCompatActivity {
         //TODO: see if date picker EditText view can be cast to string in this way
         String inputDate = date.getText().toString().trim();
         String inputWorkflow = String.valueOf(workflow.getSelectedItem());
-        String inputType = String.valueOf(employeeType.getSelectedItem());
+        String inputType = String.valueOf(employeeType.getSelectedItem()).toLowerCase();
 
         // Form validation for all fields
         if(TextUtils.isEmpty(inputFirstName)){
@@ -277,7 +277,7 @@ public class AddNewHireActivity extends AppCompatActivity {
 
         //test Active directory ID data
         //TODO: remove test AD data when API implements solution
-        String adEmployeeID = "test-id-demo201";
+        String adEmployeeID = "test-id-demo217";
         String adManagerID = "test-id-demo4";
 
         Log.d(TAG, "Name : " + inputFirstName + inputLastName + " , email: " +inputEmail + " , phone: " + inputPhone

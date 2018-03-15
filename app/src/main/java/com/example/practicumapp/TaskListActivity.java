@@ -103,9 +103,7 @@ public class TaskListActivity extends MainActivity {
             @Override
             public void onSuccess(User user) {
                 // Get the workflow ID specific to the User!
-//              TODO Remove hardcoded workflowid
-                workflowId = "CloudOffshoreExternal";
-//              workflowId = user.getWorkflow();
+                workflowId = user.getWorkflow();
                 TextView employeeNameTextView = (TextView)findViewById(R.id.EmployeeName);
                 employeeName = getUserName(user);
                 employeeNameTextView.setText(employeeName);
@@ -122,7 +120,7 @@ public class TaskListActivity extends MainActivity {
 
                 //TODO: Removefollowing, for testing only
                 //adding a completed task, "Setup employee Id"
-                completedTasks.add("LKJLKLIOC54D2DA2389CVBV98XCCVV");
+//                completedTasks.add("LKJLKLIOC54D2DA2389CVBV98XCCVV");
 
                 //Get the data we need from the workflow.
                 volleyParser.getWorkflow(workflowId, new VolleyWorkflowResponseListener() {
@@ -151,7 +149,7 @@ public class TaskListActivity extends MainActivity {
                         // iterate through taskList and populate taskListItems
                         for(int i = 0; i < taskList.size(); i++) {
                             Task task = (Task) taskList.get(i);
-                            String taskId = task.getId();
+                            Integer taskId = task.getId();
                             String taskName = task.getName();
                             HashMap<String, String> taskDescriptionMap = task.getDescriptions();
                             ArrayList<TaskDescriptionListItem> taskDescriptionListItems = new ArrayList<>();
@@ -176,7 +174,8 @@ public class TaskListActivity extends MainActivity {
                                 taskListItemToAdd.setChecked(true);
                                 IncrementCompletedTasks(1);
                                 countComplete++;
-                                completedPercentageTextView.setText( (int) (countComplete / countTotal) * 100);
+//                              ((TextView) findViewById(R.id.task_completion_percentage)).setText((int) (countComplete / countTotal) * 100);
+//                              completedPercentageTextView.setText( (int) (countComplete / countTotal) * 100);
 
                             }
                             taskListItems.add(taskListItemToAdd);
@@ -244,6 +243,8 @@ public class TaskListActivity extends MainActivity {
             // if not manager, use the first/last name from user object
         } else if (user.getType().equals("employee")) {
             usrName = user.getFirstName() + " " + user.getLastName();
+            employeeId = user.getActiveDirectoryID();
+
         }
         return usrName;
     }

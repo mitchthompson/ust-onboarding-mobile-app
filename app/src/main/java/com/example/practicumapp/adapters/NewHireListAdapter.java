@@ -63,8 +63,8 @@ public class NewHireListAdapter extends RecyclerView.Adapter<NewHireListAdapter.
                 //Toast.makeText(context, newHireID.get(position), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(v.getContext(), TaskListActivity.class);
 //              TODO Remove sample user id intent and uncomment the userID intent below it after API data is updated
-                intent.putExtra("userID", "test-id-demo4");
-//              intent.putExtra("userID",  newHireID.get(holder.getAdapterPosition()));
+//                intent.putExtra("userID", "test-id-demo4");
+                intent.putExtra("userID",  newHireID.get(holder.getAdapterPosition()));
                 intent.putExtra("name", newHireName.get(holder.getAdapterPosition()));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 v.getContext().startActivity(intent);

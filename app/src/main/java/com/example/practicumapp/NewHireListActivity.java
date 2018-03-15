@@ -42,7 +42,7 @@ public class NewHireListActivity extends MainActivity {
     private RelativeLayout relativeLayout;
     private NewHireListAdapter newHireListAdapter;
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
-    private HashMap<String, String> employees;
+    private Map<String, String> employees;
     private ArrayList<String> newHireList;
     private ArrayList<String> newHireIDs;
     SearchView searchView;
