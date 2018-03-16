@@ -38,6 +38,7 @@ public class Constants {
     public static final String KEY_NAME_ASK_BROKER_INSTALL = "practicumapp.settings.ask.broker";
     public static final String KEY_NAME_CHECK_BROKER = "practicumapp.settings.check.broker";
 
+    public static final String SUBSCRIPTION_KEY = "725634f731424f9faf8efe31aab443ed";
 
     // example parameters from the test code on microsoft's github site
     //public static String AUTHORITY_URL = "https://login.microsoftonline.com/common";

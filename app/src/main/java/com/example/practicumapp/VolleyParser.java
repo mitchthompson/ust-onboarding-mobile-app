@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.Request;
+import com.android.volley.VolleyLog;
 import com.example.practicumapp.Interfaces.VolleyResponseListener;
 import com.example.practicumapp.Interfaces.VolleyUserResponseListener;
 import com.example.practicumapp.Interfaces.VolleyWorkflowResponseListener;
@@ -16,10 +17,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
+ * @author Suraj Upreti
  * JSON parser class for User, Workflow and Task
  * This class sends and retrieves JSON data from the API using volley
  */
@@ -41,29 +45,34 @@ public class VolleyParser {
     }
 
     /**
-     * Add a new user
-     * @param user user object of the new user
+     * Add a new employee
+     * @param newHire user object of the new user
      */
-    public void addUser(final User user, final VolleyUserResponseListener volleyUserResponseListener) {
+    public void addUser(final User newHire, final VolleyUserResponseListener volleyUserResponseListener) {
         String urlWithParams = API_ADDRESS + "user/";
         HashMap<String, String> parameters = new HashMap<>();
-        parameters.put("ActiveDirectoryId", user.getActiveDirectoryID());
-        parameters.put("firstName", user.getFirstName());
-        parameters.put("lastName", user.getLastName());
-        parameters.put("email", user.getEmail());
-        parameters.put("phone", user.getPhone());
-        parameters.put("type", user.getType());
-        if (user.getType().equals("employee")) {
-            parameters.put("manager", user.getManager());
+        parameters.put("ActiveDirectoryId", newHire.getActiveDirectoryID());
+        parameters.put("firstName", newHire.getFirstName());
+        parameters.put("lastName", newHire.getLastName());
+        parameters.put("email", newHire.getEmail());
+        parameters.put("phone", newHire.getPhone());
+        parameters.put("type", newHire.getType());
+        if (newHire.getType().equals("employee")) {
+            parameters.put("manager", newHire.getManager());
         }
-        parameters.put("StartDate", user.getStartDate());
-        parameters.put("Workflow", user.getWorkflow());
+        parameters.put("StartDate", newHire.getStartDate());
+        parameters.put("Workflow", newHire.getWorkflow());
         MyVolleySingleton.getInstance(context)
-                .sendObjectRequest(accessToken, Request.Method.POST, urlWithParams, null, parameters, new VolleyResponseListener() {
+                .sendObjectRequest(accessToken, Request.Method.POST, urlWithParams, parameters, new VolleyResponseListener() {
                     @Override
                     public void onSuccess(JSONObject response) {
                         Log.d(TAG, "User Added Successfully");
-                        volleyUserResponseListener.onSuccess(user);
+//                        volleyUserResponseListener.onSuccess(newHire);
+                        if (newHire.getType().equals("employee")) {
+                            Log.d(TAG, "Adding Manager");
+                            String newHireName = newHire.getFirstName() + " " + newHire.getLastName();
+                            assignEmployeeToManager(newHire.getManager(), newHire.getActiveDirectoryID(), newHireName, volleyUserResponseListener);
+                        }
                     }
                 });
     }
@@ -77,7 +86,7 @@ public class VolleyParser {
     public void getUser(String userID, final VolleyUserResponseListener volleyUserResponseListener) {
         String urlWithParams = API_ADDRESS + "user/" + userID;
         MyVolleySingleton.getInstance(context)
-                .sendObjectRequest(accessToken, Request.Method.GET, urlWithParams, null, new HashMap<String, String>(), new VolleyResponseListener() {
+                .sendObjectRequest(accessToken, Request.Method.GET, urlWithParams, new HashMap<String, String>(), new VolleyResponseListener() {
                     @Override
                     public void onSuccess(JSONObject response) {
                         volleyUserResponseListener.onSuccess(getUserObject(response));
@@ -115,8 +124,43 @@ public class VolleyParser {
      * @param userID User id
      * @param user Updated user object of an existing user
      */
-    public void updateUser(String userID, User user) {
-        //  TODO Code to update an existing user
+    public void updateUser(String userID, final User user, final VolleyUserResponseListener userResponseListener) {
+        final String urlWithParams = API_ADDRESS + "user/" + userID;
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("id", user.getId());
+        parameters.put("ActiveDirectoryId", user.getActiveDirectoryID());
+        parameters.put("firstName", user.getFirstName());
+        parameters.put("lastName", user.getLastName());
+        parameters.put("email", user.getEmail());
+        parameters.put("phone", user.getPhone());
+        parameters.put("type", user.getType());
+        if (user.getType().equals("employee")) {
+            parameters.put("manager", user.getManager());
+        }
+        parameters.put("StartDate", user.getStartDate());
+        parameters.put("Workflow", user.getWorkflow());
+        parameters.put("Tasks", user.getTasks().toString());
+
+
+        JSONObject jsonObject = new JSONObject();
+        Map<String, String> employees = user.getEmployees();
+        try {
+            for (Map.Entry<String, String> employee : employees.entrySet()) {
+                jsonObject.put(employee.getKey(), employee.getValue());
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        parameters.put("employees", jsonObject.toString());
+        MyVolleySingleton.getInstance(context)
+                .sendObjectRequest(accessToken, Request.Method.PUT, urlWithParams, parameters, new VolleyResponseListener() {
+                    @Override
+                    public void onSuccess(JSONObject response) {
+                        Log.d(TAG, "Updated User Data : " + response.toString());
+                        Log.d(TAG, "User Updated Successfully");
+                        userResponseListener.onSuccess(getUserObject(response));
+                    }
+                });
     }
 
     /**
@@ -141,7 +185,7 @@ public class VolleyParser {
         parameters.put("tasks", workflow.getTasks().toString());
 
         MyVolleySingleton.getInstance(context)
-                .sendObjectRequest(accessToken, Request.Method.POST, urlWithParams, null, parameters, new VolleyResponseListener() {
+                .sendObjectRequest(accessToken, Request.Method.POST, urlWithParams, parameters, new VolleyResponseListener() {
                     @Override
                     public void onSuccess(JSONObject response) {
                         volleyWorkflowResponseListener.onSuccess(workflow);
@@ -159,7 +203,7 @@ public class VolleyParser {
     public void getWorkflow(String workflowID, final VolleyWorkflowResponseListener volleyWorkflowResponseListener) {
         String urlWithParams = API_ADDRESS + "workflows/" + workflowID;
         MyVolleySingleton.getInstance(context).
-                sendObjectRequest(accessToken, Request.Method.GET, urlWithParams, null, new HashMap<String, String>(), new VolleyResponseListener() {
+                sendObjectRequest(accessToken, Request.Method.GET, urlWithParams, new HashMap<String, String>(), new VolleyResponseListener() {
                     @Override
                     public void onSuccess(JSONObject response) {
                         try {
@@ -170,7 +214,7 @@ public class VolleyParser {
                             JSONArray jsonArray = response.getJSONArray("tasks");
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                String taskID = jsonObject.getString("Id");
+                                Integer taskID = jsonObject.getInt("Id");
                                 String taskName = jsonObject.getString("Name");
                                 JSONObject taskDescriptionsObject = jsonObject.getJSONObject("Descriptions");
                                 HashMap<String, String> taskDescriptions = new HashMap<String, String>();
@@ -238,17 +282,34 @@ public class VolleyParser {
     }
 
     /**
+     * Assign an employee to a manager
+     * @param managerID Manager id
+     * @param employeeID Employee id
+     * @param employeeName Employee name
+     * @param volleyUserResponseListener
+     */
+    public void assignEmployeeToManager(final String managerID, final String employeeID, final String employeeName, final VolleyUserResponseListener volleyUserResponseListener) {
+        getUser(managerID, new VolleyUserResponseListener() {
+            @Override
+            public void onSuccess(User user) {
+                User manager = user;
+                manager.addEmployee(employeeID, employeeName);
+                updateUser(manager.getActiveDirectoryID(), manager, volleyUserResponseListener);
+            }
+        });
+    }
+
+    /**
      * Mark a task as completed
      * @param userID User id
      * @param taskID Task id
      */
-    public void markTaskAsCompleted(final String userID, final String taskID) {
+    public void markTaskAsCompleted(final String userID, final Integer taskID, final VolleyUserResponseListener volleyUserResponseListener) {
         getUser(userID, new VolleyUserResponseListener() {
             @Override
             public void onSuccess(User user) {
                 user.markTaskAsCompleted(taskID);
-                Log.d(TAG, "Updated user info : " + user.getTasks().toString());
-                updateUser(userID, user);
+                updateUser(userID, user, volleyUserResponseListener);
             }
         });
     }
@@ -258,13 +319,12 @@ public class VolleyParser {
      * @param userID User id
      * @param taskID Task id
      */
-    public void markTaskAsInComplete(final String userID, final String taskID) {
+    public void markTaskAsInComplete(final String userID, final Integer taskID, final VolleyUserResponseListener volleyUserResponseListener) {
         getUser(userID, new VolleyUserResponseListener() {
             @Override
             public void onSuccess(User user) {
                 user.markTaskAsIncomplete(taskID);
-                Log.d(TAG, "Updated user info : " + user.getTasks().toString());
-                updateUser(userID, user);
+                updateUser(userID, user, volleyUserResponseListener);
             }
         });
     }
@@ -298,12 +358,12 @@ public class VolleyParser {
                 tasksObject = object.getJSONArray("Tasks");
             }
             HashMap<String, String> employees = new HashMap<String, String>();
-            ArrayList<String> tasks = new ArrayList<>();
+            ArrayList<Integer> tasks = new ArrayList<>();
             for (int i = 0; i < employeesObject.length(); i++) {
                 employees.put(employeesObject.names().getString(i), employeesObject.get(employeesObject.names().getString(i)).toString());
             }
             for (int i = 0; i < tasksObject.length(); i++) {
-                tasks.add(tasksObject.get(i).toString());
+                tasks.add(Integer.parseInt(tasksObject.get(i).toString()));
             }
             if (type.equals("employee")) {
                 return new User(id, activeDirectoryID, firstName, lastName, email, phone, type, managerID, startDate, workflow, tasks);

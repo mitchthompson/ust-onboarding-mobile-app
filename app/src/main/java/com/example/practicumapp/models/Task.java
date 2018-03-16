@@ -4,7 +4,8 @@ import java.util.HashMap;
 
 public class Task {
 
-    private String id, name, viewers;
+    private String name, viewers;
+    private Integer id;
     private HashMap descriptions;
 
     /**
@@ -15,7 +16,7 @@ public class Task {
      * @param descriptions Descriptions of the task
      * @param viewers      Employee Instructions for the task
      */
-    public Task(String id, String name, HashMap descriptions, String viewers) {
+    public Task(Integer id, String name, HashMap descriptions, String viewers) {
         this.id = id;
         this.name = name;
         this.descriptions = descriptions;
@@ -25,7 +26,7 @@ public class Task {
     /**
      * @return Unique id of the task
      */
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
