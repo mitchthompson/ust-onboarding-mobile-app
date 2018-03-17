@@ -9,10 +9,10 @@ import android.widget.CompoundButton;
 
 import com.example.practicumapp.Interfaces.VolleyUserResponseListener;
 import com.example.practicumapp.R;
-import com.example.practicumapp.TaskDescriptionListItemViewHolder;
+import com.example.practicumapp.viewHolders.TaskDescriptionListItemViewHolder;
 import com.example.practicumapp.TaskListActivity;
-import com.example.practicumapp.TaskListItemViewHolder;
-import com.example.practicumapp.VolleyParser;
+import com.example.practicumapp.viewHolders.TaskListItemViewHolder;
+import com.example.practicumapp.volley.VolleyParser;
 import com.example.practicumapp.models.TaskDescriptionListItem;
 import com.example.practicumapp.models.TaskListItem;
 import com.example.practicumapp.models.User;

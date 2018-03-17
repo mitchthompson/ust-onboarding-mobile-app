@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import com.example.practicumapp.Interfaces.VolleyUserResponseListener;
 import com.example.practicumapp.adapters.NewHireListAdapter;
 import com.example.practicumapp.models.User;
+import com.example.practicumapp.volley.VolleyParser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
