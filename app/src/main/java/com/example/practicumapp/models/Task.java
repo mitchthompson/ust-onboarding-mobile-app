@@ -2,6 +2,11 @@ package com.example.practicumapp.models;
 
 import java.util.HashMap;
 
+/**
+ * Task Model Class
+ * @author Suraj Upreti
+ */
+
 public class Task {
 
     private String name, viewers;
@@ -10,7 +15,6 @@ public class Task {
 
     /**
      * Constructor
-     *
      * @param id           Unique id of the task
      * @param name         Display name of the task
      * @param descriptions Descriptions of the task

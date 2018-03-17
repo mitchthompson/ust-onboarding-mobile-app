@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * User Model Class
+ * @author Suraj Upreti
+ */
+
 public class User {
 
     private String id, activeDirectoryID, firstName, lastName, email, phone, type, startDate, workflow, manager;
