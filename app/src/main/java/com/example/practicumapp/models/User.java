@@ -2,12 +2,18 @@ package com.example.practicumapp.models;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * User Model Class
+ * @author Suraj Upreti
+ */
 
 public class User {
 
     private String id, activeDirectoryID, firstName, lastName, email, phone, type, startDate, workflow, manager;
-    private ArrayList tasks;
-    private HashMap employees;
+    private ArrayList<Integer> tasks;
+    private Map<String, String> employees;
 
     /**
      * Constructor for a manager
@@ -23,7 +29,7 @@ public class User {
      * @param workflow Workflow id assigned to the user
      * @param tasks An array of task IDs user has completed
      */
-    public User(String id, String activeDirectoryID, String firstName, String lastName, String email, String phone, String type, String startDate, HashMap employees, String workflow, ArrayList tasks) {
+    public User(String id, String activeDirectoryID, String firstName, String lastName, String email, String phone, String type, String startDate, HashMap employees, String workflow, ArrayList<Integer> tasks) {
         this.id = id;
         this.activeDirectoryID = activeDirectoryID;
         this.firstName = firstName;
@@ -51,7 +57,7 @@ public class User {
      * @param workflow Workflow id assigned to the user
      * @param tasks An array of task IDs user has completed
      */
-    public User(String id, String activeDirectoryID, String firstName, String lastName, String email, String phone, String type, String managerID, String startDate, String workflow, ArrayList tasks) {
+    public User(String id, String activeDirectoryID, String firstName, String lastName, String email, String phone, String type, String managerID, String startDate, String workflow, ArrayList<Integer> tasks) {
         this.id = id;
         this.activeDirectoryID = activeDirectoryID;
         this.firstName = firstName;
@@ -100,15 +106,26 @@ public class User {
     /**
      * Mark a task as completed
      */
-    public void markTaskAsCompleted(String taskID) {
-        this.tasks.add(taskID);
+    public void markTaskAsCompleted(Integer taskID) {
+        if (tasks == null) {
+            tasks = new ArrayList<>();
+            this.tasks.add(taskID);
+        } else {
+            if (!this.tasks.contains(taskID)) {
+                this.tasks.add(taskID);
+            }
+        }
     }
 
     /**
      * Mark a task as incomplete
      */
-    public void markTaskAsIncomplete(String taskID) {
-        this.tasks.remove(taskID);
+    public void markTaskAsIncomplete(Integer taskID) {
+        if (tasks != null) {
+            if (this.tasks.contains(taskID)) {
+                this.tasks.remove(taskID);
+            }
+        }
     }
 
     /**
@@ -177,7 +194,19 @@ public class User {
     /**
      * @return ArrayList of IDs for the manager's assigned employees
      */
-    public HashMap getEmployees() {
+    public void addEmployee(String activeDirectoryID, String name) {
+        if (this.employees == null) {
+            this.employees = new HashMap();
+        }
+        if (!this.employees.containsKey(activeDirectoryID)) {
+            this.employees.put(activeDirectoryID, name);
+        }
+    }
+
+    /**
+     * @return ArrayList of IDs for the manager's assigned employees
+     */
+    public Map getEmployees() {
         return employees;
     }
 
@@ -191,7 +220,7 @@ public class User {
     /**
      * @return an array of completed task IDs
      */
-    public ArrayList getTasks() {
+    public ArrayList<Integer> getTasks() {
         return tasks;
     }
 }

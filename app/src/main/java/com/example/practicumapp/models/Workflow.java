@@ -2,6 +2,11 @@ package com.example.practicumapp.models;
 
 import java.util.ArrayList;
 
+/**
+ * Workflow Model Class
+ * @author Suraj Upreti
+ */
+
 public class Workflow {
 
     private String id, name, description;

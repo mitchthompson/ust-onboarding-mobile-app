@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
+import com.example.practicumapp.Interfaces.VolleyUserResponseListener;
 import com.example.practicumapp.R;
 import com.example.practicumapp.TaskDescriptionListItemViewHolder;
 import com.example.practicumapp.TaskListActivity;
@@ -14,6 +15,7 @@ import com.example.practicumapp.TaskListItemViewHolder;
 import com.example.practicumapp.VolleyParser;
 import com.example.practicumapp.models.TaskDescriptionListItem;
 import com.example.practicumapp.models.TaskListItem;
+import com.example.practicumapp.models.User;
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 
@@ -109,11 +111,21 @@ public class TaskListAdapter extends ExpandableRecyclerViewAdapter<TaskListItemV
                 //increment Progress bar and send data to the API
                 if(holder.checkBox.isChecked()) {
                     TaskListActivity.IncrementCompletedTasks(1);
-                    adapterVolleyParser.markTaskAsCompleted(TaskListActivity.SendUserId(), myItem.getTaskID());
+                    adapterVolleyParser.markTaskAsCompleted(TaskListActivity.SendUserId(), myItem.getTaskID(), new VolleyUserResponseListener() {
+                        @Override
+                        public void onSuccess(User user) {
+
+                        }
+                    });
                 }
                 else {
                     TaskListActivity.IncrementCompletedTasks(-1);
-                    adapterVolleyParser.markTaskAsInComplete(TaskListActivity.SendUserId(), myItem.getTaskID());
+                    adapterVolleyParser.markTaskAsInComplete(TaskListActivity.SendUserId(), myItem.getTaskID(), new VolleyUserResponseListener() {
+                        @Override
+                        public void onSuccess(User user) {
+
+                        }
+                    });
                 }
             }
         });
