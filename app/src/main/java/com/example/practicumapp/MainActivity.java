@@ -16,11 +16,9 @@ import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.practicumapp.Interfaces.VolleyUserResponseListener;
 import com.example.practicumapp.helpers.Constants;
-import com.example.practicumapp.models.Task;
 import com.example.practicumapp.models.User;
 import com.microsoft.aad.adal.AuthenticationCallback;
 import com.microsoft.aad.adal.AuthenticationContext;
@@ -34,9 +32,6 @@ import com.microsoft.aad.adal.PromptBehavior;
  * @author Joseph Sayler
  * @version 1.2
  **/
-/*
-TODO work on preventing user from returning to login screen using back button, and prevent back button from exiting app if pressed too many times
- */
 
 public class MainActivity extends AppCompatActivity {
 
@@ -103,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG,"Requesting login token");
                 mContext.acquireToken(MainActivity.this, Constants.RESOURCE_ID, Constants.CLIENT_ID,
                         Constants.REDIRECT_URL, Constants.USER_HINT, PromptBehavior.Auto, "", callback);
-
             }
         });
     }
