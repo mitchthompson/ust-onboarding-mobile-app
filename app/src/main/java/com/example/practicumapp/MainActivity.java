@@ -18,7 +18,10 @@ import android.webkit.CookieSyncManager;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.practicumapp.Interfaces.VolleyUserResponseListener;
 import com.example.practicumapp.helpers.Constants;
+import com.example.practicumapp.models.Task;
+import com.example.practicumapp.models.User;
 import com.microsoft.aad.adal.AuthenticationCallback;
 import com.microsoft.aad.adal.AuthenticationContext;
 import com.microsoft.aad.adal.AuthenticationException;
@@ -41,8 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private AuthenticationContext mContext;
     private AuthenticationCallback<AuthenticationResult> callback;
     private Button login_button;
-    private final static String EMPLOYEE = "employee@tkarp87live.onmicrosoft.com";
-    private final static String MANAGER = "manager@tkarp87live.onmicrosoft.com";
+
     /**
      * Allows login data to be accessed by other activities by using mResult.getAccessToken or any
      * other method associated with AuthenticationResult.
@@ -170,16 +172,21 @@ public class MainActivity extends AppCompatActivity {
      * TEST CODE - based on one of 2 emails used, routes user to one of 2 activities
      */
     private void loginRouter() {
-        if(mResult.getUserInfo().getDisplayableId().equals(EMPLOYEE)) {
-            Log.d(TAG, "employee login - move to TaskListActivity");
-            startActivity(new Intent(MainActivity.this, TaskListActivity.class));
-        } else if(mResult.getUserInfo().getDisplayableId().equals(MANAGER)) {
-            Log.d(TAG, "manager login - move to NewHireListActivity");
-            startActivity(new Intent(MainActivity.this, NewHireListActivity.class));
-        } else {
-            Log.d(TAG, "non manager or non employee login - something wrong, not changing activities");
-            Toast.makeText(this,"Something went wrong with your request. Try again.", Toast.LENGTH_SHORT).show();
-        }
+        VolleyParser volleyParser = new VolleyParser(this.getApplicationContext(), mResult.getAccessToken());
+        volleyParser.getUser(mResult.getUserInfo().getUserId(), new VolleyUserResponseListener() {
+            @Override
+            public void onSuccess(User user) {
+                Log.d(TAG, user.getFirstName() + user.getLastName());
+                String userType = user.getType();
+                if(userType.toLowerCase().equals("employee")) {
+                    startActivity(new Intent(MainActivity.this, TaskListActivity.class));
+                } else if(userType.toLowerCase().equals("manager")) {
+                    startActivity(new Intent(MainActivity.this, NewHireListActivity.class));
+                } else {
+                    Log.d(TAG, "non manager or non employee login - something wrong, not changing activities");
+                }
+            }
+        });
     }
 
     /**
@@ -204,6 +211,8 @@ public class MainActivity extends AppCompatActivity {
     private void saveLoginData() {
         SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", MODE_PRIVATE);
         sharedPreferences.edit().putString("AccessToken", mResult.getAccessToken()).apply();
+        sharedPreferences.edit().putString("UserADID", mResult.getUserInfo().getUserId()).apply();
+        sharedPreferences.edit().putString("Name", mResult.getUserInfo().getGivenName() + " " + mResult.getUserInfo().getFamilyName()).apply();
     }
 
     /**

@@ -144,12 +144,14 @@ public class VolleyParser {
 
         JSONObject jsonObject = new JSONObject();
         Map<String, String> employees = user.getEmployees();
-        try {
-            for (Map.Entry<String, String> employee : employees.entrySet()) {
-                jsonObject.put(employee.getKey(), employee.getValue());
+        if (employees != null) {
+            try {
+                for (Map.Entry<String, String> employee : employees.entrySet()) {
+                    jsonObject.put(employee.getKey(), employee.getValue());
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
         parameters.put("employees", jsonObject.toString());
         MyVolleySingleton.getInstance(context)

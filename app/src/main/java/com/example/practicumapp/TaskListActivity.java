@@ -46,7 +46,7 @@ public class TaskListActivity extends MainActivity {
     // taskList is the list of Tasks from the workflow
     private ArrayList taskList;
 
-    public static String employeeId = "test-id-demo4";
+    public static String employeeId = "";
     private String employeeName = "";
     private String userType = "";
     private String workflowId;
@@ -96,6 +96,10 @@ public class TaskListActivity extends MainActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", MODE_PRIVATE);
         final String accessToken = sharedPreferences.getString("AccessToken", "");
 
+        employeeId = sharedPreferences.getString("UserADID", "");
+        if (getIntent().getExtras() != null && getIntent().getExtras().containsKey("userID")) {
+            employeeId = getIntent().getExtras().getString("userID");
+        }
         volleyParser = new VolleyParser(this.getApplicationContext(), accessToken);
 
         //Get the data we need from the User
@@ -105,7 +109,7 @@ public class TaskListActivity extends MainActivity {
                 // Get the workflow ID specific to the User!
                 workflowId = user.getWorkflow();
                 TextView employeeNameTextView = (TextView)findViewById(R.id.EmployeeName);
-                employeeName = getUserName(user);
+                employeeName = user.getFirstName() + " " + user.getLastName();
                 employeeNameTextView.setText(employeeName);
 
                 /* confirm receipt of something... */
@@ -217,36 +221,6 @@ public class TaskListActivity extends MainActivity {
 
     public static String SendUserId() {
         return employeeId;
-    }
-
-    /**
-     * Obtains the name of the task list user either from info passed by the NewHireListActivity
-     * or from the User object itself. Depending on the user's type, the name displayed is either
-     * their own (if user is employee) or the employee from the new hire list (if user is manager)
-     * @author Joseph Sayler
-     * @param user object containing JSON info about a user
-     * @return string containing first and last name from user object
-     */
-    private String getUserName(User user) {
-        String usrName = "";
-        // check if current user type is manager
-        if (user.getType().equals("manager")) {
-            //check for a passed in bundle of userID/name and set it if it exists
-            if (getIntent().hasExtra("userID")) {
-                Bundle bundle = getIntent().getExtras();
-                usrName = bundle.getString("name");
-            }
-            // else tell the user that something got weird in the UI
-            else {
-                usrName = "Employee Name Not Included in the Bundle";
-            }
-            // if not manager, use the first/last name from user object
-        } else if (user.getType().equals("employee")) {
-            usrName = user.getFirstName() + " " + user.getLastName();
-            employeeId = user.getActiveDirectoryID();
-
-        }
-        return usrName;
     }
 
 }
