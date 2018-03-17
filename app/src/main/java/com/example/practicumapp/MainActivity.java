@@ -28,7 +28,6 @@ import com.microsoft.aad.adal.PromptBehavior;
 
 /**
  * Basic login activity using ADAL. Displays a sign in page to enter credentials and gain access to system resources.
- * This version runs from MainActivity instead of its own LoginActivity.
  * @author Joseph Sayler
  * @version 1.2
  **/
