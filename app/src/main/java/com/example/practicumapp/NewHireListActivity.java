@@ -66,6 +66,7 @@ public class NewHireListActivity extends MainActivity {
         //Retrieve access token from shared preferences
         SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", MODE_PRIVATE);
         String accessToken = sharedPreferences.getString("AccessToken", "");
+        String userADID = sharedPreferences.getString("UserADID", "");
 
         //TODO Add functionality for user to search through list using searchview
 
@@ -83,7 +84,7 @@ public class NewHireListActivity extends MainActivity {
         newHireList = new ArrayList<>();
         newHireIDs = new ArrayList<>();
         VolleyParser volleyParser = new VolleyParser(this.getApplicationContext(), accessToken);
-        volleyParser.getUser("test-id-demo4", new VolleyUserResponseListener() {
+        volleyParser.getUser(userADID, new VolleyUserResponseListener() {
 
             //if successful response assign employees & IDs to ArrayList then pass to NewHireListAdapter
             @Override

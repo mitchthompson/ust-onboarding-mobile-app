@@ -30,8 +30,7 @@ import com.example.practicumapp.models.Workflow;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-
+import java.util.UUID;
 
 
 /**
@@ -276,19 +275,21 @@ public class AddNewHireActivity extends AppCompatActivity {
         }
 
         //test Active directory ID data
-        //TODO: remove test AD data when API implements solution
-        String adEmployeeID = "test-id-demo217";
-        String adManagerID = "test-id-demo4";
+
+        //Retrieve access token from shared preferences
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", MODE_PRIVATE);
+        String accessToken = sharedPreferences.getString("AccessToken", "");
+        String adManagerID = sharedPreferences.getString("UserADID", "");
+
+//      TODO: Remove random UUID generation when API implements solution
+        String adEmployeeID = UUID.randomUUID().toString();
+        Log.d(TAG, "Employee id : " + adEmployeeID);
 
         Log.d(TAG, "Name : " + inputFirstName + inputLastName + " , email: " +inputEmail + " , phone: " + inputPhone
                 + " , type: " +inputType + " , hire date: " + inputDate + " , workflow: " +inputWorkflow);
 
         //create User object
         newUser = new User(adEmployeeID, inputFirstName, inputLastName, inputEmail, inputPhone, inputType, adManagerID, inputDate, inputWorkflow);
-
-        //Retrieve access token from shared preferences
-        SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", MODE_PRIVATE);
-        String accessToken = sharedPreferences.getString("AccessToken", "");
 
         //API call to add the new user
         VolleyParser volleyParser = new VolleyParser(this.getApplicationContext(), accessToken);
