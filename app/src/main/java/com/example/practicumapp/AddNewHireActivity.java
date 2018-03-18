@@ -6,15 +6,13 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -46,7 +44,7 @@ import java.util.UUID;
  *
  */
 
-public class AddNewHireActivity extends AppCompatActivity {
+public class AddNewHireActivity extends MainActivity {
     private static final String TAG = AddNewHireActivity.class.getName();
     private Spinner workflow, employeeType;
     private Button btnCancel, btnDone;
@@ -54,7 +52,6 @@ public class AddNewHireActivity extends AppCompatActivity {
     private EditText firstName, lastName, email, phone, date;
     private ArrayList workflowMap;
     private User newUser;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -207,13 +204,11 @@ public class AddNewHireActivity extends AppCompatActivity {
      * Will be called when user clicks "Done" button on form. Validates form inputs and adds employee via
      * the API. Errors generate a message and stop the execution.
      */
-    //TODO: Call this method when "Done" button is clicked
     public void addEmployee(){
         String inputFirstName = firstName.getText().toString().trim();
         String inputLastName = lastName.getText().toString().trim();
         String inputEmail = email.getText().toString().trim();
         String inputPhone = phone.getText().toString().trim();
-        //TODO: see if date picker EditText view can be cast to string in this way
         String inputDate = date.getText().toString().trim();
         String inputWorkflow = String.valueOf(workflow.getSelectedItem());
         String inputType = String.valueOf(employeeType.getSelectedItem()).toLowerCase();
@@ -301,17 +296,6 @@ public class AddNewHireActivity extends AppCompatActivity {
                 startActivity(new Intent(AddNewHireActivity.this, NewHireListActivity.class));
             }
         });
-    }
-
-    /**
-     * Creates actionbar menu and inflates menu hierarchy from menu/main_menu.xml.
-     * @param menu The options menu which items are placed
-     * @return boolean
-     */
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.main_menu, menu);
-        return super.onCreateOptionsMenu(menu);
     }
 
 }

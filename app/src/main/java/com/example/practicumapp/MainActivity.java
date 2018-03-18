@@ -29,13 +29,9 @@ import com.microsoft.aad.adal.PromptBehavior;
 
 /**
  * Basic login activity using ADAL. Displays a sign in page to enter credentials and gain access to system resources.
- * This version runs from MainActivity instead of its own LoginActivity.
  * @author Joseph Sayler
  * @version 1.2
  **/
-/*
-TODO work on preventing user from returning to login screen using back button, and prevent back button from exiting app if pressed too many times
- */
 
 public class MainActivity extends AppCompatActivity {
 
@@ -68,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = findViewById(R.id.myToolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setTitle("UST Global Onboarding Tool");
-
         mContext = new AuthenticationContext(MainActivity.this, Constants.AUTHORITY_URL, true);
         callback = new AuthenticationCallback<AuthenticationResult>() {
             @Override
@@ -102,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG,"Requesting login token");
                 mContext.acquireToken(MainActivity.this, Constants.RESOURCE_ID, Constants.CLIENT_ID,
                         Constants.REDIRECT_URL, Constants.USER_HINT, PromptBehavior.Auto, "", callback);
-
             }
         });
     }
@@ -151,6 +145,8 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", MODE_PRIVATE);
+        String userType = sharedPreferences.getString("UserType", "").toLowerCase();
         switch (item.getItemId()) {
             case R.id.action_debug:
                 startActivity(new Intent(MainActivity.this, DebugActivity.class));
@@ -158,6 +154,15 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.action_logout:
                 adalLogout();
+                break;
+            case android.R.id.home:
+                if (this.getClass().getSimpleName().equals(TaskListActivity.class.getSimpleName())
+                        && userType.equals("manager")){
+                    super.onBackPressed();
+                    return true;
+                }else{
+                    NavUtils.navigateUpFromSameTask(this);
+                }
                 break;
             default:
                 // If we got here, the user's action was not recognized.
@@ -177,6 +182,8 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(User user) {
                 Log.d(TAG, user.getFirstName() + user.getLastName());
                 String userType = user.getType();
+                SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", MODE_PRIVATE);
+                sharedPreferences.edit().putString("UserType", user.getType()).apply();
                 if(userType.toLowerCase().equals("employee")) {
                     startActivity(new Intent(MainActivity.this, TaskListActivity.class));
                 } else if(userType.toLowerCase().equals("manager")) {
@@ -231,11 +238,12 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", MODE_PRIVATE);
+        String userType = sharedPreferences.getString("UserType", "").toLowerCase();
         if (this.getClass().getSimpleName().equals(MainActivity.class.getSimpleName())){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Logout")
                     .setMessage("You are about to exit the app.");
-
             builder.setPositiveButton(
                     "Logout",
                     new DialogInterface.OnClickListener() {
@@ -244,7 +252,6 @@ public class MainActivity extends AppCompatActivity {
                             finish();
                         }
                     });
-
             builder.setNegativeButton(
                     "Cancel",
                     new DialogInterface.OnClickListener() {
@@ -252,12 +259,13 @@ public class MainActivity extends AppCompatActivity {
                             dialog.cancel();
                         }
                     });
-
             AlertDialog dialog = builder.create();
             dialog.show();
+        }else if(this.getClass().getSimpleName().equals(TaskListActivity.class.getSimpleName()) && userType.equals("manager")){
+            super.onBackPressed();
         }else {
             // finishes the activity and navigates to the parent
-            finish();
+            //finish();
             NavUtils.navigateUpFromSameTask(this);
         }
     }
@@ -268,7 +276,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy(){
         super.onDestroy();
-        clearLogin();
-        finish();
+        if (this.getClass().getSimpleName().equals(MainActivity.class.getSimpleName())){
+            clearLogin();
+            Log.d(TAG, "Login cleared!");
+        }
     }
 }
