@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * New Hire List Activity. Displays list of new hires in a recyclerview. (Will use) logged in
+ * New Hire List Activity. Displays list of new hires in a recyclerview. Uses logged in
  * manager's userID to make a API call with VolleyParser. Uses NewHireListAdapter to build recyclerview.
  *
  * @author Mitch Thompson
@@ -45,9 +45,9 @@ public class NewHireListActivity extends MainActivity {
     private Map<String, String> employees;
     private ArrayList<String> newHireList;
     private ArrayList<String> newHireIDs;
-    SearchView searchView;
-
     private Button addNewHireButton;
+
+    SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +68,6 @@ public class NewHireListActivity extends MainActivity {
         String accessToken = sharedPreferences.getString("AccessToken", "");
         String userADID = sharedPreferences.getString("UserADID", "");
 
-        //TODO Add functionality for user to search through list using searchview
-
         //sets click listener for add_new_hire_btn to launch AddNewHireActivity
         addNewHireButton = findViewById(R.id.add_new_hire_btn);
         addNewHireButton.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +76,6 @@ public class NewHireListActivity extends MainActivity {
             }
         });
 
-        //TODO: get userID from logged in manager user
         //Uses the Volleyparser to get all employees assigned to a manager using managers userID
         employees = new HashMap<>();
         newHireList = new ArrayList<>();

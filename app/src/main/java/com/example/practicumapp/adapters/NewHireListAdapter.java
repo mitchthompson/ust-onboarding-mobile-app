@@ -60,7 +60,6 @@ public class NewHireListAdapter extends RecyclerView.Adapter<NewHireListAdapter.
         holder.newHireBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(context, newHireID.get(position), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(v.getContext(), TaskListActivity.class);
                 intent.putExtra("userID",  newHireID.get(holder.getAdapterPosition()));
                 intent.putExtra("name", newHireName.get(holder.getAdapterPosition()));
@@ -89,7 +88,6 @@ public class NewHireListAdapter extends RecyclerView.Adapter<NewHireListAdapter.
 
 
     public static class NewHireListViewHolder extends RecyclerView.ViewHolder {
-        //TextView newHireTextView;
         Button newHireBtn;
 
         public NewHireListViewHolder(View v) {
