@@ -1,14 +1,13 @@
-package com.example.practicumapp;
+package com.example.practicumapp.volley;
 
 import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.Request;
-import com.android.volley.VolleyLog;
+import com.example.practicumapp.Interfaces.VolleyListResponseListener;
 import com.example.practicumapp.Interfaces.VolleyResponseListener;
 import com.example.practicumapp.Interfaces.VolleyUserResponseListener;
 import com.example.practicumapp.Interfaces.VolleyWorkflowResponseListener;
-import com.example.practicumapp.Interfaces.VolleyListResponseListener;
 import com.example.practicumapp.models.Task;
 import com.example.practicumapp.models.User;
 import com.example.practicumapp.models.Workflow;
@@ -17,7 +16,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
