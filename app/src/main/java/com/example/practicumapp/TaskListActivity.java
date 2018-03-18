@@ -52,8 +52,8 @@ public class TaskListActivity extends MainActivity {
     private String userType = "";
     private String workflowId;
     private ArrayList completedTasks;
-    private static float countComplete;
-    private static float countTotal;
+    private static float countComplete = 0;
+    private static float countTotal = 0;
     private int percentageComplete;
 
     private ExpandableGroup<TaskListItem> expandableTaskList;
@@ -144,7 +144,7 @@ public class TaskListActivity extends MainActivity {
                         countTotal = taskList.size();
                         // set progress to 0 initially
                         simpleProgressBar.setProgress(0);
-                        //countComplete = 0;
+                        countComplete = 0;
                         //int completedPercentage = (int) (countComplete / countTotal) * 100;
                         //String completedPercentageText = "Complete: " + completedPercentage + "%" ;
                         //completedPercentageTextView.setText(completedPercentageText);
@@ -181,10 +181,10 @@ public class TaskListActivity extends MainActivity {
                                 IncrementCompletedTasks(1);
                                 //countComplete++;
 //                              ((TextView) findViewById(R.id.task_completion_percentage)).setText((int) (countComplete / countTotal) * 100);
-                                double completeRatioDouble = (countComplete / countTotal) * 100;
-                                int completeRatioInt = (int) completeRatioDouble;
-                                String completeRatioString = "Activity" + completeRatioInt + "%";
-                                completedPercentageTextView.setText(completeRatioString);
+                                //double completeRatioDouble = (countComplete / countTotal) * 100;
+                                //int completeRatioInt = (int) completeRatioDouble;
+                                //String completeRatioString = "Activity" + completeRatioInt + "%";
+                                //completedPercentageTextView.setText(completeRatioString);
 
                             }
                             taskListItems.add(taskListItemToAdd);
