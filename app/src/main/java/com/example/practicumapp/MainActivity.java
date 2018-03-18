@@ -28,13 +28,9 @@ import com.microsoft.aad.adal.PromptBehavior;
 
 /**
  * Basic login activity using ADAL. Displays a sign in page to enter credentials and gain access to system resources.
- * This version runs from MainActivity instead of its own LoginActivity.
  * @author Joseph Sayler
  * @version 1.2
  **/
-/*
-TODO work on preventing user from returning to login screen using back button, and prevent back button from exiting app if pressed too many times
- */
 
 public class MainActivity extends AppCompatActivity {
 
@@ -67,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = findViewById(R.id.myToolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setTitle("UST Global Onboarding Tool");
-
         mContext = new AuthenticationContext(MainActivity.this, Constants.AUTHORITY_URL, true);
         callback = new AuthenticationCallback<AuthenticationResult>() {
             @Override
@@ -101,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG,"Requesting login token");
                 mContext.acquireToken(MainActivity.this, Constants.RESOURCE_ID, Constants.CLIENT_ID,
                         Constants.REDIRECT_URL, Constants.USER_HINT, PromptBehavior.Auto, "", callback);
-
             }
         });
     }
@@ -249,7 +243,6 @@ public class MainActivity extends AppCompatActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Logout")
                     .setMessage("You are about to exit the app.");
-
             builder.setPositiveButton(
                     "Logout",
                     new DialogInterface.OnClickListener() {
@@ -258,7 +251,6 @@ public class MainActivity extends AppCompatActivity {
                             finish();
                         }
                     });
-
             builder.setNegativeButton(
                     "Cancel",
                     new DialogInterface.OnClickListener() {
@@ -266,7 +258,6 @@ public class MainActivity extends AppCompatActivity {
                             dialog.cancel();
                         }
                     });
-
             AlertDialog dialog = builder.create();
             dialog.show();
         }else if(this.getClass().getSimpleName().equals(TaskListActivity.class.getSimpleName()) && userType.equals("manager")){
