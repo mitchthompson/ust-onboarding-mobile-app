@@ -137,16 +137,17 @@ public class TaskListActivity extends MainActivity {
 
                         // ArrayList of Tasks
                         taskList = workflow.getTasks();
+                        Log.d(TAG, "TaskListActivity: Workflow Task list size: " + taskList.size());
 
                         // progress bar size depends on the size of the tasklist.
                         simpleProgressBar.setMax(taskList.size());
                         countTotal = taskList.size();
                         // set progress to 0 initially
                         simpleProgressBar.setProgress(0);
-                        countComplete = 0;
-                        int completedPercentage = (int) (countComplete / countTotal) * 100;
-                        String completedPercentageText = "Complete: " + completedPercentage + "%" ;
-                        completedPercentageTextView.setText(completedPercentageText);
+                        //countComplete = 0;
+                        //int completedPercentage = (int) (countComplete / countTotal) * 100;
+                        //String completedPercentageText = "Complete: " + completedPercentage + "%" ;
+                        //completedPercentageTextView.setText(completedPercentageText);
 
                         // taskListItems ArrayList is needed to feed to the RecyclerView
                         ArrayList<TaskListItem> taskListItems = new ArrayList<>();
@@ -178,9 +179,12 @@ public class TaskListActivity extends MainActivity {
                             if(completedTasks.contains(taskId)) {
                                 taskListItemToAdd.setChecked(true);
                                 IncrementCompletedTasks(1);
-                                countComplete++;
+                                //countComplete++;
 //                              ((TextView) findViewById(R.id.task_completion_percentage)).setText((int) (countComplete / countTotal) * 100);
-//                              completedPercentageTextView.setText( (int) (countComplete / countTotal) * 100);
+                                double completeRatioDouble = (countComplete / countTotal) * 100;
+                                int completeRatioInt = (int) completeRatioDouble;
+                                String completeRatioString = "Activity" + completeRatioInt + "%";
+                                completedPercentageTextView.setText(completeRatioString);
 
                             }
                             taskListItems.add(taskListItemToAdd);

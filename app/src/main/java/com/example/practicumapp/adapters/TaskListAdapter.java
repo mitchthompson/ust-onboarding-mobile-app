@@ -1,7 +1,6 @@
 package com.example.practicumapp.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,13 +8,13 @@ import android.widget.CompoundButton;
 
 import com.example.practicumapp.Interfaces.VolleyUserResponseListener;
 import com.example.practicumapp.R;
-import com.example.practicumapp.viewHolders.TaskDescriptionListItemViewHolder;
 import com.example.practicumapp.TaskListActivity;
-import com.example.practicumapp.viewHolders.TaskListItemViewHolder;
-import com.example.practicumapp.volley.VolleyParser;
 import com.example.practicumapp.models.TaskDescriptionListItem;
 import com.example.practicumapp.models.TaskListItem;
 import com.example.practicumapp.models.User;
+import com.example.practicumapp.viewHolders.TaskDescriptionListItemViewHolder;
+import com.example.practicumapp.viewHolders.TaskListItemViewHolder;
+import com.example.practicumapp.volley.VolleyParser;
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 
@@ -50,9 +49,9 @@ public class TaskListAdapter extends ExpandableRecyclerViewAdapter<TaskListItemV
         for(int i = 0; i < groups.size(); i++) {
             //taskListItems.add((TaskListItem) groups.get(i));
             taskCheckedMap.put(((TaskListItem) groups.get(i)).getTitle(), (TaskListItem) groups.get(i));
-            Log.d(TAG, " assigning this Task item in the TaskListAdapter Constructor, by returning name here: " +  (groups.get(i)).getTitle());
-            Log.d(TAG, " assigning this Task item in the TaskListAdapter Constructor, by returning id here: " +  ((TaskListItem) groups.get(i)).getTaskID());
-            //if(((TaskListItem) groups.get(i)).isChecked()) {
+            // Log.d(TAG, " assigning this Task item in the TaskListAdapter Constructor, by returning name here: " +  (groups.get(i)).getTitle());
+            // Log.d(TAG, " assigning this Task item in the TaskListAdapter Constructor, by returning id here: " +  ((TaskListItem) groups.get(i)).getTaskID());
+            // if(((TaskListItem) groups.get(i)).isChecked()) {
             //    taskCheckedMap.put(((TaskListItem) groups.get(i)).getTaskName(), (TaskListItem) groups.get(i));
             //}
 
@@ -84,10 +83,10 @@ public class TaskListAdapter extends ExpandableRecyclerViewAdapter<TaskListItemV
     public void onBindGroupViewHolder(final TaskListItemViewHolder holder, int flatPosition, final ExpandableGroup group) {
 
         final String thisTaskTitle = group.getTitle();
-        Log.d(TAG, " assigning this Task title: " + thisTaskTitle);
+        //Log.d(TAG, " assigning this Task title: " + thisTaskTitle);
 
         final TaskListItem myItem = taskCheckedMap.get("" + thisTaskTitle);
-        Log.d(TAG, " assigning this Task item, by returning id here: " + myItem.getTaskID());
+        //Log.d(TAG, " assigning this Task item, by returning id here: " + myItem.getTaskID());
 
         holder.setTaskName(group);
 
