@@ -150,6 +150,8 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", MODE_PRIVATE);
+        String userType = sharedPreferences.getString("UserType", "").toLowerCase();
         switch (item.getItemId()) {
             case R.id.action_debug:
                 startActivity(new Intent(MainActivity.this, DebugActivity.class));
@@ -157,6 +159,15 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.action_logout:
                 adalLogout();
+                break;
+            case android.R.id.home:
+                if (this.getClass().getSimpleName().equals(TaskListActivity.class.getSimpleName())
+                        && userType.equals("manager")){
+                    super.onBackPressed();
+                    return true;
+                }else{
+                    NavUtils.navigateUpFromSameTask(this);
+                }
                 break;
             default:
                 // If we got here, the user's action was not recognized.
@@ -176,6 +187,8 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(User user) {
                 Log.d(TAG, user.getFirstName() + user.getLastName());
                 String userType = user.getType();
+                SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", MODE_PRIVATE);
+                sharedPreferences.edit().putString("UserType", user.getType()).apply();
                 if(userType.toLowerCase().equals("employee")) {
                     startActivity(new Intent(MainActivity.this, TaskListActivity.class));
                 } else if(userType.toLowerCase().equals("manager")) {
@@ -230,6 +243,8 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", MODE_PRIVATE);
+        String userType = sharedPreferences.getString("UserType", "").toLowerCase();
         if (this.getClass().getSimpleName().equals(MainActivity.class.getSimpleName())){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Logout")
@@ -254,9 +269,11 @@ public class MainActivity extends AppCompatActivity {
 
             AlertDialog dialog = builder.create();
             dialog.show();
+        }else if(this.getClass().getSimpleName().equals(TaskListActivity.class.getSimpleName()) && userType.equals("manager")){
+            super.onBackPressed();
         }else {
             // finishes the activity and navigates to the parent
-            finish();
+            //finish();
             NavUtils.navigateUpFromSameTask(this);
         }
     }
@@ -267,7 +284,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy(){
         super.onDestroy();
-        clearLogin();
-        finish();
+        if (this.getClass().getSimpleName().equals(MainActivity.class.getSimpleName())){
+            clearLogin();
+            Log.d(TAG, "Login cleared!");
+        }
     }
 }
