@@ -1,13 +1,12 @@
 package com.example.practicumapp;
 
-import android.graphics.Color;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,7 +20,6 @@ import com.example.practicumapp.models.TaskListItem;
 import com.example.practicumapp.models.User;
 import com.example.practicumapp.models.Workflow;
 import com.example.practicumapp.volley.VolleyParser;
-import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,17 +30,15 @@ import java.util.HashMap;
  */
 
 public class TaskListActivity extends MainActivity {
-    //TAG for logging
-    private static final String TAG = "TaskListActivity"; // Constant for logging data
+    //TAG constant for logging and testing
+    private static final String TAG = "TaskListActivity";
 
     //Adapter is the only one that the expanding recycler folks declared outside of their OnCreate
     private TaskListAdapter adapter;
-    private String[] testData;
     private RecyclerView recyclerView;
     private RelativeLayout relativeLayout;
 
     public static ProgressBar simpleProgressBar;
-
 
     // taskList is the list of Tasks from the workflow
     private ArrayList taskList;
@@ -54,9 +50,6 @@ public class TaskListActivity extends MainActivity {
     private ArrayList completedTasks;
     private static float countComplete = 0;
     private static float countTotal = 0;
-    private int percentageComplete;
-
-    private ExpandableGroup<TaskListItem> expandableTaskList;
 
     private VolleyParser volleyParser;
 
@@ -113,19 +106,15 @@ public class TaskListActivity extends MainActivity {
                 employeeName = user.getFirstName() + " " + user.getLastName();
                 employeeNameTextView.setText(employeeName);
 
-                /* confirm receipt of something... */
-                Log.d(TAG, "TaskListActivity: User First Name : " + user.getFirstName());
-                Log.d(TAG, "TaskListActivity: User Type Returns : " + user.getType());
+                // confirm receipt of something for API testing
+                // Log.d(TAG, "TaskListActivity: User First Name : " + user.getFirstName());
+                // Log.d(TAG, "TaskListActivity: User Type Returns : " + user.getType());
 
-                // need the user type to know what task descriptions to show.
+                // get user type to know what task descriptions to show.
                 userType = user.getType();
 
-                // Get the tasks that the user has completed!
+                // Get the tasks that the user has completed
                 completedTasks = user.getTasks();
-
-                //TODO: Removefollowing, for testing only
-                //adding a completed task, "Setup employee Id"
-//                completedTasks.add("LKJLKLIOC54D2DA2389CVBV98XCCVV");
 
                 //Get the data we need from the workflow.
                 volleyParser.getWorkflow(workflowId, new VolleyWorkflowResponseListener() {
@@ -157,21 +146,12 @@ public class TaskListActivity extends MainActivity {
                             HashMap<String, String> taskDescriptionMap = task.getDescriptions();
                             ArrayList<TaskDescriptionListItem> taskDescriptionListItems = new ArrayList<>();
 
-                            // TODO Remove sample if codes and uncomment if code below it
                             if (taskDescriptionMap.get("employee") != null) {
                                 taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("employee")));
                             }
                             if (taskDescriptionMap.get("manager") != null) {
                                 taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("manager")));
                             }
-
-//                            if(userType.equals("manager")) {
-//                                taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("manager")));
-//                            }
-//                            if(userType.equals("employee")) {
-//                                taskDescriptionListItems.add(new TaskDescriptionListItem(taskDescriptionMap.get("employee")));
-//                            }
-
 
                             TaskListItem taskListItemToAdd = new TaskListItem(taskName,taskDescriptionListItems);
                             taskListItemToAdd.setTaskID(taskId);
@@ -184,7 +164,7 @@ public class TaskListActivity extends MainActivity {
                             taskListItems.add(taskListItemToAdd);
                         }
 
-                        // recyclerView gets kicked off in here, because we know we have data to display.
+                        // recyclerView gets kicked off here, because we know we have data to display.
                         relativeLayout = (RelativeLayout) findViewById(R.id.activity_task_list);
                         adapter = new TaskListAdapter(taskListItems, accessToken);
                         recyclerView.setLayoutManager(layoutManager);
