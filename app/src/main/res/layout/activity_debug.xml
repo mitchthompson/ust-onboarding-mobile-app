@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.practicumapp.DebugActivity">
+    android:theme="@style/CustomTheme"
+    tools:context="com.example.practicumapp.MainActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/myToolbar"
@@ -18,45 +19,47 @@
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <ProgressBar
-        android:id="@+id/login_progress2"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
+
+    <!--<Button
+        android:id="@+id/login_button"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="64dp"
-        android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="163dp"
-        android:layout_height="125dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="48dp"
-        android:adjustViewBounds="false"
-        android:contentDescription="UST_LOGO"
-        android:cropToPadding="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/myToolbar"
-        app:srcCompat="@drawable/ust_global_logo"
-        tools:ignore="HardcodedText" />
-
-    <Button
-        android:id="@+id/loginButton"
-        android:layout_width="179dp"
-        android:layout_height="54dp"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:text="LOGIN"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logo"
-        app:layout_constraintVertical_bias="0.0"
-        tools:ignore="HardcodedText" />
+        app:layout_constraintTop_toBottomOf="@+id/myToolbar" />-->
+
+    <Button
+        android:id="@+id/task_list_button"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:text="TASK LIST"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/myToolbar" />
+
+    <Button
+        android:id="@+id/new_hire_button"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="197dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:text="New Hire List"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/task_list_button" />
 
 </android.support.constraint.ConstraintLayout>

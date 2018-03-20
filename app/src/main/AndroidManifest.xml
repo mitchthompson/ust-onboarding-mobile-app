@@ -45,6 +45,14 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
+            android:name=".DebugActivity"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
             android:name="com.microsoft.aad.adal.AuthenticationActivity"
             android:exported="true"
             android:label="title_login_hello_app"
