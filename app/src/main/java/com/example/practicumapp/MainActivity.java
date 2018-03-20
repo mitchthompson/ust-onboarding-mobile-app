@@ -148,10 +148,6 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", MODE_PRIVATE);
         String userType = sharedPreferences.getString("UserType", "").toLowerCase();
         switch (item.getItemId()) {
-            case R.id.action_debug:
-                startActivity(new Intent(MainActivity.this, DebugActivity.class));
-                Log.d(TAG,"debug menu activity selected");
-                break;
             case R.id.action_logout:
                 adalLogout();
                 break;
